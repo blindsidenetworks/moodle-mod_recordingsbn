@@ -13,6 +13,7 @@
 
 require_once(dirname(dirname(dirname(__FILE__))).'/config.php');
 require_once(dirname(__FILE__).'/lib.php');
+require_once(dirname(__FILE__).'/../bigbluebuttonbn/locallib.php');
 
 $id = optional_param('id', 0, PARAM_INT); // course_module ID, or
 $n  = optional_param('n', 0, PARAM_INT);  // recordingsbn instance ID - it should be named as the first character of the module
@@ -75,23 +76,23 @@ $username = $USER->firstname.' '.$USER->lastname;
 $userID = $USER->id;
 
 // Recordings plugin code
-$results = $DB->get_records_sql('SELECT * FROM '.$CFG->prefix.'bigbluebuttonbn WHERE '.$CFG->prefix.'bigbluebuttonbn.course ='.$course->id );
+$results = $DB->get_records_sql('SELECT DISTINCT meetingid, courseid, bigbluebuttonbnid FROM '.$CFG->prefix.'bigbluebuttonbn_log WHERE '.$CFG->prefix.'bigbluebuttonbn_log.courseid='.$course->id. ' AND '.$CFG->prefix.'bigbluebuttonbn_log.record = 1 AND '.$CFG->prefix.'bigbluebuttonbn_log.event = \'Create\';' );
 $meetingID='';
 
 $groups = groups_get_all_groups($course->id);
 if( isset($groups) && count($groups) > 0 ){  //If the course has groups include groupid in the name to look for possible recordings related to the sub-activities
     foreach ($results as $result) {
         if (strlen($meetingID) > 0) $meetingID .= ',';
-        $meetingID .= $result->meetingid;
+        $meetingID .= $result->meetingid.'-'.$course->id.'-'.$result->bigbluebuttonbnid;
         foreach ( $groups as $group ){
-            $meetingID .= ','.$result->meetingid.'['.$group->id.']';
+            $meetingID .= ','.$result->meetingid.'['.$group->id.']'.'-'.$course->id.'-'.$result->bigbluebuttonbnid;
         }
     }
     
 } else {                                    // No groups means that it wont check any other sub-activity
     foreach ($results as $result) {
         if (strlen($meetingID) > 0) $meetingID .= ',';
-        $meetingID .= $result->meetingid;
+        $meetingID .= $result->meetingid.'-'.$course->id.'-'.$result->bigbluebuttonbnid;
     }
     
 }
