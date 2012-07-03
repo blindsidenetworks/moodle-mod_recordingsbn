@@ -83,16 +83,16 @@ $groups = groups_get_all_groups($course->id);
 if( isset($groups) && count($groups) > 0 ){  //If the course has groups include groupid in the name to look for possible recordings related to the sub-activities
     foreach ($results as $result) {
         if (strlen($meetingID) > 0) $meetingID .= ',';
-        $meetingID .= $result->meetingid.'-'.$course->id.'-'.$result->bigbluebuttonbnid;
+        $meetingID .= $result->meetingid;
         foreach ( $groups as $group ){
-            $meetingID .= ','.$result->meetingid.'['.$group->id.']'.'-'.$course->id.'-'.$result->bigbluebuttonbnid;
+            $meetingID .= ','.$result->meetingid.'['.$group->id.']';
         }
     }
     
 } else {                                    // No groups means that it wont check any other sub-activity
     foreach ($results as $result) {
         if (strlen($meetingID) > 0) $meetingID .= ',';
-        $meetingID .= $result->meetingid.'-'.$course->id.'-'.$result->bigbluebuttonbnid;
+        $meetingID .= $result->meetingid;
     }
     
 }
