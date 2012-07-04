@@ -57,9 +57,9 @@ $PAGE->set_context($context);
 $PAGE->set_cacheable(false);
 
 
-$PAGE->requires->js('/mod/bigbluebuttonbn/js/libs/jquery/1.7.2/jquery.min.js', true);    
-$PAGE->requires->js('/mod/bigbluebuttonbn/js/libs/dataTables/1.9.1/jquery.dataTables.min.js', true);    
-$PAGE->requires->js('/mod/bigbluebuttonbn/js/bigbluebuttonbn.js', true);    
+$PAGE->requires->js('/mod/recordingsbn/js/libs/jquery/1.7.2/jquery.min.js', true);    
+$PAGE->requires->js('/mod/recordingsbn/js/libs/dataTables/1.9.1/jquery.dataTables.min.js', true);    
+$PAGE->requires->js('/mod/recordingsbn/js/recordingsbn.js', true);    
 
 // Output starts here
 echo $OUTPUT->header();
