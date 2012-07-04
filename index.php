@@ -31,11 +31,6 @@ $PAGE->set_title(format_string($course->fullname));
 $PAGE->set_heading(format_string($course->fullname));
 $PAGE->set_context($context);
 
-// other things you may want to set - remove if not needed
-//$PAGE->set_cacheable(false);
-//$PAGE->set_focuscontrol('some-html-id');
-//$PAGE->add_body_class('recordingsbn-'.$somevar);
-
 // Output starts here
 echo $OUTPUT->header();
 
