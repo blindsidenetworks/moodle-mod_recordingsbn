@@ -20,6 +20,7 @@ $string['recordingsbnname_help'] = 'RecordingsBN provides a list of playback rec
 $string['recordingsbn'] = 'RecordingsBN';
 $string['pluginadministration'] = 'recordingsbn administration';
 $string['pluginname'] = 'RecordingsBN';
+$string['recordingsbn:addinstance'] = 'Add a new resource with playback recordings';
 $string['recordingsbn:view'] = 'View recordings';
 $string['view_noguests'] = 'The RecordingsBN module is not open to guests';
 
