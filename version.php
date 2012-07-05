@@ -12,9 +12,9 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$module->version   = 2012070400;
+$module->version   = 2012070500;
 $module->requires  = 2010112400;
 $module->cron      = 0;
 $module->component = 'mod_recordingsbn';
-$module->maturity = MATURITY_STABLE;  // [MATURITY_STABLE | MATURITY_RC | MATURITY_BETA | MATURITY_ALPHA]
-$module->release  = '1.0.7'; 
+$module->maturity = MATURITY_RC;  // [MATURITY_STABLE | MATURITY_RC | MATURITY_BETA | MATURITY_ALPHA]
+$module->release  = '1.0.8'; 
