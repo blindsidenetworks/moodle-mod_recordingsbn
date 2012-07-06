@@ -53,8 +53,7 @@ function xmldb_recordingsbn_upgrade($oldversion) {
     if ($oldversion < 2012040210) {
         $table = new xmldb_table('recordingsbn');
         
-        $field = new xmldb_field('timecreated', XMLDB_TYPE_INTEGER, '10', XMLDB_UNSIGNED, XMLDB_NOTNULL, null, '0',
-        		'name');
+        $field = new xmldb_field('timecreated', XMLDB_TYPE_INTEGER, '10', XMLDB_UNSIGNED, XMLDB_NOTNULL, null, '0',	'name');
         
         if ($dbman->field_exists($table, $field)) {
             $dbman->change_field_default($table, $field, $continue=true, $feedback=true);
