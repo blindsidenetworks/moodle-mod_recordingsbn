@@ -14,7 +14,8 @@ defined('MOODLE_INTERNAL') || die();
 
 $string['modulename'] = 'RecordingsBN';
 $string['modulenameplural'] = 'RecordingsBN';
-$string['modulename_help'] = 'Use the recordingsbn module as a resource of the course in order to have access to the playback recordings related to it.';
+$string['modulename_help'] = 'Use the RecordingsBN module as a resource to provide access to the BigBlueButton recordings related to this course.';
+$string['modulename_link'] = 'RecordingsBN/view';
 $string['recordingsbnname'] = 'Recordings name';
 $string['recordingsbnname_help'] = 'RecordingsBN provides a list of playback recordings in a BigBlueButton Server providing direct access to them.';
 $string['recordingsbn'] = 'RecordingsBN';
