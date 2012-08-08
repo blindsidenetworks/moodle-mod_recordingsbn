@@ -12,7 +12,7 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$module->version   = 2012070900;
+$module->version   = 2012080805;
 $module->requires  = 2010112400;
 $module->cron      = 0;
 $module->component = 'mod_recordingsbn';
