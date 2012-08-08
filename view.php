@@ -100,6 +100,7 @@ if ($dbman->table_exists('bigbluebuttonbn_log') ) {
     echo $OUTPUT->box_start('generalbox boxaligncenter', 'dates');
     
     echo '<script type="text/javascript" >var meetingid = "'.$meetingID.'";</script>'."\n";
+    echo '<script type="text/javascript" >var courseid = "'.$course->id.'";</script>'."\n";
     echo '<script type="text/javascript" >var ismoderator = "'.($moderator?'true':'false').'";</script>'."\n";
     
     echo '<script type="text/javascript" >'."\n";

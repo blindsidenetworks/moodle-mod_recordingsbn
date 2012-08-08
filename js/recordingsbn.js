@@ -1,12 +1,12 @@
-function actionCall(action, recordingID) {
+function actionCall(action, recordingid, courseid) {
 	action = (typeof action == 'undefined') ? 'publish' : action;
-
+	
 	if (action == 'publish' || action == 'unpublish' || (action == 'delete' && confirm("Are you sure to delete this recording?"))) {
 		if (action == 'publish' || action == 'unpublish') {
 			
-			var el_a = document.getElementById('actionbar-publish-a-'+ recordingID);
+			var el_a = document.getElementById('actionbar-publish-a-'+ recordingid);
 			if (el_a) {
-				var el_img = document.getElementById('actionbar-publish-img-'+ recordingID);
+				var el_img = document.getElementById('actionbar-publish-img-'+ recordingid);
 				if (el_a.title == view_recording_list_actionbar_hide ) {
 					el_a.title = view_recording_list_actionbar_show;
 					el_img.src = 'pix/show.gif';
@@ -21,13 +21,12 @@ function actionCall(action, recordingID) {
 			
 		} else {
 			// Deletes the line in the dataTable
-			var row = $(document.getElementById('actionbar-publish-img-'+ recordingID)).closest("tr").get(0);
+			var row = $(document.getElementById('actionbar-publish-img-'+ recordingid)).closest("tr").get(0);
 			oTable.fnDeleteRow(oTable.fnGetPosition(row));
 
 		}
-		
 		$.ajax({
-		    url	: M.cfg.wwwroot + '/mod/bigbluebuttonbn/bbb-broker.php?action=' + action + '&recordingID=' + recordingID,
+		    url	: M.cfg.wwwroot + '/mod/bigbluebuttonbn/bbb-broker.php?action=' + action + '&recordingid=' + recordingid + '&cid=' + courseid,
 		    dataType : 'xml'
 		});
 		
@@ -87,7 +86,7 @@ $(document).ready(function(){
             "aButtons": [ "select_all", "select_none" ]
             },
                 
-        "sAjaxSource": M.cfg.wwwroot + "/mod/bigbluebuttonbn/ajax.php?name=" + meetingid + "&admin=" + ismoderator,
+        "sAjaxSource": M.cfg.wwwroot + "/mod/bigbluebuttonbn/ajax.php?cid=" + courseid + "&mid=" + meetingid,
         "bFilter": false,
         "bPaginate": false,
         "bInfo": false,
