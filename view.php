@@ -56,14 +56,12 @@ $PAGE->set_button(update_module_button($cm->id, $course->id, get_string('modulen
 $PAGE->set_context($context);
 $PAGE->set_cacheable(false);
 
-
-$PAGE->requires->js('/mod/recordingsbn/js/libs/jquery/1.7.2/jquery.min.js', true);    
-$PAGE->requires->js('/mod/recordingsbn/js/libs/dataTables/1.9.1/jquery.dataTables.min.js', true);    
-$PAGE->requires->js('/mod/recordingsbn/js/recordingsbn.js', true);    
+$PAGE->requires->js('/mod/recordingsbn/js/libs/jquery/1.7.2/jquery.min.js');    
+$PAGE->requires->js('/mod/recordingsbn/js/libs/dataTables/1.9.1/jquery.dataTables.min.js');    
+$PAGE->requires->js('/mod/recordingsbn/js/recordingsbn.js');    
 
 // Output starts here
 echo $OUTPUT->header();
-
 
 // Recordings plugin code
 $dbman = $DB->get_manager(); // loads ddl manager and xmldb classes
