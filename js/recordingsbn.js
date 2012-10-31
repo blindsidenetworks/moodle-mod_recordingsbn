@@ -78,6 +78,7 @@ $(document).ready(function(){
             {"sTitle": view_recording_list_activity, "sWidth": "150px"},
             {"sTitle": view_recording_list_description, "sWidth": "150px"},
             {"sTitle": view_recording_list_date, "sWidth": "200px", "sClass": "right"},
+            {"sTitle": view_recording_list_duration, "sWidth": "50px", "sClass": "right"},
             {"sTitle": view_recording_list_actionbar, "sWidth": "50px", "sClass": "right", "bVisible" : false}
             ],
 	    
@@ -96,7 +97,7 @@ $(document).ready(function(){
     });
             
     if (ismoderator == 'true' )
-        oTable.fnSetColumnVis( 5, true );			
+        oTable.fnSetColumnVis( 6, true );			
              
     setInterval(function() {
         oTable.fnReloadAjax();

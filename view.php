@@ -109,6 +109,7 @@ if ($dbman->table_exists('bigbluebuttonbn_log') ) {
     echo '    var view_recording_list_activity = "'.get_string('view_recording_list_activity', 'bigbluebuttonbn').'";'."\n";
     echo '    var view_recording_list_description = "'.get_string('view_recording_list_description', 'bigbluebuttonbn').'";'."\n";
     echo '    var view_recording_list_date = "'.get_string('view_recording_list_date', 'bigbluebuttonbn').'";'."\n";
+    echo '    var view_recording_list_duration = "'.get_string('view_recording_list_duration', 'bigbluebuttonbn').'";'."\n";
     echo '    var view_recording_list_actionbar = "'.get_string('view_recording_list_actionbar', 'bigbluebuttonbn').'";'."\n";
     echo '    var view_recording_list_actionbar_hide = "'.get_string('view_recording_list_actionbar_hide', 'bigbluebuttonbn').'";'."\n";
     echo '    var view_recording_list_actionbar_show = "'.get_string('view_recording_list_actionbar_show', 'bigbluebuttonbn').'";'."\n";
