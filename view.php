@@ -75,7 +75,7 @@ $PAGE->set_context($context);
 $PAGE->set_cacheable(false);
 
 //$PAGE->requires->js('/mod/recordingsbn/js/libs/jquery/1.7.2/jquery.min.js');    
-$PAGE->requires->js('/mod/recordingsbn/js/recordingsbn.js');    
+//$PAGE->requires->js('/mod/recordingsbn/js/recordingsbn.js');    
 //echo '<script type="text/javascript" >var wwwroot = "'.$CFG->wwwroot.'";</script>'."\n";
 //echo '<script type="text/javascript" >var view_hint_actionbar_hide = "'.$view_hint_actionbar_hide.'";</script>'."\n";
 //echo '<script type="text/javascript" >var view_hint_actionbar_show = "'.$view_hint_actionbar_show.'";</script>'."\n";
@@ -175,9 +175,8 @@ if ($dbman->table_exists('bigbluebuttonbn_log') ) {
                         //$actionbar .= "<a id=\"actionbar-delete-a-".$recording['recordID']."\" title=\"".$view_hint_actionbar_delete."\" href=\"#\"><img id=\"actionbar-delete-img-".$recording['recordID']."\" src=\"pix/delete.gif\" class=\"iconsmall\" onClick=\"recordingsbn_actionCall('delete', '".$recording['recordID']."', '".$course->id."'); return false;\" /></a>";
                         //$actionbar .= "<a id='actionbar-delete-a-".$recording['recordID']."' title='".$view_hint_actionbar_delete."' href='".$deleteURL."'><img id='actionbar-delete-img-".$recording['recordID']."' src='pix/delete.gif' class='iconsmall' /></a>";
                         
-                        
-                        $actionbar .= "<a id='actionbar-delete-a-".$recording['recordID']."' title='".$view_hint_actionbar_delete."' href='".$CFG->wwwroot."/mod/recordingsbn/view?id=".$cm->id."&action=delete&recordingid=".$recording['recordID']."&cid=".$course->id."'><img id='actionbar-delete-img-".$recording['recordID']."' src='pix/delete.gif' class='iconsmall' /></a>";
-                        //$actionbar .= "<a id='actionbar-delete-a-".$recording['recordID']."' title='".$view_hint_actionbar_delete."' href='#'><img id='actionbar-delete-img-".$recording['recordID']."' src='pix/delete.gif' class='iconsmall' onclick='if(confirm(\"Are you sure to delete this recording?\")) load(\"".$CFG->wwwroot."/mod/recordingsbn/view?id=".$cm->id."&action=delete&recordingid=".$recording['recordID']."&cid=".$course->id."\"); return false;' /></a>";
+                        //$actionbar .= "<a id='actionbar-delete-a-".$recording['recordID']."' title='".$view_hint_actionbar_delete."' href='".$CFG->wwwroot."/mod/recordingsbn/view?id=".$cm->id."&action=delete&recordingid=".$recording['recordID']."&cid=".$course->id."'><img id='actionbar-delete-img-".$recording['recordID']."' src='pix/delete.gif' class='iconsmall' /></a>";
+                        $actionbar .= "<a id='actionbar-delete-a-".$recording['recordID']."' title='".$view_hint_actionbar_delete."' href='#'><img id='actionbar-delete-img-".$recording['recordID']."' src='pix/delete.gif' class='iconsmall' onclick='if(confirm(\"Are you sure to delete this recording?\")) window.location = \"".$CFG->wwwroot."/mod/recordingsbn/view?id=".$cm->id."&action=delete&recordingid=".$recording['recordID']."&cid=".$course->id."\"; return false;' /></a>";
                         
                     }
     
