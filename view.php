@@ -74,13 +74,6 @@ $PAGE->set_button(update_module_button($cm->id, $course->id, get_string('modulen
 $PAGE->set_context($context);
 $PAGE->set_cacheable(false);
 
-//$PAGE->requires->js('/mod/recordingsbn/js/libs/jquery/1.7.2/jquery.min.js');    
-//$PAGE->requires->js('/mod/recordingsbn/js/recordingsbn.js');    
-//echo '<script type="text/javascript" >var wwwroot = "'.$CFG->wwwroot.'";</script>'."\n";
-//echo '<script type="text/javascript" >var view_hint_actionbar_hide = "'.$view_hint_actionbar_hide.'";</script>'."\n";
-//echo '<script type="text/javascript" >var view_hint_actionbar_show = "'.$view_hint_actionbar_show.'";</script>'."\n";
-//echo '<script type="text/javascript" >var view_hint_actionbar_delete = "'.$view_hint_actionbar_delete.'";</script>'."\n";
-
 // Output starts here
 echo $OUTPUT->header();
 
@@ -93,7 +86,6 @@ $table->align = array ('center', 'center', 'center', 'center', 'center', 'center
 
 //Print page headers
 echo $OUTPUT->heading(get_string('modulenameplural', 'recordingsbn'), 2);
-
 
 // Recordings plugin code
 $dbman = $DB->get_manager(); // loads ddl manager and xmldb classes
@@ -137,7 +129,6 @@ if ($dbman->table_exists('bigbluebuttonbn_log') ) {
     
     }
 
-    
     //If there are meetings with recordings load the data to the table 
     if ( $meetingID != '' ){
         $recordingsbn = bigbluebuttonbn_getRecordingsArray($meetingID, $url, $salt);
@@ -158,33 +149,20 @@ if ($dbman->table_exists('bigbluebuttonbn_log') ) {
     
                     $actionbar = '';
                     if ( $moderator ) {
-                        //$deleteURL = bigbluebuttonbn_getDeleteRecordingsURL($recording['recordID'], $url, $salt);
                         if ( $recording['published'] == 'true' ){
-                            //$publishURL = bigbluebuttonbn_getPublishRecordingsURL($recording['recordID'], 'false', $url, $salt);
-                            //$actionbar = "<a id=\"actionbar-publish-a-".$recording['recordID']."\" title=\"".$view_hint_actionbar_hide."\" href=\"#\"><img id=\"actionbar-publish-img-".$recording['recordID']."\" src=\"pix/hide.gif\" class=\"iconsmall\" onClick=\"recordingsbn_actionCall('unpublish', '".$recording['recordID']."', '".$course->id."'); return false;\" /></a>";
-                            //$actionbar = "<a id='actionbar-publish-a-".$recording['recordID']."' title='".$view_hint_actionbar_hide."' href='".$CFG->wwwroot."/mod/bigbluebuttonbn/bbb-broker.php?action=unpublish&recordingid=".$recording['recordID']."&cid=".$course->id."'><img id='actionbar-publish-img-".$recording['recordID']."' src='pix/hide.gif' class='iconsmall' /></a>";
-                            //$actionbar = "<a id='actionbar-publish-a-".$recording['recordID']."' title='".$view_hint_actionbar_hide."' href='".$publishURL."'><img id='actionbar-publish-img-".$recording['recordID']."' src='pix/hide.gif' class='iconsmall' /></a>";
                             $actionbar = "<a id='actionbar-publish-a-".$recording['recordID']."' title='".$view_hint_actionbar_hide."' href='".$CFG->wwwroot."/mod/recordingsbn/view?id=".$cm->id."&action=unpublish&recordingid=".$recording['recordID']."&cid=".$course->id."'><img id='actionbar-publish-img-".$recording['recordID']."' src='pix/hide.gif' class='iconsmall' /></a>";
                         } else {
-                            //$publishURL = bigbluebuttonbn_getPublishRecordingsURL($recording['recordID'], 'true', $url, $salt);
-                            //$actionbar = "<a id=\"actionbar-publish-a-".$recording['recordID']."\" title=\"".$view_hint_actionbar_show."\" href=\"#\"><img id=\"actionbar-publish-img-".$recording['recordID']."\" src=\"pix/show.gif\" class=\"iconsmall\" onClick=\"recordingsbn_actionCall('publish', '".$recording['recordID']."', '".$course->id."'); return false;\" /></a>";
-                            //$actionbar = "<a id='actionbar-publish-a-".$recording['recordID']."' title='".$view_hint_actionbar_show."' href='".$CFG->wwwroot."/mod/bigbluebuttonbn/bbb-broker.php?action=publish&recordingid=".$recording['recordID']."&cid=".$course->id."'><img id='actionbar-publish-img-".$recording['recordID']."' src='pix/show.gif' class='iconsmall' /></a>";
-                            //$actionbar = "<a id='actionbar-publish-a-".$recording['recordID']."' title='".$view_hint_actionbar_show."' href='".$publishURL."'><img id='actionbar-publish-img-".$recording['recordID']."' src='pix/show.gif' class='iconsmall' /></a>";
                             $actionbar = "<a id='actionbar-publish-a-".$recording['recordID']."' title='".$view_hint_actionbar_show."' href='".$CFG->wwwroot."/mod/recordingsbn/view?id=".$cm->id."&action=publish&recordingid=".$recording['recordID']."&cid=".$course->id."'><img id='actionbar-publish-img-".$recording['recordID']."' src='pix/show.gif' class='iconsmall' /></a>";
                         }
-                        //$actionbar .= "<a id=\"actionbar-delete-a-".$recording['recordID']."\" title=\"".$view_hint_actionbar_delete."\" href=\"#\"><img id=\"actionbar-delete-img-".$recording['recordID']."\" src=\"pix/delete.gif\" class=\"iconsmall\" onClick=\"recordingsbn_actionCall('delete', '".$recording['recordID']."', '".$course->id."'); return false;\" /></a>";
-                        //$actionbar .= "<a id='actionbar-delete-a-".$recording['recordID']."' title='".$view_hint_actionbar_delete."' href='".$deleteURL."'><img id='actionbar-delete-img-".$recording['recordID']."' src='pix/delete.gif' class='iconsmall' /></a>";
-                        
-                        //$actionbar .= "<a id='actionbar-delete-a-".$recording['recordID']."' title='".$view_hint_actionbar_delete."' href='".$CFG->wwwroot."/mod/recordingsbn/view?id=".$cm->id."&action=delete&recordingid=".$recording['recordID']."&cid=".$course->id."'><img id='actionbar-delete-img-".$recording['recordID']."' src='pix/delete.gif' class='iconsmall' /></a>";
-                        $actionbar .= "<a id='actionbar-delete-a-".$recording['recordID']."' title='".$view_hint_actionbar_delete."' href='#'><img id='actionbar-delete-img-".$recording['recordID']."' src='pix/delete.gif' class='iconsmall' onclick='if(confirm(\"Are you sure to delete this recording?\")) window.location = \"".$CFG->wwwroot."/mod/recordingsbn/view?id=".$cm->id."&action=delete&recordingid=".$recording['recordID']."&cid=".$course->id."\"; return false;' /></a>";
+                        $actionbar .= "<a id='actionbar-delete-a-".$recording['recordID']."' title='".$view_hint_actionbar_delete."' href='#'><img id='actionbar-delete-img-".$recording['recordID']."' src='pix/delete.gif' class='iconsmall' onclick='if(confirm(\"".get_string('view_delete_confirmation', 'recordingsbn')."\")) window.location = \"".$CFG->wwwroot."/mod/recordingsbn/view?id=".$cm->id."&action=delete&recordingid=".$recording['recordID']."&cid=".$course->id."\"; return false;' /></a>";
                         
                     }
     
                     $type = '';
                     foreach ( $recording['playbacks'] as $playback ){
-                        $type .= '<a href=\"'.$playback['url'].'\" target=\"_new\">'.$playback['type'].'</a>&#32;';
+                        $type .= '<a href="'.$playback['url'].'" target="_new">'.$playback['type'].'</a>&#32;';
                     }
-    
+                    
                     //Make sure the startTime is timestamp
                     if( !is_numeric($recording['startTime']) ){
                         $date = new DateTime($recording['startTime']);
@@ -214,7 +192,7 @@ if ($dbman->table_exists('bigbluebuttonbn_log') ) {
         
 } else {
     echo $OUTPUT->box_start('generalbox boxaligncenter', 'dates');
-    print_error('You must to have BigBlueButtonBN Activity Module installed');
+    print_error(get_string('view_dependency_error', 'recordingsbn'));
     echo $OUTPUT->box_end();
     
 }

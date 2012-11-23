@@ -24,6 +24,6 @@ $string['pluginname'] = 'RecordingsBN';
 $string['recordingsbn:addinstance'] = 'Add a new resource with playback recordings';
 $string['recordingsbn:view'] = 'View recordings';
 $string['view_noguests'] = 'The RecordingsBN module is not open to guests';
+$string['view_delete_confirmation'] = 'Are you sure to delete this recording?';
+$string['view_dependency_error'] = 'You must to have BigBlueButtonBN Activity Module installed';
 
-
-?>
