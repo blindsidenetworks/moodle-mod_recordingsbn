@@ -99,9 +99,9 @@ if ($dbman->table_exists('bigbluebuttonbn_log') ) {
 
     //Execute actions if there is one and it is allowed
     if( isset($action) && isset($recordingid) && $moderator ){
-        if( $action == 'publish' )
+        if( $action == 'show' )
             bigbluebuttonbn_doPublishRecordings($recordingid, 'true', $url, $salt);
-        else if( $action == 'unpublish')
+        else if( $action == 'hide')
             bigbluebuttonbn_doPublishRecordings($recordingid, 'false', $url, $salt);
         else if( $action == 'delete')
             bigbluebuttonbn_doDeleteRecordings($recordingid, $url, $salt);
@@ -151,57 +151,37 @@ if ($dbman->table_exists('bigbluebuttonbn_log') ) {
                     $params['id'] = $cm->id;
                     $params['recordingid'] = $recording['recordID'];
                     if ( $moderator ) {
+                        ///Set action [show|hide] 
                         if ( $recording['published'] == 'true' ){
-                            //$actionbar .= "<a class='editing_hide' id='actionbar-unpublish-a-".$recording['recordID']."' title='".$view_hint_actionbar_hide."' href='".$CFG->wwwroot."/mod/recordingsbn/view?id=".$cm->id."&action=unpublish&recordingid=".$recording['recordID']."&cid=".$course->id."'><img id='actionbar-publish-img-".$recording['recordID']."' src='pix/hide.gif' class='iconsmall' /></a>";
-                            //$actionbar .= "<a class='editing_hide' id='actionbar-unpublish-a-".$recording['recordID']."' title='".$view_hint_actionbar_hide."' href='".$CFG->wwwroot."/mod/recordingsbn/view?id=".$cm->id."&action=unpublish&recordingid=".$recording['recordID']."&cid=".$course->id."'></a>";
-                            $params['action'] = 'unpublish';
-                            $link = new moodle_url('/mod/recordingsbn/view.php', $params);
-                            //$actionbar .= "<a class='editing_hide' title='".$view_hint_actionbar_hide."' href='".$link."'></a>";
-                            
-                            //With text
-                            //$actionbar .= $OUTPUT->action_link($link, $view_hint_actionbar_hide, null, array('title'=>$view_hint_actionbar_hide.' bye', 'class'=>'editing_hide'));
-                            
-                            //With icon
-                            $attributes = array('title' => get_string('hide'));
-                            $icon = new pix_icon('t/hide', get_string('hide'), 'moodle', $attributes);
-                            $action = null;
-                            $actionbar .= $OUTPUT->action_icon($link, $icon, $action, $attributes, false);
-                            
+                            $params['action'] = 'hide';
                         } else {
-                            //$actionbar .= "<a class='editing_show' id='actionbar-publish-a-".$recording['recordID']."' title='".$view_hint_actionbar_show."' href='".$CFG->wwwroot."/mod/recordingsbn/view?id=".$cm->id."&action=publish&recordingid=".$recording['recordID']."&cid=".$course->id."'><img id='actionbar-publish-img-".$recording['recordID']."' src='pix/show.gif' class='iconsmall' /></a>";
-                            //$actionbar .= "<a class='editing_show' id='actionbar-publish-a-".$recording['recordID']."' title='".$view_hint_actionbar_show."' href='".$CFG->wwwroot."/mod/recordingsbn/view?id=".$cm->id."&action=publish&recordingid=".$recording['recordID']."&cid=".$course->id."'></a>";
-                            $params['action'] = 'publish';
-                            $link = new moodle_url('/mod/recordingsbn/view.php', $params);
-                            //$actionbar .= "<a class='editing_show' title='".$view_hint_actionbar_show."' href='".$link."'></a>";
-                            
-                            //With text
-                            //$actionbar .= $OUTPUT->action_link($link, $view_hint_actionbar_show, null, array('title'=>$view_hint_actionbar_show.' hello', 'class'=>'editing_show'));
-                            
-                            //With icon
-                            $attributes = array('title' => get_string('show'));
-                            $icon = new pix_icon('t/show', get_string('show'), 'moodle', $attributes);
-                            $action = null;
-                            $actionbar .= $OUTPUT->action_icon($link, $icon, $action, $attributes, false);
+                            $params['action'] = 'show';
                         }
-                        
-                        
-                        //$actionbar .= "<a class='editing_delete' id='actionbar-delete-a-".$recording['recordID']."' title='".$view_hint_actionbar_delete."' href='#'><img id='actionbar-delete-img-".$recording['recordID']."' src='pix/delete.gif' class='iconsmall' onclick='if(confirm(\"".get_string('view_delete_confirmation', 'recordingsbn')."\")) window.location = \"".$CFG->wwwroot."/mod/recordingsbn/view?id=".$cm->id."&action=delete&recordingid=".$recording['recordID']."&cid=".$course->id."\"; return false;' /></a>";
-                        //$actionbar .= "<a class='editing_delete' id='actionbar-delete-a-".$recording['recordID']."' title='".$view_hint_actionbar_delete."' href='#' onclick='if(confirm(\"".get_string('view_delete_confirmation', 'recordingsbn')."\")) window.location = \"".$CFG->wwwroot."/mod/recordingsbn/view?id=".$cm->id."&action=delete&recordingid=".$recording['recordID']."&cid=".$course->id."\"; return false;'></a>";
-                        $params['action'] = 'delete';
-                        $link = new moodle_url('/mod/recordingsbn/view.php', $params);
-                        //$actionbar .= "<a class='editing_delete' title='".$view_hint_actionbar_delete."' href='".$link."'></a>";
+                        $url = new moodle_url('/mod/recordingsbn/view.php', $params);
                         //With text
-                        //$actionbar .= $OUTPUT->action_link($link, $view_hint_actionbar_delete, null, array('title'=>$view_hint_actionbar_delete, 'class'=>'editing_delete'));
+                        //$actionbar .= $OUTPUT->action_link($link, get_string($params['action']), null, array('title'=>get_string($params['action']), 'class'=>'editing_'.$params['action']));
                         //With icon
-                        $icon = new pix_icon('t/delete', get_string('delete'), 'moodle', array('title' => get_string('delete')));
-                        $actionbar .= $OUTPUT->action_icon($link, $icon, null, array('title' => get_string('delete')), false);
+                        $attributes = array('title' => get_string($params['action']));
+                        $icon = new pix_icon('t/'.$params['action'], get_string($params['action']), 'moodle', $attributes);
+                        $action = null;
+                        $actionbar .= $OUTPUT->action_icon($url, $icon, $action, $attributes, false);
                         
+                        ///Set action delete
+                        $params['action'] = 'delete';
+                        $url = new moodle_url('/mod/recordingsbn/view.php', $params);
+                        //With icon
+                        $attributes = array('title' => get_string($params['action']));
+                        $icon = new pix_icon('t/'.$params['action'], get_string($params['action']), 'moodle', $attributes);
+                        $action = new component_action('click', 'M.util.show_confirm_dialog', array('message' => get_string('view_delete_confirmation', 'recordingsbn')));
+                        $actionbar .= $OUTPUT->action_icon($url, $icon, $action, $attributes, false);
+                    
                     }
-    
                     
                     $type = '';
                     foreach ( $recording['playbacks'] as $playback ){
-                        $type .= '<a href="'.$playback['url'].'" target="_new">'.$playback['type'].'</a>&#32;';
+                        //$type .= '<a href="'.$playback['url'].'" target="_new">'.$playback['type'].'</a>&#32;';
+                        $type .= $OUTPUT->action_link($playback['url'], $playback['type'], null, array('title' => $playback['type'], 'target' => '_new') ).'&#32;';
+                        
                     }
                     
                     //Make sure the startTime is timestamp
@@ -225,24 +205,6 @@ if ($dbman->table_exists('bigbluebuttonbn_log') ) {
         }
     
     }
-    
-    $params['id'] = '3';
-    $link = new moodle_url('/mod/chat/gui_basic/index.php', $params);
-    $action = new popup_action('click', $link, "chat{$course->id}{'3'}{'45'}", array('height' => 500, 'width' => 700));
-    echo '<p>';
-    echo $OUTPUT->action_link($link, get_string('noframesjs', 'message'), null, array('title'=>get_string('modulename', 'chat')));
-    //echo $OUTPUT->action_icon($urledit, new pix_icon('t/edit', get_string('edit')));
-    echo '</p>';
-    /*
-    <p>
-        <a title="Chat" href="http://192.168.0.176/moodle23/mod/chat/gui_basic/index.php?id=3" id="action_link50b39bb33f48b4">Use more accessible interface</a>
-    </p>
-    
-    <p>
-        <a title="Chat" href="http://192.168.0.176/moodle23/mod/chat/gui_basic/index.php?id=3&amp;recordingid=c81b910b3d2df887a7147931a003a8cd23fce7cd-1353709239816&amp;action=delete">Use more accessible interface</a>
-    </p>
-    */
-    
     
     //Print the table
     echo $OUTPUT->box_start('generalbox boxaligncenter', 'dates');
