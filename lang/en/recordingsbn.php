@@ -26,4 +26,11 @@ $string['recordingsbn:view'] = 'View recordings';
 $string['view_noguests'] = 'The RecordingsBN module is not open to guests';
 $string['view_delete_confirmation'] = 'Are you sure to delete this recording?';
 $string['view_dependency_error'] = 'You must to have BigBlueButtonBN Activity Module installed';
+$string['view_head_actionbar'] = 'Toolbar';
+$string['view_head_activity'] = 'Activity';
+$string['view_head_course'] = 'Course';
+$string['view_head_date'] = 'Date';
+$string['view_head_description'] = 'Description';
+$string['view_head_duration'] = 'Duration';
+$string['view_head_recording'] = 'Recording';
 

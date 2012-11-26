@@ -55,16 +55,13 @@ $moderator = has_capability('mod/bigbluebuttonbn:moderate', $context);
 add_to_log($course->id, 'recordingsbn', 'view', "view.php?id={$cm->id}", $recordingsbn->name, $cm->id);
 
 //Set strings to show
-$view_head_recording = get_string('view_recording_list_recording', 'bigbluebuttonbn');
-$view_head_course = get_string('view_recording_list_course', 'bigbluebuttonbn');
-$view_head_activity = get_string('view_recording_list_activity', 'bigbluebuttonbn');
-$view_head_description = get_string('view_recording_list_description', 'bigbluebuttonbn');
-$view_head_date = get_string('view_recording_list_date', 'bigbluebuttonbn');
-$view_head_duration = get_string('view_recording_list_duration', 'bigbluebuttonbn');
-$view_head_actionbar = get_string('view_recording_list_actionbar', 'bigbluebuttonbn');
-$view_hint_actionbar_hide = get_string('view_recording_list_actionbar_hide', 'bigbluebuttonbn');
-$view_hint_actionbar_show = get_string('view_recording_list_actionbar_show', 'bigbluebuttonbn');
-$view_hint_actionbar_delete = get_string('view_recording_list_actionbar_delete', 'bigbluebuttonbn');
+$view_head_recording = get_string('view_head_recording', 'recordingsbn');
+$view_head_course = get_string('view_head_course', 'recordingsbn');
+$view_head_activity = get_string('view_head_activity', 'recordingsbn');
+$view_head_description = get_string('view_head_description', 'recordingsbn');
+$view_head_date = get_string('view_head_date', 'recordingsbn');
+$view_head_duration = get_string('view_head_duration', 'recordingsbn');
+$view_head_actionbar = get_string('view_head_actionbar', 'recordingsbn');
 
 /// Print the page header
 $PAGE->set_url($CFG->wwwroot.'/mod/recordingsbn/view.php', array('id' => $cm->id));
@@ -158,21 +155,23 @@ if ($dbman->table_exists('bigbluebuttonbn_log') ) {
                             $params['action'] = 'show';
                         }
                         $url = new moodle_url('/mod/recordingsbn/view.php', $params);
+                        $action = null;
                         //With text
-                        //$actionbar .= $OUTPUT->action_link($link, get_string($params['action']), null, array('title'=>get_string($params['action']), 'class'=>'editing_'.$params['action']));
+                        //$actionbar .= $OUTPUT->action_link(  $link, get_string( $params['action'] ), $action, array( 'title' => get_string($params['action'] ) )  );
                         //With icon
                         $attributes = array('title' => get_string($params['action']));
                         $icon = new pix_icon('t/'.$params['action'], get_string($params['action']), 'moodle', $attributes);
-                        $action = null;
                         $actionbar .= $OUTPUT->action_icon($url, $icon, $action, $attributes, false);
                         
                         ///Set action delete
                         $params['action'] = 'delete';
                         $url = new moodle_url('/mod/recordingsbn/view.php', $params);
+                        $action = new component_action('click', 'M.util.show_confirm_dialog', array('message' => get_string('view_delete_confirmation', 'recordingsbn')));
+                        //With text
+                        //$actionbar .= $OUTPUT->action_link(  $link, get_string( $params['action'] ), $action, array( 'title' => get_string($params['action']) )  );
                         //With icon
                         $attributes = array('title' => get_string($params['action']));
                         $icon = new pix_icon('t/'.$params['action'], get_string($params['action']), 'moodle', $attributes);
-                        $action = new component_action('click', 'M.util.show_confirm_dialog', array('message' => get_string('view_delete_confirmation', 'recordingsbn')));
                         $actionbar .= $OUTPUT->action_icon($url, $icon, $action, $attributes, false);
                     
                     }
