@@ -128,7 +128,7 @@ if ($dbman->table_exists('bigbluebuttonbn_log') ) {
         }
     
     }
-
+    
     //If there are meetings with recordings load the data to the table 
     if ( $meetingID != '' ){
         $recordingsbn = bigbluebuttonbn_getRecordingsArray($meetingID, $url, $salt);
@@ -148,16 +148,57 @@ if ($dbman->table_exists('bigbluebuttonbn_log') ) {
                     $meta_description = isset($recording['meta_contextactivitydescription'])?str_replace('"', '\"', $recording['meta_contextactivitydescription']):'';
     
                     $actionbar = '';
+                    $params['id'] = $cm->id;
+                    $params['recordingid'] = $recording['recordID'];
                     if ( $moderator ) {
                         if ( $recording['published'] == 'true' ){
-                            $actionbar = "<a id='actionbar-publish-a-".$recording['recordID']."' title='".$view_hint_actionbar_hide."' href='".$CFG->wwwroot."/mod/recordingsbn/view?id=".$cm->id."&action=unpublish&recordingid=".$recording['recordID']."&cid=".$course->id."'><img id='actionbar-publish-img-".$recording['recordID']."' src='pix/hide.gif' class='iconsmall' /></a>";
+                            //$actionbar .= "<a class='editing_hide' id='actionbar-unpublish-a-".$recording['recordID']."' title='".$view_hint_actionbar_hide."' href='".$CFG->wwwroot."/mod/recordingsbn/view?id=".$cm->id."&action=unpublish&recordingid=".$recording['recordID']."&cid=".$course->id."'><img id='actionbar-publish-img-".$recording['recordID']."' src='pix/hide.gif' class='iconsmall' /></a>";
+                            //$actionbar .= "<a class='editing_hide' id='actionbar-unpublish-a-".$recording['recordID']."' title='".$view_hint_actionbar_hide."' href='".$CFG->wwwroot."/mod/recordingsbn/view?id=".$cm->id."&action=unpublish&recordingid=".$recording['recordID']."&cid=".$course->id."'></a>";
+                            $params['action'] = 'unpublish';
+                            $link = new moodle_url('/mod/recordingsbn/view.php', $params);
+                            //$actionbar .= "<a class='editing_hide' title='".$view_hint_actionbar_hide."' href='".$link."'></a>";
+                            
+                            //With text
+                            //$actionbar .= $OUTPUT->action_link($link, $view_hint_actionbar_hide, null, array('title'=>$view_hint_actionbar_hide.' bye', 'class'=>'editing_hide'));
+                            
+                            //With icon
+                            $attributes = array('title' => get_string('hide'));
+                            $icon = new pix_icon('t/hide', get_string('hide'), 'moodle', $attributes);
+                            $action = null;
+                            $actionbar .= $OUTPUT->action_icon($link, $icon, $action, $attributes, false);
+                            
                         } else {
-                            $actionbar = "<a id='actionbar-publish-a-".$recording['recordID']."' title='".$view_hint_actionbar_show."' href='".$CFG->wwwroot."/mod/recordingsbn/view?id=".$cm->id."&action=publish&recordingid=".$recording['recordID']."&cid=".$course->id."'><img id='actionbar-publish-img-".$recording['recordID']."' src='pix/show.gif' class='iconsmall' /></a>";
+                            //$actionbar .= "<a class='editing_show' id='actionbar-publish-a-".$recording['recordID']."' title='".$view_hint_actionbar_show."' href='".$CFG->wwwroot."/mod/recordingsbn/view?id=".$cm->id."&action=publish&recordingid=".$recording['recordID']."&cid=".$course->id."'><img id='actionbar-publish-img-".$recording['recordID']."' src='pix/show.gif' class='iconsmall' /></a>";
+                            //$actionbar .= "<a class='editing_show' id='actionbar-publish-a-".$recording['recordID']."' title='".$view_hint_actionbar_show."' href='".$CFG->wwwroot."/mod/recordingsbn/view?id=".$cm->id."&action=publish&recordingid=".$recording['recordID']."&cid=".$course->id."'></a>";
+                            $params['action'] = 'publish';
+                            $link = new moodle_url('/mod/recordingsbn/view.php', $params);
+                            //$actionbar .= "<a class='editing_show' title='".$view_hint_actionbar_show."' href='".$link."'></a>";
+                            
+                            //With text
+                            //$actionbar .= $OUTPUT->action_link($link, $view_hint_actionbar_show, null, array('title'=>$view_hint_actionbar_show.' hello', 'class'=>'editing_show'));
+                            
+                            //With icon
+                            $attributes = array('title' => get_string('show'));
+                            $icon = new pix_icon('t/show', get_string('show'), 'moodle', $attributes);
+                            $action = null;
+                            $actionbar .= $OUTPUT->action_icon($link, $icon, $action, $attributes, false);
                         }
-                        $actionbar .= "<a id='actionbar-delete-a-".$recording['recordID']."' title='".$view_hint_actionbar_delete."' href='#'><img id='actionbar-delete-img-".$recording['recordID']."' src='pix/delete.gif' class='iconsmall' onclick='if(confirm(\"".get_string('view_delete_confirmation', 'recordingsbn')."\")) window.location = \"".$CFG->wwwroot."/mod/recordingsbn/view?id=".$cm->id."&action=delete&recordingid=".$recording['recordID']."&cid=".$course->id."\"; return false;' /></a>";
+                        
+                        
+                        //$actionbar .= "<a class='editing_delete' id='actionbar-delete-a-".$recording['recordID']."' title='".$view_hint_actionbar_delete."' href='#'><img id='actionbar-delete-img-".$recording['recordID']."' src='pix/delete.gif' class='iconsmall' onclick='if(confirm(\"".get_string('view_delete_confirmation', 'recordingsbn')."\")) window.location = \"".$CFG->wwwroot."/mod/recordingsbn/view?id=".$cm->id."&action=delete&recordingid=".$recording['recordID']."&cid=".$course->id."\"; return false;' /></a>";
+                        //$actionbar .= "<a class='editing_delete' id='actionbar-delete-a-".$recording['recordID']."' title='".$view_hint_actionbar_delete."' href='#' onclick='if(confirm(\"".get_string('view_delete_confirmation', 'recordingsbn')."\")) window.location = \"".$CFG->wwwroot."/mod/recordingsbn/view?id=".$cm->id."&action=delete&recordingid=".$recording['recordID']."&cid=".$course->id."\"; return false;'></a>";
+                        $params['action'] = 'delete';
+                        $link = new moodle_url('/mod/recordingsbn/view.php', $params);
+                        //$actionbar .= "<a class='editing_delete' title='".$view_hint_actionbar_delete."' href='".$link."'></a>";
+                        //With text
+                        //$actionbar .= $OUTPUT->action_link($link, $view_hint_actionbar_delete, null, array('title'=>$view_hint_actionbar_delete, 'class'=>'editing_delete'));
+                        //With icon
+                        $icon = new pix_icon('t/delete', get_string('delete'), 'moodle', array('title' => get_string('delete')));
+                        $actionbar .= $OUTPUT->action_icon($link, $icon, null, array('title' => get_string('delete')), false);
                         
                     }
     
+                    
                     $type = '';
                     foreach ( $recording['playbacks'] as $playback ){
                         $type .= '<a href="'.$playback['url'].'" target="_new">'.$playback['type'].'</a>&#32;';
@@ -185,6 +226,24 @@ if ($dbman->table_exists('bigbluebuttonbn_log') ) {
     
     }
     
+    $params['id'] = '3';
+    $link = new moodle_url('/mod/chat/gui_basic/index.php', $params);
+    $action = new popup_action('click', $link, "chat{$course->id}{'3'}{'45'}", array('height' => 500, 'width' => 700));
+    echo '<p>';
+    echo $OUTPUT->action_link($link, get_string('noframesjs', 'message'), null, array('title'=>get_string('modulename', 'chat')));
+    //echo $OUTPUT->action_icon($urledit, new pix_icon('t/edit', get_string('edit')));
+    echo '</p>';
+    /*
+    <p>
+        <a title="Chat" href="http://192.168.0.176/moodle23/mod/chat/gui_basic/index.php?id=3" id="action_link50b39bb33f48b4">Use more accessible interface</a>
+    </p>
+    
+    <p>
+        <a title="Chat" href="http://192.168.0.176/moodle23/mod/chat/gui_basic/index.php?id=3&amp;recordingid=c81b910b3d2df887a7147931a003a8cd23fce7cd-1353709239816&amp;action=delete">Use more accessible interface</a>
+    </p>
+    */
+    
+    
     //Print the table
     echo $OUTPUT->box_start('generalbox boxaligncenter', 'dates');
     echo html_writer::table($table);
@@ -200,4 +259,52 @@ if ($dbman->table_exists('bigbluebuttonbn_log') ) {
 // Finish the page
 echo $OUTPUT->footer();
 
+/*
+<li class="activity recordingsbn modtype_recordingsbn" id="module-59">
+    <div class="mod-indent">
+        <a  href="http://192.168.0.176/moodle23/mod/recordingsbn/view.php?id=59"><img src="http://192.168.0.176/moodle23/theme/image.php?theme=bootstrap&amp;component=recordingsbn&amp;image=icon" class="activityicon" alt="RecordingsBN" /> <span class="instancename">Library<span class="accesshide " > RecordingsBN</span></span></a>&nbsp;&nbsp;
+        <span class="commands">
+            <a class="editing_title" title="Edit title" href="http://192.168.0.176/moodle23/course/mod.php?sesskey=rUvQp0CwoZ&amp;sr=0&amp;update=59"><i class=icon-tag></i></a>
+            <a class="editing_moveright" title="Move right" href="http://192.168.0.176/moodle23/course/mod.php?sesskey=rUvQp0CwoZ&amp;sr=0&amp;id=59&amp;indent=1"><i class=icon-arrow-right></i></a>
+            <a class="editing_move" title="Move" href="http://192.168.0.176/moodle23/course/mod.php?sesskey=rUvQp0CwoZ&amp;sr=0&amp;copy=59"><i class=icon-resize-vertical></i></a>
+            <a class="editing_update" title="Update" href="http://192.168.0.176/moodle23/course/mod.php?sesskey=rUvQp0CwoZ&amp;sr=0&amp;update=59"><i class=icon-edit></i></a>
+            <a class="editing_duplicate" title="Duplicate" href="http://192.168.0.176/moodle23/course/mod.php?sesskey=rUvQp0CwoZ&amp;sr=0&amp;duplicate=59"><i class=icon-repeat></i></a>
+            <a class="editing_delete" title="Delete" href="http://192.168.0.176/moodle23/course/mod.php?sesskey=rUvQp0CwoZ&amp;sr=0&amp;delete=59"><i class=icon-remove></i></a>
+            <a class="editing_hide" title="Hide" href="http://192.168.0.176/moodle23/course/mod.php?sesskey=rUvQp0CwoZ&amp;sr=0&amp;hide=59"><i class=icon-eye-open></i></a>
+            <a class="editing_assign" title="Assign roles" href="http://192.168.0.176/moodle23/admin/roles/assign.php?contextid=105"><i class=icon-user></i></a>
+        </span>
+    </div>
+</li>
+
+
+<li class="activity recordingsbn modtype_recordingsbn" id="module-38">
+    <div class="mod-indent">
+        <a  href="http://192.168.0.176/moodle22/mod/recordingsbn/view.php?id=38"><img src="http://192.168.0.176/moodle22/theme/image.php?theme=standard&amp;image=icon&amp;rev=371&amp;component=recordingsbn" class="activityicon" alt="RecordingsBN" /> <span class="instancename">Library<span class="accesshide " > RecordingsBN</span></span></a>&nbsp;&nbsp;
+        <span class="commands">
+            <a class="editing_moveright" title="Move right" href="http://192.168.0.176/moodle22/course/mod.php?sesskey=QslhtQcAYL&amp;sr=0&amp;id=38&amp;indent=1"><img class="iconsmall" alt="Move right" title="Move right" src="http://192.168.0.176/moodle22/theme/image.php?theme=standard&amp;image=t%2Fright&amp;rev=371" /></a>
+            <a class="editing_move" title="Move" href="http://192.168.0.176/moodle22/course/mod.php?sesskey=QslhtQcAYL&amp;sr=0&amp;copy=38"><img class="iconsmall" alt="Move" title="Move" src="http://192.168.0.176/moodle22/theme/image.php?theme=standard&amp;image=t%2Fmove&amp;rev=371" /></a>
+            <a class="editing_update" title="Update" href="http://192.168.0.176/moodle22/course/mod.php?sesskey=QslhtQcAYL&amp;sr=0&amp;update=38"><img class="iconsmall" alt="Update" title="Update" src="http://192.168.0.176/moodle22/theme/image.php?theme=standard&amp;image=t%2Fedit&amp;rev=371" /></a>
+            <a class="editing_duplicate" title="Duplicate" href="http://192.168.0.176/moodle22/course/mod.php?sesskey=QslhtQcAYL&amp;sr=0&amp;duplicate=38"><img class="iconsmall" alt="Duplicate" title="Duplicate" src="http://192.168.0.176/moodle22/theme/image.php?theme=standard&amp;image=t%2Fcopy&amp;rev=371" /></a>
+            <a class="editing_delete" title="Delete" href="http://192.168.0.176/moodle22/course/mod.php?sesskey=QslhtQcAYL&amp;sr=0&amp;delete=38"><img class="iconsmall" alt="Delete" title="Delete" src="http://192.168.0.176/moodle22/theme/image.php?theme=standard&amp;image=t%2Fdelete&amp;rev=371" /></a>
+            <a class="editing_hide" title="Hide" href="http://192.168.0.176/moodle22/course/mod.php?sesskey=QslhtQcAYL&amp;sr=0&amp;hide=38"><img class="iconsmall" alt="Hide" title="Hide" src="http://192.168.0.176/moodle22/theme/image.php?theme=standard&amp;image=t%2Fhide&amp;rev=371" /></a>
+            <a class="editing_assign" title="Assign roles" href="http://192.168.0.176/moodle22/admin/roles/assign.php?contextid=67"><img class="iconsmall" alt="Assign roles" title="Assign roles" src="http://192.168.0.176/moodle22/theme/image.php?theme=standard&amp;image=i%2Froles&amp;rev=371" /></a>
+        </span>
+    </div>
+</li>
+
+
+        <span class="commands">
+            <a class='editing_hide' id='actionbar-publish-a-c81b910b3d2df887a7147931a003a8cd23fce7cd-1353709239816' title='Hide' href='http://192.168.0.176/moodle23/mod/recordingsbn/view?id=59&action=unpublish&recordingid=c81b910b3d2df887a7147931a003a8cd23fce7cd-1353709239816&cid=2'></a>
+            <a class='editing_delete' id='actionbar-delete-a-c81b910b3d2df887a7147931a003a8cd23fce7cd-1353709239816' title='Delete' href='#' onclick='if(confirm("Are you sure to delete this recording?")) window.location = "http://192.168.0.176/moodle23/mod/recordingsbn/view?id=59&action=delete&recordingid=c81b910b3d2df887a7147931a003a8cd23fce7cd-1353709239816&cid=2"; return false;'></a>
+        </span>
+
+
+        <p>
+            <a title="Chat" href="http://192.168.0.176/moodle23/mod/chat/gui_basic/index.php?id=3" id="action_link50b39bb33f48b4">Use more accessible interface</a>
+        </p>
+*/
+
 ?>
+
+
+
