@@ -31,6 +31,7 @@ $string['view_head_activity'] = 'Activity';
 $string['view_head_course'] = 'Course';
 $string['view_head_date'] = 'Date';
 $string['view_head_description'] = 'Description';
+$string['view_head_length'] = 'Length';
 $string['view_head_duration'] = 'Duration';
 $string['view_head_recording'] = 'Recording';
 

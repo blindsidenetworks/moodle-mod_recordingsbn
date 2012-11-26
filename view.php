@@ -20,8 +20,6 @@ $n  = optional_param('n', 0, PARAM_INT);  // recordingsbn instance ID - it shoul
 
 $action  = optional_param('action', 0, PARAM_TEXT);
 $recordingid  = optional_param('recordingid', 0, PARAM_TEXT);
-$cid  = optional_param('cid', 0, PARAM_INT);
-
 
 if ($id) {
     $cm         = get_coursemodule_from_id('recordingsbn', $id, 0, false, MUST_EXIST);
@@ -54,12 +52,13 @@ $moderator = has_capability('mod/bigbluebuttonbn:moderate', $context);
 
 add_to_log($course->id, 'recordingsbn', 'view', "view.php?id={$cm->id}", $recordingsbn->name, $cm->id);
 
-//Set strings to show
+///Set strings to show
 $view_head_recording = get_string('view_head_recording', 'recordingsbn');
 $view_head_course = get_string('view_head_course', 'recordingsbn');
 $view_head_activity = get_string('view_head_activity', 'recordingsbn');
 $view_head_description = get_string('view_head_description', 'recordingsbn');
 $view_head_date = get_string('view_head_date', 'recordingsbn');
+$view_head_length = get_string('view_head_length', 'recordingsbn');
 $view_head_duration = get_string('view_head_duration', 'recordingsbn');
 $view_head_actionbar = get_string('view_head_actionbar', 'recordingsbn');
 
@@ -71,15 +70,15 @@ $PAGE->set_button(update_module_button($cm->id, $course->id, get_string('modulen
 $PAGE->set_context($context);
 $PAGE->set_cacheable(false);
 
-// Output starts here
+/// Output starts here
 echo $OUTPUT->header();
 
-//Declare the table
+///Declare the table
 $table = new html_table();
 
-//Initialize table headers
-$table->head  = array ($view_head_recording, $view_head_course, $view_head_activity, $view_head_description, $view_head_date, $view_head_duration, $view_head_actionbar);
-$table->align = array ('center', 'center', 'center', 'center', 'center', 'center', 'left');
+///Initialize table headers
+$table->head  = array ($view_head_recording, $view_head_activity, $view_head_description, $view_head_date, $view_head_duration, $view_head_actionbar);
+$table->align = array ('center', 'center', 'center', 'center', 'center', 'left');
 
 //Print page headers
 echo $OUTPUT->heading(get_string('modulenameplural', 'recordingsbn'), 2);
@@ -90,9 +89,6 @@ if ($dbman->table_exists('bigbluebuttonbn_log') ) {
     // BigBlueButton Setup
     $salt = trim($CFG->BigBlueButtonBNSecuritySalt);
     $url = trim(trim($CFG->BigBlueButtonBNServerURL),'/').'/';
-    $logoutURL = $CFG->wwwroot;
-    $username = $USER->firstname.' '.$USER->lastname;
-    $userID = $USER->id;
 
     //Execute actions if there is one and it is allowed
     if( isset($action) && isset($recordingid) && $moderator ){
@@ -103,7 +99,6 @@ if ($dbman->table_exists('bigbluebuttonbn_log') ) {
         else if( $action == 'delete')
             bigbluebuttonbn_doDeleteRecordings($recordingid, $url, $salt);
     }
-    
     
     $meetingID='';
     $results = $DB->get_records_sql('SELECT DISTINCT meetingid, courseid, bigbluebuttonbnid FROM '.$CFG->prefix.'bigbluebuttonbn_log WHERE '.$CFG->prefix.'bigbluebuttonbn_log.courseid='.$course->id. ' AND '.$CFG->prefix.'bigbluebuttonbn_log.record = 1 AND '.$CFG->prefix.'bigbluebuttonbn_log.event = \'Create\';' );
@@ -133,14 +128,15 @@ if ($dbman->table_exists('bigbluebuttonbn_log') ) {
         if( isset($recordingsbn) && !isset($recordingsbn['messageKey']) ){
             foreach ( $recordingsbn as $recording ){
                 if ( $moderator || $recording['published'] == 'true' ) {
-    
+                    
+                    $length = 0;
                     $endTime = isset($recording['endTime'])? intval(str_replace('"', '\"', $recording['endTime'])):0;
                     $endTime = $endTime - ($endTime % 1000);
                     $startTime = isset($recording['startTime'])? intval(str_replace('"', '\"', $recording['startTime'])):0;
                     $startTime = $startTime - ($startTime % 1000);
                     $duration = intval(($endTime - $startTime) / 60000);
     
-                    $meta_course = isset($recording['meta_context'])?str_replace('"', '\"', $recording['meta_context']):'';
+                    //$meta_course = isset($recording['meta_context'])?str_replace('"', '\"', $recording['meta_context']):'';
                     $meta_activity = isset($recording['meta_contextactivity'])?str_replace('"', '\"', $recording['meta_contextactivity']):'';
                     $meta_description = isset($recording['meta_contextactivitydescription'])?str_replace('"', '\"', $recording['meta_contextactivitydescription']):'';
     
@@ -178,7 +174,6 @@ if ($dbman->table_exists('bigbluebuttonbn_log') ) {
                     
                     $type = '';
                     foreach ( $recording['playbacks'] as $playback ){
-                        //$type .= '<a href="'.$playback['url'].'" target="_new">'.$playback['type'].'</a>&#32;';
                         $type .= $OUTPUT->action_link($playback['url'], $playback['type'], null, array('title' => $playback['type'], 'target' => '_new') ).'&#32;';
                         
                     }
@@ -197,7 +192,7 @@ if ($dbman->table_exists('bigbluebuttonbn_log') ) {
                     //Format the date
                     $formatedStartDate = userdate($recording['startTime'], $format, usertimezone($USER->timezone) );
                     
-                    $table->data[] = array ($type, $meta_course, $meta_activity, $meta_description, str_replace( " ", "&nbsp;", $formatedStartDate), $duration, $actionbar );
+                    $table->data[] = array ($type, $meta_activity, $meta_description, str_replace( " ", "&nbsp;", $formatedStartDate), $duration, $actionbar );
                     
                 }
             }
@@ -219,53 +214,6 @@ if ($dbman->table_exists('bigbluebuttonbn_log') ) {
 
 // Finish the page
 echo $OUTPUT->footer();
-
-/*
-<li class="activity recordingsbn modtype_recordingsbn" id="module-59">
-    <div class="mod-indent">
-        <a  href="http://192.168.0.176/moodle23/mod/recordingsbn/view.php?id=59"><img src="http://192.168.0.176/moodle23/theme/image.php?theme=bootstrap&amp;component=recordingsbn&amp;image=icon" class="activityicon" alt="RecordingsBN" /> <span class="instancename">Library<span class="accesshide " > RecordingsBN</span></span></a>&nbsp;&nbsp;
-        <span class="commands">
-            <a class="editing_title" title="Edit title" href="http://192.168.0.176/moodle23/course/mod.php?sesskey=rUvQp0CwoZ&amp;sr=0&amp;update=59"><i class=icon-tag></i></a>
-            <a class="editing_moveright" title="Move right" href="http://192.168.0.176/moodle23/course/mod.php?sesskey=rUvQp0CwoZ&amp;sr=0&amp;id=59&amp;indent=1"><i class=icon-arrow-right></i></a>
-            <a class="editing_move" title="Move" href="http://192.168.0.176/moodle23/course/mod.php?sesskey=rUvQp0CwoZ&amp;sr=0&amp;copy=59"><i class=icon-resize-vertical></i></a>
-            <a class="editing_update" title="Update" href="http://192.168.0.176/moodle23/course/mod.php?sesskey=rUvQp0CwoZ&amp;sr=0&amp;update=59"><i class=icon-edit></i></a>
-            <a class="editing_duplicate" title="Duplicate" href="http://192.168.0.176/moodle23/course/mod.php?sesskey=rUvQp0CwoZ&amp;sr=0&amp;duplicate=59"><i class=icon-repeat></i></a>
-            <a class="editing_delete" title="Delete" href="http://192.168.0.176/moodle23/course/mod.php?sesskey=rUvQp0CwoZ&amp;sr=0&amp;delete=59"><i class=icon-remove></i></a>
-            <a class="editing_hide" title="Hide" href="http://192.168.0.176/moodle23/course/mod.php?sesskey=rUvQp0CwoZ&amp;sr=0&amp;hide=59"><i class=icon-eye-open></i></a>
-            <a class="editing_assign" title="Assign roles" href="http://192.168.0.176/moodle23/admin/roles/assign.php?contextid=105"><i class=icon-user></i></a>
-        </span>
-    </div>
-</li>
-
-
-<li class="activity recordingsbn modtype_recordingsbn" id="module-38">
-    <div class="mod-indent">
-        <a  href="http://192.168.0.176/moodle22/mod/recordingsbn/view.php?id=38"><img src="http://192.168.0.176/moodle22/theme/image.php?theme=standard&amp;image=icon&amp;rev=371&amp;component=recordingsbn" class="activityicon" alt="RecordingsBN" /> <span class="instancename">Library<span class="accesshide " > RecordingsBN</span></span></a>&nbsp;&nbsp;
-        <span class="commands">
-            <a class="editing_moveright" title="Move right" href="http://192.168.0.176/moodle22/course/mod.php?sesskey=QslhtQcAYL&amp;sr=0&amp;id=38&amp;indent=1"><img class="iconsmall" alt="Move right" title="Move right" src="http://192.168.0.176/moodle22/theme/image.php?theme=standard&amp;image=t%2Fright&amp;rev=371" /></a>
-            <a class="editing_move" title="Move" href="http://192.168.0.176/moodle22/course/mod.php?sesskey=QslhtQcAYL&amp;sr=0&amp;copy=38"><img class="iconsmall" alt="Move" title="Move" src="http://192.168.0.176/moodle22/theme/image.php?theme=standard&amp;image=t%2Fmove&amp;rev=371" /></a>
-            <a class="editing_update" title="Update" href="http://192.168.0.176/moodle22/course/mod.php?sesskey=QslhtQcAYL&amp;sr=0&amp;update=38"><img class="iconsmall" alt="Update" title="Update" src="http://192.168.0.176/moodle22/theme/image.php?theme=standard&amp;image=t%2Fedit&amp;rev=371" /></a>
-            <a class="editing_duplicate" title="Duplicate" href="http://192.168.0.176/moodle22/course/mod.php?sesskey=QslhtQcAYL&amp;sr=0&amp;duplicate=38"><img class="iconsmall" alt="Duplicate" title="Duplicate" src="http://192.168.0.176/moodle22/theme/image.php?theme=standard&amp;image=t%2Fcopy&amp;rev=371" /></a>
-            <a class="editing_delete" title="Delete" href="http://192.168.0.176/moodle22/course/mod.php?sesskey=QslhtQcAYL&amp;sr=0&amp;delete=38"><img class="iconsmall" alt="Delete" title="Delete" src="http://192.168.0.176/moodle22/theme/image.php?theme=standard&amp;image=t%2Fdelete&amp;rev=371" /></a>
-            <a class="editing_hide" title="Hide" href="http://192.168.0.176/moodle22/course/mod.php?sesskey=QslhtQcAYL&amp;sr=0&amp;hide=38"><img class="iconsmall" alt="Hide" title="Hide" src="http://192.168.0.176/moodle22/theme/image.php?theme=standard&amp;image=t%2Fhide&amp;rev=371" /></a>
-            <a class="editing_assign" title="Assign roles" href="http://192.168.0.176/moodle22/admin/roles/assign.php?contextid=67"><img class="iconsmall" alt="Assign roles" title="Assign roles" src="http://192.168.0.176/moodle22/theme/image.php?theme=standard&amp;image=i%2Froles&amp;rev=371" /></a>
-        </span>
-    </div>
-</li>
-
-
-        <span class="commands">
-            <a class='editing_hide' id='actionbar-publish-a-c81b910b3d2df887a7147931a003a8cd23fce7cd-1353709239816' title='Hide' href='http://192.168.0.176/moodle23/mod/recordingsbn/view?id=59&action=unpublish&recordingid=c81b910b3d2df887a7147931a003a8cd23fce7cd-1353709239816&cid=2'></a>
-            <a class='editing_delete' id='actionbar-delete-a-c81b910b3d2df887a7147931a003a8cd23fce7cd-1353709239816' title='Delete' href='#' onclick='if(confirm("Are you sure to delete this recording?")) window.location = "http://192.168.0.176/moodle23/mod/recordingsbn/view?id=59&action=delete&recordingid=c81b910b3d2df887a7147931a003a8cd23fce7cd-1353709239816&cid=2"; return false;'></a>
-        </span>
-
-
-        <p>
-            <a title="Chat" href="http://192.168.0.176/moodle23/mod/chat/gui_basic/index.php?id=3" id="action_link50b39bb33f48b4">Use more accessible interface</a>
-        </p>
-*/
-
-?>
 
 
 
