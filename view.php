@@ -101,24 +101,16 @@ if ($dbman->table_exists('bigbluebuttonbn_log') ) {
     }
     
     $meetingID='';
-    $results = $DB->get_records_sql('SELECT DISTINCT meetingid, courseid, bigbluebuttonbnid FROM '.$CFG->prefix.'bigbluebuttonbn_log WHERE '.$CFG->prefix.'bigbluebuttonbn_log.courseid='.$course->id. ' AND '.$CFG->prefix.'bigbluebuttonbn_log.record = 1 AND '.$CFG->prefix.'bigbluebuttonbn_log.event = \'Create\';' );
-    
-    $groups = groups_get_all_groups($course->id);
-    if( isset($groups) && count($groups) > 0 ){  //If the course has groups include groupid in the name to look for possible recordings related to the sub-activities
+    if( $results = get_records_sql('SELECT DISTINCT meetingid, courseid, bigbluebuttonbnid FROM '.$CFG->prefix.'bigbluebuttonbn_log WHERE '.$CFG->prefix.'bigbluebuttonbn_log.courseid='.$course->id. ' AND '.$CFG->prefix.'bigbluebuttonbn_log.record = 1 AND '.$CFG->prefix.'bigbluebuttonbn_log.event = \'Create\';' ) ){
         foreach ($results as $result) {
             if (strlen($meetingID) > 0) $meetingID .= ',';
             $meetingID .= $result->meetingid;
-            foreach ( $groups as $group ){
-                $meetingID .= ','.$result->meetingid.'['.$group->id.']';
+            if( $groups = groups_get_all_groups($course->id)){
+                foreach ( $groups as $group ){
+                    $meetingID .= ','.$result->meetingid.'['.$group->id.']';
+                }
             }
         }
-    
-    } else {                                    // No groups means that it wont check any other sub-activity
-        foreach ($results as $result) {
-            if (strlen($meetingID) > 0) $meetingID .= ',';
-            $meetingID .= $result->meetingid;
-        }
-    
     }
     
     //If there are meetings with recordings load the data to the table 
