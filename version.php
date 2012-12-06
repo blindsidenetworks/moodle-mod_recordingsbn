@@ -16,8 +16,8 @@ $module->version   = 2012120100;
 $module->requires  = 2010112400;
 $module->cron      = 0;
 $module->component = 'mod_recordingsbn';
-$module->maturity = MATURITY_RC;  // [MATURITY_STABLE | MATURITY_RC | MATURITY_BETA | MATURITY_ALPHA]
+$module->maturity = MATURITY_STABLE;  // [MATURITY_STABLE | MATURITY_RC | MATURITY_BETA | MATURITY_ALPHA]
 $module->release  = '1.0.8';
 $module->dependencies = array(
-    'mod_bigbluebuttonbn' => 2012110100,
+    'mod_bigbluebuttonbn' => 2012120100,
 );
