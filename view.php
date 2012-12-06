@@ -66,13 +66,6 @@ echo $OUTPUT->header();
 // Recordings plugin code
 $dbman = $DB->get_manager(); // loads ddl manager and xmldb classes
 if ($dbman->table_exists('bigbluebuttonbn_log') ) {
-    // BigBlueButton Setup
-    $salt = trim($CFG->BigBlueButtonBNSecuritySalt);
-    $url = trim(trim($CFG->BigBlueButtonBNServerURL),'/').'/';
-    $logoutURL = $CFG->wwwroot;
-    $username = $USER->firstname.' '.$USER->lastname;
-    $userID = $USER->id;
-    
     $meetingID='';
     $results = $DB->get_records_sql('SELECT DISTINCT meetingid, courseid, bigbluebuttonbnid FROM '.$CFG->prefix.'bigbluebuttonbn_log WHERE '.$CFG->prefix.'bigbluebuttonbn_log.courseid='.$course->id. ' AND '.$CFG->prefix.'bigbluebuttonbn_log.record = 1 AND '.$CFG->prefix.'bigbluebuttonbn_log.event = \'Create\';' );
     
