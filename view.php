@@ -69,6 +69,7 @@ $PAGE->set_heading(format_string($course->fullname));
 $PAGE->set_button(update_module_button($cm->id, $course->id, get_string('modulename', 'recordingsbn')));
 $PAGE->set_context($context);
 $PAGE->set_cacheable(false);
+//$PAGE->set_periodic_refresh_delay(60);
 
 /// Output starts here
 echo $OUTPUT->header();
@@ -101,7 +102,7 @@ if ($dbman->table_exists('bigbluebuttonbn_log') ) {
     }
     
     $meetingID='';
-    if( $results = get_records_sql('SELECT DISTINCT meetingid, courseid, bigbluebuttonbnid FROM '.$CFG->prefix.'bigbluebuttonbn_log WHERE '.$CFG->prefix.'bigbluebuttonbn_log.courseid='.$course->id. ' AND '.$CFG->prefix.'bigbluebuttonbn_log.record = 1 AND '.$CFG->prefix.'bigbluebuttonbn_log.event = \'Create\';' ) ){
+    if( $results = $DB->get_records_sql('SELECT DISTINCT meetingid, courseid, bigbluebuttonbnid FROM '.$CFG->prefix.'bigbluebuttonbn_log WHERE '.$CFG->prefix.'bigbluebuttonbn_log.courseid='.$course->id. ' AND '.$CFG->prefix.'bigbluebuttonbn_log.record = 1 AND '.$CFG->prefix.'bigbluebuttonbn_log.event = \'Create\';' ) ){
         foreach ($results as $result) {
             if (strlen($meetingID) > 0) $meetingID .= ',';
             $meetingID .= $result->meetingid;
