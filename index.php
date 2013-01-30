@@ -50,6 +50,7 @@ $strname  = get_string('name');
 $strweek  = get_string('week');
 $strtopic = get_string('topic');
 
+$table = new html_table();
 if ($course->format == 'weeks') {
     $table->head  = array ($strweek, $strname);
     $table->align = array ('center', 'left');

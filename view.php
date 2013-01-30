@@ -78,8 +78,13 @@ echo $OUTPUT->header();
 $table = new html_table();
 
 ///Initialize table headers
-$table->head  = array ($view_head_recording, $view_head_activity, $view_head_description, $view_head_date, $view_head_duration, $view_head_actionbar);
-$table->align = array ('center', 'center', 'center', 'center', 'center', 'left');
+if ( $moderator ) {
+    $table->head  = array ($view_head_recording, $view_head_activity, $view_head_description, $view_head_date, $view_head_duration, $view_head_actionbar);
+    $table->align = array ('center', 'center', 'center', 'center', 'center', 'left');
+} else {
+    $table->head  = array ($view_head_recording, $view_head_activity, $view_head_description, $view_head_date, $view_head_duration);
+    $table->align = array ('center', 'center', 'center', 'center', 'center');
+}
 
 //Print page headers
 echo $OUTPUT->heading(get_string('modulenameplural', 'recordingsbn'), 2);
@@ -184,9 +189,13 @@ if ($dbman->table_exists('bigbluebuttonbn_log') ) {
                     $format = '%a %h %d %H:%M:%S %Z %Y';
                     //Format the date
                     $formatedStartDate = userdate($recording['startTime'], $format, usertimezone($USER->timezone) );
-                    
-                    $table->data[] = array ($type, $meta_activity, $meta_description, str_replace( " ", "&nbsp;", $formatedStartDate), $duration, $actionbar );
-                    
+
+                    if ( $moderator ) {
+                        $table->data[] = array ($type, $meta_activity, $meta_description, str_replace( " ", "&nbsp;", $formatedStartDate), $duration, $actionbar );
+                    } else {
+                        $table->data[] = array ($type, $meta_activity, $meta_description, str_replace( " ", "&nbsp;", $formatedStartDate), $duration);
+                    }
+                        
                 }
             }
         }
