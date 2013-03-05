@@ -111,11 +111,6 @@ if ($dbman->table_exists('bigbluebuttonbn_log') ) {
         foreach ($results as $result) {
             if (strlen($meetingID) > 0) $meetingID .= ',';
             $meetingID .= $result->meetingid;
-            if( $groups = groups_get_all_groups($course->id)){
-                foreach ( $groups as $group ){
-                    $meetingID .= ','.$result->meetingid.'['.$group->id.']';
-                }
-            }
         }
     }
     
