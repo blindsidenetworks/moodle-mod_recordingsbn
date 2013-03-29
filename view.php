@@ -167,10 +167,13 @@ if ($dbman->table_exists('bigbluebuttonbn_log') ) {
                     
                     $type = '';
                     foreach ( $recording['playbacks'] as $playback ){
-                        $type .= $OUTPUT->action_link($playback['url'], $playback['type'], null, array('title' => $playback['type'], 'target' => '_new') ).'&#32;';
-                        
+                        if ($recording['published'] == 'true'){
+                            $type .= $OUTPUT->action_link($playback['url'], $playback['type'], null, array('title' => $playback['type'], 'target' => '_new') ).'&#32;';
+                        } else {
+                            $type .= $playback['type'].'&#32;';
+                        }
                     }
-                    
+
                     //Make sure the startTime is timestamp
                     if( !is_numeric($recording['startTime']) ){
                         $date = new DateTime($recording['startTime']);
