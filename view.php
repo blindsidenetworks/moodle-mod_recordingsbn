@@ -123,12 +123,12 @@ if ($dbman->table_exists('bigbluebuttonbn_log') ) {
                 if ( $moderator || $recording['published'] == 'true' ) {
                     
                     $length = 0;
-                    $endTime = isset($recording['endTime'])? intval(str_replace('"', '\"', $recording['endTime'])):0;
+                    $endTime = isset($recording['endTime'])? floatval($recording['endTime']):0;
                     $endTime = $endTime - ($endTime % 1000);
-                    $startTime = isset($recording['startTime'])? intval(str_replace('"', '\"', $recording['startTime'])):0;
+                    $startTime = isset($recording['startTime'])? floatval($recording['startTime']):0;
                     $startTime = $startTime - ($startTime % 1000);
                     $duration = intval(($endTime - $startTime) / 60000);
-    
+                        
                     //$meta_course = isset($recording['meta_context'])?str_replace('"', '\"', $recording['meta_context']):'';
                     $meta_activity = isset($recording['meta_contextactivity'])?str_replace('"', '\"', $recording['meta_contextactivity']):'';
                     $meta_description = isset($recording['meta_contextactivitydescription'])?str_replace('"', '\"', $recording['meta_contextactivitydescription']):'';
