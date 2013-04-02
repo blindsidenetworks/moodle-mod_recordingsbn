@@ -27,11 +27,11 @@ Obtaining the source
 ====================
 This GitHub repostiory at
 
-  https://github.com/blindsidenetworks/moodle-mod_bigbluebutton/tree/master/moodle2x/recordingsbn
+  https://github.com/blindsidenetworks/moodle-mod_recordingsbn
 
 contains the latest source.  If you want to use the latest packaged snapshot, you can download it from
 
-  http://blindsidenetworks.com/downloads/moodle/recordingsbn.zip
+  http://blindsidenetworks.com/downloads/moodle/bigbluebutton_blindsidenetworks_activity_module_2x.zip
 
 
 Installation
