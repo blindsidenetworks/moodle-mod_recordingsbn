@@ -34,4 +34,4 @@ $string['view_head_description'] = 'Description';
 $string['view_head_length'] = 'Length';
 $string['view_head_duration'] = 'Duration';
 $string['view_head_recording'] = 'Recording';
-
+$string['view_duration_min'] = 'min';
