@@ -32,6 +32,7 @@ if ($id) {
 } else {
     error('You must specify a course_module ID or an instance ID');
 }
+$module = $DB->get_record('modules', array('name' => 'recordingsbn'));
 
 require_login($course, true, $cm);
 $context = get_context_instance(CONTEXT_MODULE, $cm->id);
@@ -74,6 +75,10 @@ $PAGE->set_cacheable(false);
 
 /// Output starts here
 echo $OUTPUT->header();
+
+/// Shows version as a comment
+echo '
+<!-- moodle-mod_recordingsbn ('.$module->version.') -->'."\n";
 
 ///Declare the table
 $table = new html_table();
@@ -126,7 +131,7 @@ if ($dbman->table_exists('bigbluebuttonbn_log') ) {
     }
     
     $meetingID='';
-    if( $results = $DB->get_records_sql('SELECT DISTINCT meetingid, courseid, bigbluebuttonbnid FROM '.$CFG->prefix.'bigbluebuttonbn_log WHERE '.$CFG->prefix.'bigbluebuttonbn_log.courseid='.$course->id. ' AND '.$CFG->prefix.'bigbluebuttonbn_log.record = 1 AND '.$CFG->prefix.'bigbluebuttonbn_log.event = \'Create\';' ) ){
+    if( $results = $DB->get_records_sql('SELECT DISTINCT meetingid, courseid, bigbluebuttonbnid FROM '.$CFG->prefix.'bigbluebuttonbn_log WHERE courseid='.$course->id. ' AND record = 1 AND event = \'Create\';' ) ){
         foreach ($results as $result) {
             if (strlen($meetingID) > 0) $meetingID .= ',';
             $meetingID .= $result->meetingid;
