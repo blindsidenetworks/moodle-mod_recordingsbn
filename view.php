@@ -131,10 +131,17 @@ if ($dbman->table_exists('bigbluebuttonbn_log') ) {
     }
     
     $meetingID='';
-    if( $results = $DB->get_records_sql('SELECT DISTINCT meetingid, courseid, bigbluebuttonbnid FROM '.$CFG->prefix.'bigbluebuttonbn_log WHERE courseid='.$course->id. ' AND record = 1 AND event = \'Create\';' ) ){
+    $results = $DB->get_records('bigbluebuttonbn_log', array('courseid' => $course->id, 'record' => 1, 'event' => 'Create'));
+    if( $results ){
+        //Eliminates duplicates
+        $mIDs = array();
         foreach ($results as $result) {
+            $mIDs[$result->meetingid] = $result->meetingid;
+        }
+        //Generates the meetingID string
+        foreach ($mIDs as $mID) {
             if (strlen($meetingID) > 0) $meetingID .= ',';
-            $meetingID .= $result->meetingid;
+            $meetingID .= $mID;
         }
     }
     
