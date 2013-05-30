@@ -12,8 +12,6 @@ M.mod_recordingsbn = M.mod_recordingsbn || {};
 
 M.mod_recordingsbn.datatable_init = function(Y) {
 
-    Y.one('#recordingsbn_html_table').hide();
-    
 	YUI({ filter: 'raw' }).use('datatable-sort', 'datatable-column-widths', 'datatablepaginator', 'paginatorview', function (Y) {
 	    var table = new Y.DataTable({
 	    	columns: recordingsbn.columns,
@@ -25,8 +23,6 @@ M.mod_recordingsbn.datatable_init = function(Y) {
 
 M.mod_recordingsbn.gallery_datatable_init = function(Y) {
 
-    Y.one('#recordingsbn_html_table').hide();
-    
     recordingsbn.columns[3].formatter = fmtDate;
     for(var i = 0; i < recordingsbn.data.length; i++){
         recordingsbn.data[i].date = new Date(recordingsbn.data[i].date);

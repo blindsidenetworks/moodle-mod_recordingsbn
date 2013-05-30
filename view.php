@@ -249,27 +249,62 @@ if ($dbman->table_exists('bigbluebuttonbn_log') ) {
     
     }
     
+    
     //Print the table
-    echo '
-    <style type="text/css">
-        #recordingsbn_yui_paginator {
-            margin-top: 15px;
-            margin-bottom: 10px;
-        }
-    </style>'."\n";
+    if ($CFG->version >= '2012062500' ) {
+        //Shows javascript YUI version.
+        echo '
+        <style type="text/css">
+            #recordingsbn_yui_paginator {
+                margin-top: 15px;
+                margin-bottom: 10px;
+            }
+        </style>'."\n";
     
-    echo '<link rel="stylesheet" type="text/css" href="'.$CFG->wwwroot.'/mod/recordingsbn/yui/paginatorview/assets/paginatorview-core.css" />'."\n";
-    echo '<link rel="stylesheet" type="text/css" href="'.$CFG->wwwroot.'/mod/recordingsbn/yui/paginatorview/assets/skins/sam/paginatorview-skin.css" />'."\n";
+        echo '<link rel="stylesheet" type="text/css" href="'.$CFG->wwwroot.'/mod/recordingsbn/yui/paginatorview/assets/paginatorview-core.css" />'."\n";
+        echo '<link rel="stylesheet" type="text/css" href="'.$CFG->wwwroot.'/mod/recordingsbn/yui/paginatorview/assets/skins/sam/paginatorview-skin.css" />'."\n";
+        
+        echo $OUTPUT->box_start('generalbox boxaligncenter', 'recordingsbn_box')."\n";
+        echo '<div class="yui3-skin-sam">'."\n";
+        echo '  <div id="recordingsbn_yui_paginator"></div>'."\n";
+        echo '  <div id="recordingsbn_yui_table"></div>'."\n";
+        echo '</div>'."\n";
+        echo $OUTPUT->box_end();
     
-    echo $OUTPUT->box_start('generalbox boxaligncenter', 'recordingsbn_box')."\n";
-    echo '<div id="recordingsbn_html_table">'."\n";
-    //echo html_writer::table($table)."\n";
-    echo '</div>'."\n";
-    echo '<div class="yui3-skin-sam">'."\n";
-    echo '  <div id="recordingsbn_yui_paginator"></div>'."\n";
-    echo '  <div id="recordingsbn_yui_table"></div>'."\n";
-    echo '</div>'."\n";
-    echo $OUTPUT->box_end();
+        $gallery_datatable_paginator = array(
+                'name'      => 'datatablepaginator',
+                'fullpath'  => '/mod/recordingsbn/yui/datatablepaginator/datatablepaginator.js'
+        );
+        $PAGE->requires->js_module($gallery_datatable_paginator);
+        
+        $gallery_paginator_view = array(
+                'name'      => 'paginatorview',
+                'fullpath'  => '/mod/recordingsbn/yui/paginatorview/paginatorview.js'
+        );
+        $PAGE->requires->js_module($gallery_paginator_view);
+        
+        //JavaScript variables
+        $jsvars = array(
+                'columns' => $recordingsbn_columns,
+                'data' => $recordingsbn_data
+        );
+        $PAGE->requires->data_for_js('recordingsbn', $jsvars);
+        
+        $jsmodule = array(
+                'name'     => 'mod_recordingsbn',
+                'fullpath' => '/mod/recordingsbn/module.js',
+                'requires' => array('datatable-sort', 'datasource-get', 'datasource-jsonschema', 'datasource-polling', 'datatablepaginator', 'paginatorview'),
+        );
+        $PAGE->requires->js_init_call('M.mod_recordingsbn.gallery_datatable_init', array(), false, $jsmodule);
+        
+    } else {
+        //Shows HTML tan version.
+        echo $OUTPUT->box_start('generalbox boxaligncenter', 'recordingsbn_box')."\n";
+        echo '<div id="recordingsbn_html_table">'."\n";
+        echo html_writer::table($table)."\n";
+        echo '</div>'."\n";
+        echo $OUTPUT->box_end();
+    }
         
 } else {
     echo $OUTPUT->box_start('generalbox boxaligncenter', 'dates');
@@ -277,34 +312,6 @@ if ($dbman->table_exists('bigbluebuttonbn_log') ) {
     echo $OUTPUT->box_end();
     
 }
-
-
-$gallery_datatable_paginator = array(
-        'name'      => 'datatablepaginator',
-        'fullpath'  => '/mod/recordingsbn/yui/datatablepaginator/datatablepaginator.js'
-);
-$PAGE->requires->js_module($gallery_datatable_paginator);
-
-$gallery_paginator_view = array(
-        'name'      => 'paginatorview',
-        'fullpath'  => '/mod/recordingsbn/yui/paginatorview/paginatorview.js'
-);
-$PAGE->requires->js_module($gallery_paginator_view);
-
-
-//JavaScript variables
-$jsvars = array(
-        'columns' => $recordingsbn_columns,
-        'data' => $recordingsbn_data
-);
-$PAGE->requires->data_for_js('recordingsbn', $jsvars);
-
-$jsmodule = array(
-        'name'     => 'mod_recordingsbn',
-        'fullpath' => '/mod/recordingsbn/module.js',
-        'requires' => array('datatable-sort', 'datasource-get', 'datasource-jsonschema', 'datasource-polling', 'datatablepaginator', 'paginatorview'),
-);
-$PAGE->requires->js_init_call('M.mod_recordingsbn.gallery_datatable_init', array(), false, $jsmodule);
 
 // Finish the page
 echo $OUTPUT->footer();
