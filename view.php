@@ -86,7 +86,7 @@ $table = new html_table();
 ///Initialize table headers
 if ( $moderator ) {
     $table->head  = array ($view_head_recording, $view_head_activity, $view_head_description, $view_head_date, $view_head_duration, $view_head_actionbar);
-    $table->align = array ('center', 'center', 'center', 'center', 'center', 'left');
+    $table->align = array ('left', 'left', 'left', 'left', 'center', 'left');
     $recordingsbn_columns = array(
             array("key" =>"recording", "label" => $view_head_recording, "width" => "125px", "allowHTML" => true),
             array("key" =>"activity", "label" => $view_head_activity, "sortable" => true, "width" => "175px"),
@@ -97,7 +97,7 @@ if ( $moderator ) {
             );
 } else {
     $table->head  = array ($view_head_recording, $view_head_activity, $view_head_description, $view_head_date, $view_head_duration);
-    $table->align = array ('center', 'center', 'center', 'center', 'center');
+    $table->align = array ('left', 'left', 'left', 'left', 'center');
     $recordingsbn_columns = array(
             array("key" =>"recording", "label" => $view_head_recording, "width" => "125px", "allowHTML" => true),
             array("key" =>"activity", "label" => $view_head_activity, "sortable" => true, "width" => "175px"),
@@ -251,7 +251,7 @@ if ($dbman->table_exists('bigbluebuttonbn_log') ) {
     
     
     //Print the table
-    if ($CFG->version >= '2012062500' ) {
+    if (isset($CFG->recordingsbn_ui) && strtolower($CFG->recordingsbn_ui) == 'yui'  && $CFG->version >= '2012062500' ) {
         //Shows javascript YUI version.
         echo '
         <style type="text/css">
@@ -298,7 +298,7 @@ if ($dbman->table_exists('bigbluebuttonbn_log') ) {
         $PAGE->requires->js_init_call('M.mod_recordingsbn.gallery_datatable_init', array(), false, $jsmodule);
         
     } else {
-        //Shows HTML tan version.
+        //Shows HTML version.
         echo $OUTPUT->box_start('generalbox boxaligncenter', 'recordingsbn_box')."\n";
         echo '<div id="recordingsbn_html_table">'."\n";
         echo html_writer::table($table)."\n";

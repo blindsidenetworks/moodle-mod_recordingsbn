@@ -37,10 +37,9 @@ function xmldb_recordingsbn_upgrade($oldversion) {
         }
 
         // Define field introformat to be droped from recordingsbn
-        $field = new xmldb_field('introformat', XMLDB_TYPE_INTEGER, '4', XMLDB_UNSIGNED, XMLDB_NOTNULL, null, '0',
-            'intro');
+        $field = new xmldb_field('introformat', XMLDB_TYPE_INTEGER, '4', XMLDB_UNSIGNED, XMLDB_NOTNULL, null, '0', 'intro');
 
-        // Add field introformat
+        // Drop field introformat
         if ($dbman->field_exists($table, $field)) {
             $dbman->drop_field($table, $field, $continue=true, $feedback=true);
         }
