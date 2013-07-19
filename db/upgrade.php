@@ -61,6 +61,25 @@ function xmldb_recordingsbn_upgrade($oldversion) {
         upgrade_mod_savepoint(true, 2012040210, 'recordingsbn');
     }
         
+    if ($oldversion < 2013071001) {
+        $table = new xmldb_table('recordingsbn');
+    
+        // Define field intro to be re-added to recordingsbn
+        $field = new xmldb_field('intro', XMLDB_TYPE_TEXT, 'medium', null, null, null, null,'name');
+    
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        // Define field introformat to be re-added to recordingsbn
+        $field = new xmldb_field('introformat', XMLDB_TYPE_INTEGER, '4', XMLDB_UNSIGNED, XMLDB_NOTNULL, null, '0', 'intro');
+                
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+        
+        upgrade_mod_savepoint(true, 2013071001, 'recordingsbn');
+    }
     
     // Final return of upgrade result (true, all went good) to Moodle.
     return true;
