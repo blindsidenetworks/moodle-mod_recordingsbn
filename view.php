@@ -32,9 +32,16 @@ if ($id) {
 } else {
     error('You must specify a course_module ID or an instance ID');
 }
-$module = $DB->get_record('modules', array('name' => 'recordingsbn'));
+
+if ( $CFG->version < '2013111800' ) {
+    $module = $DB->get_record('modules', array('name' => 'recordingsbn'));
+    $module_version = $module->version;
+} else {
+    $module_version = get_config('mod_recordingsbn', 'version');
+}
 
 require_login($course, true, $cm);
+
 $context = get_context_instance(CONTEXT_MODULE, $cm->id);
 $PAGE->set_context($context);
 
@@ -78,7 +85,7 @@ echo $OUTPUT->header();
 
 /// Shows version as a comment
 echo '
-<!-- moodle-mod_recordingsbn ('.$module->version.') -->'."\n";
+<!-- moodle-mod_recordingsbn ('.$module_version.') -->'."\n";
 
 ///Declare the table
 $table = new html_table();
