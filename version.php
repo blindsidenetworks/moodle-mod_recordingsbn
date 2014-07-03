@@ -15,7 +15,7 @@ defined('MOODLE_INTERNAL') || die();
 $module->version   = 2014070100;
 $module->requires  = 2010112400;
 $module->cron      = 0;
-$module->component = 'moodle-mod_recordingsbn';
+$module->component = 'mod_recordingsbn';
 $module->maturity = MATURITY_RC;  // [MATURITY_STABLE | MATURITY_RC | MATURITY_BETA | MATURITY_ALPHA]
 $module->release  = '1.0.10';
 $module->dependencies = array(
