@@ -12,10 +12,10 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 2014070101;
+$plugin->version   = 2014070300;
 $plugin->requires  = 2013101800;
 $plugin->cron      = 0;
-$plugin->component = 'moodle-mod_recordingsbn';
+$plugin->component = 'mod_recordingsbn';
 $plugin->maturity = MATURITY_RC;  // [MATURITY_STABLE | MATURITY_RC | MATURITY_BETA | MATURITY_ALPHA]
 $plugin->release  = '1.0.11';
 $plugin->dependencies = array(
