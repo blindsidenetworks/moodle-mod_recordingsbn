@@ -12,12 +12,12 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$module->version   = 2013110104;
-$module->requires  = 2010112400;
-$module->cron      = 0;
-$module->component = 'mod_recordingsbn';
-$module->maturity = MATURITY_STABLE;  // [MATURITY_STABLE | MATURITY_RC | MATURITY_BETA | MATURITY_ALPHA]
-$module->release  = '1.0.9';
-$module->dependencies = array(
+$plugin->version   = 2014070100;
+$plugin->requires  = 2010112400;
+$plugin->cron      = 0;
+$plugin->component = 'moodle-mod_recordingsbn';
+$plugin->maturity = MATURITY_RC;  // [MATURITY_STABLE | MATURITY_RC | MATURITY_BETA | MATURITY_ALPHA]
+$plugin->release  = '1.0.10';
+$plugin->dependencies = array(
     'mod_bigbluebuttonbn' => 2013110100,
 );
