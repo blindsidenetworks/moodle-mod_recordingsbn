@@ -13,7 +13,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->version   = 2014070100;
-$plugin->requires  = 2010112400;
+$plugin->requires  = 2013101800;
 $plugin->cron      = 0;
 $plugin->component = 'moodle-mod_recordingsbn';
 $plugin->maturity = MATURITY_RC;  // [MATURITY_STABLE | MATURITY_RC | MATURITY_BETA | MATURITY_ALPHA]
