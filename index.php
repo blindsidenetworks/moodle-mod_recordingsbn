@@ -20,7 +20,12 @@ if (! $course = $DB->get_record('course', array('id' => $id))) {
 }
 
 require_course_login($course);
-$context = get_context_instance(CONTEXT_COURSE, $course->id);
+
+if ( $CFG->version < '2013111800' ) {
+    $context = get_context_instance(CONTEXT_MODULE, $cm->id);
+} else {
+    $context = context_module::instance($cm->id);
+}
 
 add_to_log($course->id, 'recordingsbn', 'view all', "index.php?id={$course->id}", '');
 
