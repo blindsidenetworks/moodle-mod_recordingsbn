@@ -23,11 +23,11 @@ require_course_login($course);
 
 if ( $CFG->version < '2013111800' ) {
     $context = get_context_instance(CONTEXT_MODULE, $cm->id);
+    add_to_log($course->id, 'recordingsbn', 'view all', "index.php?id={$course->id}", '');
 } else {
     $context = context_module::instance($cm->id);
 }
 
-add_to_log($course->id, 'recordingsbn', 'view all', "index.php?id={$course->id}", '');
 
 /// Print the header
 

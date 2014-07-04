@@ -35,3 +35,8 @@ $string['view_head_length'] = 'Length';
 $string['view_head_duration'] = 'Duration';
 $string['view_head_recording'] = 'Recording';
 $string['view_duration_min'] = 'min';
+
+$string['event_resource_page_viewed'] = 'RcordingsBN page viewed';
+$string['event_recording_published'] = 'Recording published';
+$string['event_recording_unpublished'] = 'Recording unpublished';
+$string['event_recording_deleted'] = 'Recording deleted';

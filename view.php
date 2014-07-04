@@ -10,13 +10,12 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v2 or later
  */
 
-
 require_once(dirname(dirname(dirname(__FILE__))).'/config.php');
 require_once(dirname(__FILE__).'/locallib.php');
 require_once($CFG->dirroot.'/mod/bigbluebuttonbn/locallib.php');
 
 $id = optional_param('id', 0, PARAM_INT); // course_module ID, or
-$n  = optional_param('n', 0, PARAM_INT);  // recordingsbn instance ID - it should be named as the first character of the module
+$r  = optional_param('r', 0, PARAM_INT);  // recordingsbn instance ID - it should be named as the first character of the module
 
 $action  = optional_param('action', 0, PARAM_TEXT);
 $recordingid  = optional_param('recordingid', 0, PARAM_TEXT);
@@ -25,8 +24,8 @@ if ($id) {
     $cm         = get_coursemodule_from_id('recordingsbn', $id, 0, false, MUST_EXIST);
     $course     = $DB->get_record('course', array('id' => $cm->course), '*', MUST_EXIST);
     $recordingsbn  = $DB->get_record('recordingsbn', array('id' => $cm->instance), '*', MUST_EXIST);
-} elseif ($n) {
-    $recordingsbn  = $DB->get_record('recordingsbn', array('id' => $n), '*', MUST_EXIST);
+} elseif ($r) {
+    $recordingsbn  = $DB->get_record('recordingsbn', array('id' => $r), '*', MUST_EXIST);
     $course     = $DB->get_record('course', array('id' => $recordingsbn->course), '*', MUST_EXIST);
     $cm         = get_coursemodule_from_instance('recordingsbn', $recordingsbn->id, $course->id, false, MUST_EXIST);
 } else {
@@ -37,9 +36,17 @@ if ( $CFG->version < '2013111800' ) {
     $module = $DB->get_record('modules', array('name' => 'recordingsbn'));
     $module_version = $module->version;
     $context = get_context_instance(CONTEXT_MODULE, $cm->id);
+    add_to_log($course->id, 'recordingsbn', 'view', "view.php?id={$cm->id}", $recordingsbn->name, $cm->id);
 } else {
     $module_version = get_config('mod_recordingsbn', 'version');
     $context = context_module::instance($cm->id);
+    $event = \mod_recordingsbn\event\recordingsbn_resource_page_viewed::create(
+            array(
+                    'context' => $context,
+                    'objectid' => $recordingsbn->id
+                    )
+            );
+    $event->trigger();
 }
 
 require_login($course, true, $cm);
@@ -58,8 +65,6 @@ if (isguestuser()) {
 }
 
 $moderator = has_capability('mod/bigbluebuttonbn:moderate', $context);
-
-add_to_log($course->id, 'recordingsbn', 'view', "view.php?id={$cm->id}", $recordingsbn->name, $cm->id);
 
 ///Set strings to show
 $view_head_recording = get_string('view_head_recording', 'recordingsbn');
@@ -130,12 +135,58 @@ if ($dbman->table_exists('bigbluebuttonbn_log') ) {
 
     //Execute actions if there is one and it is allowed
     if( isset($action) && isset($recordingid) && $moderator ){
-        if( $action == 'show' )
+        if( $action == 'show' ) {
             bigbluebuttonbn_doPublishRecordings($recordingid, 'true', $url, $salt);
-        else if( $action == 'hide')
+                if ( $CFG->version < '2013111800' ) {
+                add_to_log($course->id, 'recordingsbn', 'recording published', "", $recordingsbn->name, $cm->id);
+            } else {
+                $event = \mod_recordingsbn\event\recordingsbn_recording_published::create(
+                        array(
+                                'context' => $context,
+                                'objectid' => $recordingsbn->id,
+                                'other' => array(
+                                        //'title' => $title,
+                                        'rid' => $recordingid
+                                        )
+                        )
+                );
+                $event->trigger();
+            }
+        } else if( $action == 'hide') {
             bigbluebuttonbn_doPublishRecordings($recordingid, 'false', $url, $salt);
-        else if( $action == 'delete')
+            if ( $CFG->version < '2013111800' ) {
+                add_to_log($course->id, 'recordingsbn', 'recording unpublished', "", $recordingsbn->name, $cm->id);
+            } else {
+                $event = \mod_recordingsbn\event\recordingsbn_recording_unpublished::create(
+                        array(
+                                'context' => $context,
+                                'objectid' => $recordingsbn->id,
+                                'other' => array(
+                                        //'title' => $title,
+                                        'rid' => $recordingid
+                                        )
+                        )
+                );
+                $event->trigger();
+            }
+        } else if( $action == 'delete') {
             bigbluebuttonbn_doDeleteRecordings($recordingid, $url, $salt);
+            if ( $CFG->version < '2013111800' ) {
+                add_to_log($course->id, 'recordingsbn', 'recording deleted', "", $recordingsbn->name, $cm->id);
+            } else {
+                $event = \mod_recordingsbn\event\recordingsbn_recording_deleted::create(
+                        array(
+                                'context' => $context,
+                                'objectid' => $recordingsbn->id,
+                                'other' => array(
+                                        //'title' => $title,
+                                        'rid' => $recordingid
+                                        )
+                        )
+                );
+                $event->trigger();
+            }
+        }
     }
     
     $meetingID='';
