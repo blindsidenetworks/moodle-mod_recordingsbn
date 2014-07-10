@@ -31,13 +31,21 @@ if ($id) {
 }
 
 if ( $CFG->version < '2013111800' ) {
+    //This is valid before v2.6
     $module = $DB->get_record('modules', array('name' => 'recordingsbn'));
     $module_version = $module->version;
     $context = get_context_instance(CONTEXT_MODULE, $cm->id);
-    add_to_log($course->id, 'recordingsbn', 'view', "view.php?id={$cm->id}", $recordingsbn->name, $cm->id);
 } else {
+    //This is valid after v2.6
     $module_version = get_config('mod_recordingsbn', 'version');
     $context = context_module::instance($cm->id);
+}
+
+if ( $CFG->version < '2014051200' ) {
+    //This is valid before v2.7
+    add_to_log($course->id, 'recordingsbn', 'resource viewed', "view.php?id={$cm->id}", $recordingsbn->name, $cm->id);
+} else {
+    //This is valid after v2.7
     $event = \mod_recordingsbn\event\recordingsbn_resource_page_viewed::create(
             array(
                     'context' => $context,
@@ -135,9 +143,11 @@ if ($dbman->table_exists('bigbluebuttonbn_log') ) {
     if( isset($action) && isset($recordingid) && $moderator ){
         if( $action == 'show' ) {
             bigbluebuttonbn_doPublishRecordings($recordingid, 'true', $url, $salt);
-                if ( $CFG->version < '2013111800' ) {
+            if ( $CFG->version < '2014051200' ) {
+                //This is valid before v2.7
                 add_to_log($course->id, 'recordingsbn', 'recording published', "", $recordingsbn->name, $cm->id);
             } else {
+                //This is valid after v2.7
                 $event = \mod_recordingsbn\event\recordingsbn_recording_published::create(
                         array(
                                 'context' => $context,
@@ -152,9 +162,11 @@ if ($dbman->table_exists('bigbluebuttonbn_log') ) {
             }
         } else if( $action == 'hide') {
             bigbluebuttonbn_doPublishRecordings($recordingid, 'false', $url, $salt);
-            if ( $CFG->version < '2013111800' ) {
+            if ( $CFG->version < '2014051200' ) {
+                //This is valid before v2.7
                 add_to_log($course->id, 'recordingsbn', 'recording unpublished', "", $recordingsbn->name, $cm->id);
             } else {
+                //This is valid after v2.7
                 $event = \mod_recordingsbn\event\recordingsbn_recording_unpublished::create(
                         array(
                                 'context' => $context,
@@ -169,9 +181,11 @@ if ($dbman->table_exists('bigbluebuttonbn_log') ) {
             }
         } else if( $action == 'delete') {
             bigbluebuttonbn_doDeleteRecordings($recordingid, $url, $salt);
-            if ( $CFG->version < '2013111800' ) {
-                add_to_log($course->id, 'recordingsbn', 'recording deleted', "", $recordingsbn->name, $cm->id);
+            if ( $CFG->version < '2014051200' ) {
+                //This is valid before v2.7
+                add_to_log($course->id, 'recordingsbn', 'recording deleted', '', $recordingsbn->name, $cm->id);
             } else {
+                //This is valid after v2.7
                 $event = \mod_recordingsbn\event\recordingsbn_recording_deleted::create(
                         array(
                                 'context' => $context,

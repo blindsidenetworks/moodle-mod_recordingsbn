@@ -19,7 +19,7 @@ defined('MOODLE_INTERNAL') || die();
 #$module->dependencies = array( 'mod_bigbluebuttonbn' => 2014070310 );
 
 $plugin->version = 2014070400;
-$plugin->requires = 2013051400;
+$plugin->requires = 2013111800;
 $plugin->cron = 0;
 $plugin->component = 'mod_recordingsbn';
 $plugin->maturity = MATURITY_BETA;    // [MATURITY_STABLE | MATURITY_RC | MATURITY_BETA | MATURITY_ALPHA]
