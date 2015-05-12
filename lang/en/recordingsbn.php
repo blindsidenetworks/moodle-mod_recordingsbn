@@ -2,12 +2,9 @@
 /**
  * Language File
  *
- * Authors:
- *    Jesus Federico  (jesus [at] blindsidenetworks [dt] com)
- *    
- *
  * @package   mod_bigbluebutton
- * @copyright 2011-2012 Blindside Networks Inc.
+ * @author    Jesus Federico  (jesus [at] blindsidenetworks [dt] com)
+ * @copyright 2011-2014 Blindside Networks Inc.
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v2 or later
  */
 defined('MOODLE_INTERNAL') || die();
@@ -35,3 +32,8 @@ $string['view_head_length'] = 'Length';
 $string['view_head_duration'] = 'Duration';
 $string['view_head_recording'] = 'Recording';
 $string['view_duration_min'] = 'min';
+
+$string['event_resource_page_viewed'] = 'RcordingsBN page viewed';
+$string['event_recording_published'] = 'Recording published';
+$string['event_recording_unpublished'] = 'Recording unpublished';
+$string['event_recording_deleted'] = 'Recording deleted';
