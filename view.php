@@ -136,13 +136,18 @@ echo $OUTPUT->heading($recordingsbn->name, 2);
 $dbman = $DB->get_manager(); // loads ddl manager and xmldb classes
 if ($dbman->table_exists('bigbluebuttonbn_log') ) {
     // BigBlueButton Setup
-    $salt = trim($CFG->BigBlueButtonBNSecuritySalt);
-    $url = trim(trim($CFG->BigBlueButtonBNServerURL),'/').'/';
+    if( isset($CFG->bigbluebuttonbn_server_url) ) {
+        $url = trim(trim($CFG->bigbluebuttonbn_server_url),'/').'/';
+        $shared_secret = trim($CFG->bigbluebuttonbn_shared_secret);
+    } else {
+        $url = trim(trim($CFG->BigBlueButtonBNServerURL),'/').'/';
+        $shared_secret = trim($CFG->BigBlueButtonBNSecuritySalt);
+    }
 
     //Execute actions if there is one and it is allowed
     if( isset($action) && isset($recordingid) && $moderator ){
         if( $action == 'show' ) {
-            bigbluebuttonbn_doPublishRecordings($recordingid, 'true', $url, $salt);
+            bigbluebuttonbn_doPublishRecordings($recordingid, 'true', $url, $shared_secret);
             if ( $CFG->version < '2014051200' ) {
                 //This is valid before v2.7
                 add_to_log($course->id, 'recordingsbn', 'recording published', "", $recordingsbn->name, $cm->id);
@@ -161,7 +166,7 @@ if ($dbman->table_exists('bigbluebuttonbn_log') ) {
                 $event->trigger();
             }
         } else if( $action == 'hide') {
-            bigbluebuttonbn_doPublishRecordings($recordingid, 'false', $url, $salt);
+            bigbluebuttonbn_doPublishRecordings($recordingid, 'false', $url, $shared_secret);
             if ( $CFG->version < '2014051200' ) {
                 //This is valid before v2.7
                 add_to_log($course->id, 'recordingsbn', 'recording unpublished', "", $recordingsbn->name, $cm->id);
@@ -180,7 +185,7 @@ if ($dbman->table_exists('bigbluebuttonbn_log') ) {
                 $event->trigger();
             }
         } else if( $action == 'delete') {
-            bigbluebuttonbn_doDeleteRecordings($recordingid, $url, $salt);
+            bigbluebuttonbn_doDeleteRecordings($recordingid, $url, $shared_secret);
             if ( $CFG->version < '2014051200' ) {
                 //This is valid before v2.7
                 add_to_log($course->id, 'recordingsbn', 'recording deleted', '', $recordingsbn->name, $cm->id);
@@ -218,7 +223,7 @@ if ($dbman->table_exists('bigbluebuttonbn_log') ) {
     
     //If there are meetings with recordings load the data to the table
     if ( $meetingID != '' ){
-        $recordingsbn = bigbluebuttonbn_getRecordingsArray($meetingID, $url, $salt);
+        $recordingsbn = bigbluebuttonbn_getRecordingsArray($meetingID, $url, $shared_secret);
     
         if( isset($recordingsbn) && !isset($recordingsbn['messageKey']) ){
             foreach ( $recordingsbn as $recording ){
@@ -319,10 +324,9 @@ if ($dbman->table_exists('bigbluebuttonbn_log') ) {
                 }
             }
         }
-    
     }
-    
-    
+
+
     //Print the table
     if (isset($CFG->recordingsbn_ui) && strtolower($CFG->recordingsbn_ui) == 'yui'  && $CFG->version >= '2012062500' ) {
         //Shows javascript YUI version.
