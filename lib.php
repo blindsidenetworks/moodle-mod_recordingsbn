@@ -33,7 +33,7 @@ function recordingsbn_supports($feature) {
         case FEATURE_GRADE_OUTCOMES:           return false;
         case FEATURE_MOD_ARCHETYPE:            return MOD_ARCHETYPE_RESOURCE;
         case FEATURE_BACKUP_MOODLE2:           return true;
-        
+
         default:                               return null;
     }
 }
@@ -225,7 +225,7 @@ function recordingsbn_scale_used($recordingsbnid, $scaleid) {
     $return = false;
 
     return $return;
-    
+
 }
 
 /**
@@ -312,4 +312,3 @@ function recordingsbn_extend_navigation(navigation_node $navref, stdclass $cours
  */
 function recordingsbn_extend_settings_navigation(settings_navigation $settingsnav, navigation_node $recordingsbnnode=null) {
 }
-

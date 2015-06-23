@@ -27,7 +27,7 @@ if ($id) {
     $course     = $DB->get_record('course', array('id' => $recordingsbn->course), '*', MUST_EXIST);
     $cm         = get_coursemodule_from_instance('recordingsbn', $recordingsbn->id, $course->id, false, MUST_EXIST);
 } else {
-    error('You must specify a course_module ID or an instance ID');
+    print_error('You must specify a course_module ID or an instance ID');
 }
 
 if ( $CFG->version < '2013111800' ) {
@@ -205,7 +205,7 @@ if ($dbman->table_exists('bigbluebuttonbn_log') ) {
             }
         }
     }
-    
+
     $meetingID='';
     $results = $DB->get_records('bigbluebuttonbn_log', array('courseid' => $course->id, 'record' => 1, 'event' => 'Create'));
     if( $results ){
@@ -220,31 +220,31 @@ if ($dbman->table_exists('bigbluebuttonbn_log') ) {
             $meetingID .= $mID;
         }
     }
-    
+
     //If there are meetings with recordings load the data to the table
     if ( $meetingID != '' ){
         $recordingsbn = bigbluebuttonbn_getRecordingsArray($meetingID, $url, $shared_secret);
-    
+
         if( isset($recordingsbn) && !isset($recordingsbn['messageKey']) ){
             foreach ( $recordingsbn as $recording ){
                 if ( $moderator || $recording['published'] == 'true' ) {
-                    
+
                     $length = 0;
                     $endTime = isset($recording['endTime'])? floatval($recording['endTime']):0;
                     $endTime = $endTime - ($endTime % 1000);
                     $startTime = isset($recording['startTime'])? floatval($recording['startTime']):0;
                     $startTime = $startTime - ($startTime % 1000);
                     $duration = intval(($endTime - $startTime) / 60000);
-    
+
                     //$meta_course = isset($recording['meta_context'])?str_replace('"', '\"', $recording['meta_context']):'';
                     $meta_activity = isset($recording['meta_contextactivity'])?str_replace('"', '\"', $recording['meta_contextactivity']):'';
                     $meta_description = isset($recording['meta_contextactivitydescription'])?str_replace('"', '\"', $recording['meta_contextactivitydescription']):'';
-    
+
                     $actionbar = '';
                     $params['id'] = $cm->id;
                     $params['recordingid'] = $recording['recordID'];
                     if ( $moderator ) {
-                        ///Set action [show|hide] 
+                        ///Set action [show|hide]
                         if ( $recording['published'] == 'true' ){
                             $params['action'] = 'hide';
                         } else {
@@ -258,7 +258,7 @@ if ($dbman->table_exists('bigbluebuttonbn_log') ) {
                         $attributes = array('title' => get_string($params['action']));
                         $icon = new pix_icon('t/'.$params['action'], get_string($params['action']), 'moodle', $attributes);
                         $actionbar .= $OUTPUT->action_icon($url, $icon, $action, $attributes, false);
-                        
+
                         ///Set action delete
                         $params['action'] = 'delete';
                         $url = new moodle_url('/mod/recordingsbn/view.php', $params);
@@ -269,7 +269,7 @@ if ($dbman->table_exists('bigbluebuttonbn_log') ) {
                         $attributes = array('title' => get_string($params['action']));
                         $icon = new pix_icon('t/'.$params['action'], get_string($params['action']), 'moodle', $attributes);
                         $actionbar .= $OUTPUT->action_icon($url, $icon, $action, $attributes, false);
-                    
+
                     }
 
                     $type = '';
@@ -306,9 +306,9 @@ if ($dbman->table_exists('bigbluebuttonbn_log') ) {
                                 "date" => $formatedStartDate,
                                 "duration" => $duration." ".$view_duration_min,
                                 "actionbar" => $actionbar
-                                
+
                         );
-                        
+
                     } else {
                         $table->data[] = array ($type, $meta_activity, $meta_description, str_replace(" ", "&nbsp;", $formatedStartDate), $duration);
                         $recordingsbn_data_item = array(
@@ -320,7 +320,7 @@ if ($dbman->table_exists('bigbluebuttonbn_log') ) {
                         );
                     }
                     array_push($recordingsbn_data, $recordingsbn_data_item);
-                    
+
                 }
             }
         }
@@ -337,43 +337,43 @@ if ($dbman->table_exists('bigbluebuttonbn_log') ) {
                 margin-bottom: 10px;
             }
         </style>'."\n";
-    
+
         echo '<link rel="stylesheet" type="text/css" href="'.$CFG->wwwroot.'/mod/recordingsbn/yui/paginatorview/assets/paginatorview-core.css" />'."\n";
         echo '<link rel="stylesheet" type="text/css" href="'.$CFG->wwwroot.'/mod/recordingsbn/yui/paginatorview/assets/skins/sam/paginatorview-skin.css" />'."\n";
-        
+
         echo $OUTPUT->box_start('generalbox boxaligncenter', 'recordingsbn_box')."\n";
         echo '<div class="yui3-skin-sam">'."\n";
         echo '  <div id="recordingsbn_yui_paginator"></div>'."\n";
         echo '  <div id="recordingsbn_yui_table"></div>'."\n";
         echo '</div>'."\n";
         echo $OUTPUT->box_end();
-    
+
         $gallery_datatable_paginator = array(
                 'name'      => 'datatablepaginator',
                 'fullpath'  => '/mod/recordingsbn/yui/datatablepaginator/datatablepaginator.js'
         );
         $PAGE->requires->js_module($gallery_datatable_paginator);
-        
+
         $gallery_paginator_view = array(
                 'name'      => 'paginatorview',
                 'fullpath'  => '/mod/recordingsbn/yui/paginatorview/paginatorview.js'
         );
         $PAGE->requires->js_module($gallery_paginator_view);
-        
+
         //JavaScript variables
         $jsvars = array(
                 'columns' => $recordingsbn_columns,
                 'data' => $recordingsbn_data
         );
         $PAGE->requires->data_for_js('recordingsbn', $jsvars);
-        
+
         $jsmodule = array(
                 'name'     => 'mod_recordingsbn',
                 'fullpath' => '/mod/recordingsbn/module.js',
                 'requires' => array('datatable-sort', 'datasource-get', 'datasource-jsonschema', 'datasource-polling', 'datatablepaginator', 'paginatorview'),
         );
         $PAGE->requires->js_init_call('M.mod_recordingsbn.gallery_datatable_init', array(), false, $jsmodule);
-        
+
     } else {
         //Shows HTML version.
         echo $OUTPUT->box_start('generalbox boxaligncenter', 'recordingsbn_box')."\n";
@@ -382,16 +382,13 @@ if ($dbman->table_exists('bigbluebuttonbn_log') ) {
         echo '</div>'."\n";
         echo $OUTPUT->box_end();
     }
-        
+
 } else {
     echo $OUTPUT->box_start('generalbox boxaligncenter', 'dates');
     print_error(get_string('view_dependency_error', 'recordingsbn'));
     echo $OUTPUT->box_end();
-    
+
 }
 
 // Finish the page
 echo $OUTPUT->footer();
-
-
-
