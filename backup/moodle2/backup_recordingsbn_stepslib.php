@@ -51,7 +51,7 @@ class backup_recordingsbn_activity_structure_step extends backup_activity_struct
 
         // Define file annotations
         // (none)
-        
+
         // Return the root element (recordingsbn), wrapped into standard activity structure
         return $this->prepare_activity_structure($recordingsbn);
     }

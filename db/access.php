@@ -14,7 +14,7 @@ $capabilities = array(
 
         'mod/recordingsbn:addinstance' => array(
                 'riskbitmask' => RISK_XSS,
-        
+
                 'captype' => 'write',
                 'contextlevel' => CONTEXT_COURSE,
                 'archetypes' => array(
@@ -23,7 +23,7 @@ $capabilities = array(
                 ),
                 'clonepermissionsfrom' => 'moodle/course:manageactivities'
         ),
-        
+
         'mod/recordingsbn:view' => array(
                 'captype' => 'read',
                 'contextlevel' => CONTEXT_MODULE,
@@ -35,6 +35,5 @@ $capabilities = array(
                         'manager' => CAP_ALLOW
                 )
         ),
-        
-);
 
+);

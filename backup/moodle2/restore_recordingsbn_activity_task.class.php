@@ -82,5 +82,4 @@ class restore_recordingsbn_activity_task extends restore_activity_task {
 
         return $rules;
     }
-
 }
