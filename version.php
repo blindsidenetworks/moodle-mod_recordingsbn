@@ -10,7 +10,7 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-#$module->version = 2014101000;
+#$module->version = 2014101001;
 #$module->requires = 2010112400;
 #$module->cron = 0;
 #$module->component = 'mod_recordingsbn';
@@ -18,7 +18,7 @@ defined('MOODLE_INTERNAL') || die();
 #$module->release = '1.0.11';
 #$module->dependencies = array( 'mod_bigbluebuttonbn' => 2014070310 );
 
-$plugin->version = 2014101000;
+$plugin->version = 2014101001;
 $plugin->requires = 2013111800;
 $plugin->cron = 0;
 $plugin->component = 'mod_recordingsbn';
