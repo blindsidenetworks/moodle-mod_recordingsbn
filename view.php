@@ -27,7 +27,7 @@ if ($id) {
     $course     = $DB->get_record('course', array('id' => $recordingsbn->course), '*', MUST_EXIST);
     $cm         = get_coursemodule_from_instance('recordingsbn', $recordingsbn->id, $course->id, false, MUST_EXIST);
 } else {
-    error('You must specify a course_module ID or an instance ID');
+    print_error('You must specify a course_module ID or an instance ID');
 }
 
 if ( $CFG->version < '2013111800' ) {
@@ -392,6 +392,3 @@ if ($dbman->table_exists('bigbluebuttonbn_log') ) {
 
 // Finish the page
 echo $OUTPUT->footer();
-
-
-
