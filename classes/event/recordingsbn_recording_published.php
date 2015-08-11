@@ -1,6 +1,6 @@
 <?php
 /**
- * The mod_recordingsbn viewed event.
+ * The mod_recordingsbn published event.
  *
  * @package   mod_recordingsbn
  * @author    Jesus Federico  (jesus [at] blindsidenetworks [dt] com)
