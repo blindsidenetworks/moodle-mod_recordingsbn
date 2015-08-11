@@ -17,7 +17,7 @@ function recordingsbn_getRecordedMeetings( $courseID ) {
 
     $records = $DB->get_records('bigbluebuttonbn_log', array('courseid' => $courseID, 'event' => 'Create'));
 
-    //Remove duplicated
+    //Remove duplicates
     $unique_records = array();
     foreach ($records as $key => $record) {
         $record_key = $record->meetingid.','.$record->courseid.','.$record->bigbluebuttonbnid.','.$record->meta;

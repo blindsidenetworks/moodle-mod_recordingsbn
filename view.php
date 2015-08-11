@@ -117,6 +117,7 @@ if ($dbman->table_exists('bigbluebuttonbn_log') ) {
     if( isset($CFG->bigbluebuttonbn_server_url) ) {
         $url = trim(trim($CFG->bigbluebuttonbn_server_url),'/').'/';
         $shared_secret = trim($CFG->bigbluebuttonbn_shared_secret);
+
     } else {
         $url = trim(trim($CFG->BigBlueButtonBNServerURL),'/').'/';
         $shared_secret = trim($CFG->BigBlueButtonBNSecuritySalt);
@@ -143,6 +144,7 @@ if ($dbman->table_exists('bigbluebuttonbn_log') ) {
                 );
                 $event->trigger();
             }
+
         } else if( $action == 'hide') {
             bigbluebuttonbn_doPublishRecordings($recordingid, 'false', $url, $shared_secret);
             if ( $CFG->version < '2014051200' ) {
@@ -162,6 +164,7 @@ if ($dbman->table_exists('bigbluebuttonbn_log') ) {
                 );
                 $event->trigger();
             }
+
         } else if( $action == 'delete') {
             bigbluebuttonbn_doDeleteRecordings($recordingid, $url, $shared_secret);
             if ( $CFG->version < '2014051200' ) {
@@ -220,15 +223,22 @@ if ($dbman->table_exists('bigbluebuttonbn_log') ) {
     echo $OUTPUT->box_start('generalbox boxaligncenter', 'dates');
     print_error(get_string('view_dependency_error', 'recordingsbn'));
     echo $OUTPUT->box_end();
-
 }
+
+//JavaScript variables
+$jsVars = array(
+        'ping_interval' => ($CFG->bigbluebuttonbn_waitformoderator_ping_interval > 0? $CFG->bigbluebuttonbn_waitformoderator_ping_interval * 1000: 10000),
+        'locales' => bigbluebuttonbn_get_locales_for_ui()
+);
+
+$PAGE->requires->data_for_js('bigbluebuttonbn', $jsVars);
 
 $jsmodule = array(
         'name'     => 'mod_bigbluebuttonbn',
         'fullpath' => '/mod/bigbluebuttonbn/module.js',
         'requires' => array('datasource-get', 'datasource-jsonschema', 'datasource-polling'),
 );
-$PAGE->requires->js_init_call('M.mod_bigbluebuttonbn.view_init', array(), false, $jsmodule);
+$PAGE->requires->js_init_call('M.mod_bigbluebuttonbn.recordingsbn_init', array(), false, $jsmodule);
 
 // Finish the page
 echo $OUTPUT->footer();
