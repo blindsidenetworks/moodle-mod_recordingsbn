@@ -79,6 +79,24 @@ function xmldb_recordingsbn_upgrade($oldversion) {
         upgrade_mod_savepoint(true, 2013071001, 'recordingsbn');
     }
 
+    if ($oldversion < 2015080601) {
+        $table = new xmldb_table('recordingsbn');
+
+        $index = new xmldb_index('course', XMLDB_INDEX_NOTUNIQUE, array('course'));
+        // Remove the index if exists
+        if( $dbman->index_exists($table, $index) ) {
+            $dbman->drop_index($table, $index, $continue=true, $feedback=true);
+        }
+
+        // Update the course field
+        $field = new xmldb_field('course', XMLDB_TYPE_INTEGER, '10', XMLDB_UNSIGNED, XMLDB_NOTNULL, null, '0');
+        $dbman->change_field_type($table, $field, $continue=true, $feedback=true);
+
+        // Recreate the index
+        $dbman->add_index($table, $index, $continue=true, $feedback=true);
+
+        upgrade_mod_savepoint(true, 2015080601, 'bigbluebuttonbn');
+    }
     // Final return of upgrade result (true, all went good) to Moodle.
     return true;
 }

@@ -80,15 +80,7 @@ $bbbsession['courseid'] = $course->id;
 $bbbsession['cm'] = $cm;
 
 ///Set strings to show
-$view_head_recording = get_string('view_head_recording', 'recordingsbn');
-$view_head_course = get_string('view_head_course', 'recordingsbn');
-$view_head_activity = get_string('view_head_activity', 'recordingsbn');
-$view_head_description = get_string('view_head_description', 'recordingsbn');
-$view_head_date = get_string('view_head_date', 'recordingsbn');
-$view_head_length = get_string('view_head_length', 'recordingsbn');
-$view_head_duration = get_string('view_head_duration', 'recordingsbn');
-$view_head_actionbar = get_string('view_head_actionbar', 'recordingsbn');
-$view_duration_min = get_string('view_duration_min', 'recordingsbn');
+$view_no_recordings = get_string('view_no_recordings', 'recordingsbn');
 
 /// Print the page header
 $PAGE->set_url($CFG->wwwroot.'/mod/recordingsbn/view.php', array('id' => $cm->id));
@@ -217,6 +209,10 @@ if ($dbman->table_exists('bigbluebuttonbn_log') ) {
             echo html_writer::table($table)."\n";
             echo '</div>'."\n";
         }
+    } else {
+        echo '<div id="bigbluebuttonbn_html_table">'."\n";
+        echo '  '.$view_no_recordings."\n";
+        echo '</div>'."\n";
     }
 
 } else {

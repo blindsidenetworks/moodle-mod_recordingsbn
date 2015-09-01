@@ -50,14 +50,12 @@ function recordingsbn_supports($feature) {
  * @param mod_recordingsbn_mod_form $mform
  * @return int The id of the newly inserted recordingsbn record
  */
-function recordingsbn_add_instance(stdClass $recordingsbn, mod_recordingsbn_mod_form $mform = null) {
+function recordingsbn_add_instance($data, $mform) {
     global $DB;
 
-    $recordingsbn->timecreated = time();
+    recordingsbn_process_pre_save($data);
 
-    # You may have to add extra stuff in here #
-
-    return $DB->insert_record('recordingsbn', $recordingsbn);
+    return $DB->insert_record('recordingsbn', $data);
 }
 
 /**
@@ -311,4 +309,22 @@ function recordingsbn_extend_navigation(navigation_node $navref, stdclass $cours
  * @param navigation_node $recordingsbnnode {@link navigation_node}
  */
 function recordingsbn_extend_settings_navigation(settings_navigation $settingsnav, navigation_node $recordingsbnnode=null) {
+}
+
+/**
+ * Runs any processes that must run before
+ * a recordingsbn insert/update
+ *
+ * @global object
+ * @param object $recordingsbn RecordingsBN form data
+ * @return void
+ **/
+function recordingsbn_process_pre_save(&$recordingsbn) {
+    global $DB, $CFG;
+
+    if ( !isset($recordingsbn->timecreated) || !$recordingsbn->timecreated ) {
+        $recordingsbn->timecreated = time();
+    } else {
+        $recordingsbn->timemodified = time();
+    }
 }
