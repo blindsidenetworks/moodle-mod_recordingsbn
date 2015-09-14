@@ -49,8 +49,8 @@ class recordingsbn_recording_unpublished extends \core\event\base {
      * @return array
      */
     protected function get_legacy_logdata() {
-        return(array($this->courseid, 'recordingsbn', 'view',
-                'view.php?pageid=' . $this->objectid, $this->objectid, $this->contextinstanceid));
+        return(array($this->courseid, 'recordingsbn', 'recording unpublished',
+                'view.php?pageid=' . $this->objectid, get_string('event_recording_unpublished', 'recordingsbn'), $this->contextinstanceid));
     }
 
     /**

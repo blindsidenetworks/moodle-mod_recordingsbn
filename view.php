@@ -30,7 +30,10 @@ if ($id) {
     print_error('You must specify a course_module ID or an instance ID');
 }
 
-if ( $CFG->version < '2013111800' ) {
+require_login($course, true, $cm);
+
+$version_major = bigbluebuttonbn_get_moodle_version_major();
+if ( $version_major < '2013111800' ) {
     //This is valid before v2.6
     $module = $DB->get_record('modules', array('name' => 'recordingsbn'));
     $module_version = $module->version;
@@ -40,22 +43,6 @@ if ( $CFG->version < '2013111800' ) {
     $module_version = get_config('mod_recordingsbn', 'version');
     $context = context_module::instance($cm->id);
 }
-
-if ( $CFG->version < '2014051200' ) {
-    //This is valid before v2.7
-    add_to_log($course->id, 'recordingsbn', 'resource viewed', "view.php?id={$cm->id}", $recordingsbn->name, $cm->id);
-} else {
-    //This is valid after v2.7
-    $event = \mod_recordingsbn\event\recordingsbn_resource_page_viewed::create(
-            array(
-                    'context' => $context,
-                    'objectid' => $recordingsbn->id
-                    )
-            );
-    $event->trigger();
-}
-
-require_login($course, true, $cm);
 
 $PAGE->set_context($context);
 
@@ -68,6 +55,16 @@ if (isguestuser()) {
 
     echo $OUTPUT->footer();
     exit;
+}
+
+// Register the event view
+if ( $version_major < '2014051200' ) {
+    //This is valid before v2.7
+    add_to_log($course->id, 'recordingsbn', 'resource viewed', "view.php?id={$cm->id}", $recordingsbn->name, $cm->id);
+} else {
+    //This is valid after v2.7
+    $event = \mod_recordingsbn\event\recordingsbn_resource_page_viewed::create(array('context' => $context, 'objectid' => $recordingsbn->id));
+    $event->trigger();
 }
 
 //User roles
@@ -113,61 +110,34 @@ if ($dbman->table_exists('bigbluebuttonbn_log') ) {
     if( isset($action) && isset($recordingid) && ($bbbsession['administrator'] || $bbbsession['moderator']) ){
         if( $action == 'show' ) {
             bigbluebuttonbn_doPublishRecordings($recordingid, 'true', $endpoint, $shared_secret);
-            if ( $CFG->version < '2014051200' ) {
+            if ( $version_major < '2014051200' ) {
                 //This is valid before v2.7
                 add_to_log($course->id, 'recordingsbn', 'recording published', "", $recordingsbn->name, $cm->id);
             } else {
                 //This is valid after v2.7
-                $event = \mod_recordingsbn\event\recordingsbn_recording_published::create(
-                        array(
-                                'context' => $context,
-                                'objectid' => $recordingsbn->id,
-                                'other' => array(
-                                        //'title' => $title,
-                                        'rid' => $recordingid
-                                        )
-                        )
-                );
+                $event = \mod_recordingsbn\event\recordingsbn_recording_published::create(array('context' => $context, 'objectid' => $recordingsbn->id, 'other' => array('rid' => $recordingid)));
                 $event->trigger();
             }
 
         } else if( $action == 'hide') {
             bigbluebuttonbn_doPublishRecordings($recordingid, 'false', $endpoint, $shared_secret);
-            if ( $CFG->version < '2014051200' ) {
+            if ( $version_major < '2014051200' ) {
                 //This is valid before v2.7
                 add_to_log($course->id, 'recordingsbn', 'recording unpublished', "", $recordingsbn->name, $cm->id);
             } else {
                 //This is valid after v2.7
-                $event = \mod_recordingsbn\event\recordingsbn_recording_unpublished::create(
-                        array(
-                                'context' => $context,
-                                'objectid' => $recordingsbn->id,
-                                'other' => array(
-                                        //'title' => $title,
-                                        'rid' => $recordingid
-                                        )
-                        )
-                );
+                $event = \mod_recordingsbn\event\recordingsbn_recording_unpublished::create(array('context' => $context, 'objectid' => $recordingsbn->id, 'other' => array('rid' => $recordingid)));
                 $event->trigger();
             }
 
         } else if( $action == 'delete') {
             bigbluebuttonbn_doDeleteRecordings($recordingid, $endpoint, $shared_secret);
-            if ( $CFG->version < '2014051200' ) {
+            if ( $version_major < '2014051200' ) {
                 //This is valid before v2.7
                 add_to_log($course->id, 'recordingsbn', 'recording deleted', '', $recordingsbn->name, $cm->id);
             } else {
                 //This is valid after v2.7
-                $event = \mod_recordingsbn\event\recordingsbn_recording_deleted::create(
-                        array(
-                                'context' => $context,
-                                'objectid' => $recordingsbn->id,
-                                'other' => array(
-                                        //'title' => $title,
-                                        'rid' => $recordingid
-                                        )
-                        )
-                );
+                $event = \mod_recordingsbn\event\recordingsbn_recording_deleted::create(array('context' => $context,'objectid' => $recordingsbn->id,'other' => array('rid' => $recordingid)));
                 $event->trigger();
             }
         }

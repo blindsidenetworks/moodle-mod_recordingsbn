@@ -48,8 +48,8 @@ class recordingsbn_resource_page_viewed extends \core\event\base {
      * @return array
      */
     protected function get_legacy_logdata() {
-        return(array($this->courseid, 'recordingsbn', 'view',
-                'view.php?pageid=' . $this->objectid, $this->objectid, $this->contextinstanceid));
+        return(array($this->courseid, 'recordingsbn', 'resource page viewed',
+                'view.php?pageid=' . $this->objectid, get_string('event_resource_page_viewed', 'recordingsbn'), $this->contextinstanceid));
     }
 
     /**
