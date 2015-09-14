@@ -162,27 +162,45 @@ if ($dbman->table_exists('bigbluebuttonbn_log') ) {
         $recordings = bigbluebuttonbn_getRecordingsArray($meetingID, $endpoint, $shared_secret);
     }
 
-    echo '<div id="bigbluebuttonbn_html_table">'."\n";
+    echo "\n".'  <div id="bigbluebuttonbn_html_table">'."\n";
     if ( isset($recordings) && !array_key_exists('messageKey', $recordings)) {  // There are recordings for this meeting
         //If there are meetings with recordings load the data to the table
-        $show_html = true;
-
-        if( $show_html ) {
+        if( $CFG->recordingsbn_ui_html_default ) {
             //Shows HTML version.
             $table = bigbluebuttonbn_get_recording_table($bbbsession, $recordings);
             if( isset($table->data) ) {
                 //Print the table
                 echo html_writer::table($table)."\n";
             }
+
         } else {
             //Shows YUI version.
+            $recordingsbn_data = bigbluebuttonbn_get_recording_data($bbbsession, $recordings);
+            $recordingsbn_columns = bigbluebuttonbn_get_recording_columns($bbbsession, $recordings);
+
+            echo '    <div id="recordingsbn_yui_table">'."\n";
+
+            //JavaScript variables
+            $jsvars = array(
+                    'columns' => $recordingsbn_columns,
+                    'data' => $recordingsbn_data
+            );
+            $PAGE->requires->data_for_js('recordingsbn', $jsvars);
+
+            $jsmodule = array(
+                    'name'     => 'mod_recordingsbn',
+                    'fullpath' => '/mod/recordingsbn/module.js',
+                    'requires' => array('datatable', 'datatable-sort', 'datatable-paginator', 'datatype-number'),
+            );
+            $PAGE->requires->js_init_call('M.mod_recordingsbn.datatable_init', array(), false, $jsmodule);
+            echo '    </div>'."\n";
         }
 
     } else {
         //There are no recordings to be shown.
         echo '  '.$view_no_recordings."\n";
     }
-    echo '</div>'."\n";
+    echo '  </div>'."\n";
     
 } else {
     echo $OUTPUT->box_start('generalbox boxaligncenter', 'dates');

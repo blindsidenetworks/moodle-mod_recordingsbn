@@ -10,4 +10,10 @@
 
 defined('MOODLE_INTERNAL') || die;
 
-$CFG->recordingsbn_ui = 'html';
+$settings->add( new admin_setting_heading('recordingsbn_config_general',
+        get_string('config_general', 'recordingsbn'),
+        get_string('config_general_description', 'recordingsbn')));
+$settings->add(new admin_setting_configcheckbox('recordingsbn_ui_html_default',
+        get_string('config_feature_ui_html_default', 'recordingsbn'),
+        get_string('config_feature_ui_html_default_description', 'recordingsbn'),
+        1));
