@@ -158,27 +158,32 @@ if ($dbman->table_exists('bigbluebuttonbn_log') ) {
         }
     }
 
-    //If there are meetings with recordings load the data to the table
     if ( $meetingID != '' ) {
         $recordings = bigbluebuttonbn_getRecordingsArray($meetingID, $endpoint, $shared_secret);
     }
 
-    //Shows HTML version.
+    echo '<div id="bigbluebuttonbn_html_table">'."\n";
     if ( isset($recordings) && !array_key_exists('messageKey', $recordings)) {  // There are recordings for this meeting
-        $table = bigbluebuttonbn_get_recording_table($bbbsession, $recordings);
+        //If there are meetings with recordings load the data to the table
+        $show_html = true;
 
-        if( isset($table->data) ) {
-            //Print the table
-            echo '<div id="bigbluebuttonbn_html_table">'."\n";
-            echo html_writer::table($table)."\n";
-            echo '</div>'."\n";
+        if( $show_html ) {
+            //Shows HTML version.
+            $table = bigbluebuttonbn_get_recording_table($bbbsession, $recordings);
+            if( isset($table->data) ) {
+                //Print the table
+                echo html_writer::table($table)."\n";
+            }
+        } else {
+            //Shows YUI version.
         }
-    } else {
-        echo '<div id="bigbluebuttonbn_html_table">'."\n";
-        echo '  '.$view_no_recordings."\n";
-        echo '</div>'."\n";
-    }
 
+    } else {
+        //There are no recordings to be shown.
+        echo '  '.$view_no_recordings."\n";
+    }
+    echo '</div>'."\n";
+    
 } else {
     echo $OUTPUT->box_start('generalbox boxaligncenter', 'dates');
     print_error(get_string('view_dependency_error', 'recordingsbn'));
