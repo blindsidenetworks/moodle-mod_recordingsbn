@@ -95,7 +95,7 @@ function xmldb_recordingsbn_upgrade($oldversion) {
         // Recreate the index
         $dbman->add_index($table, $index, $continue=true, $feedback=true);
 
-        upgrade_mod_savepoint(true, 2015080601, 'bigbluebuttonbn');
+        upgrade_mod_savepoint(true, 2015080601, 'recordingsbn');
     }
     // Final return of upgrade result (true, all went good) to Moodle.
     return true;
