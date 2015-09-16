@@ -165,7 +165,7 @@ if ($dbman->table_exists('bigbluebuttonbn_log') ) {
     echo "\n".'  <div id="bigbluebuttonbn_html_table">'."\n";
     if ( isset($recordings) && !array_key_exists('messageKey', $recordings)) {  // There are recordings for this meeting
         //If there are meetings with recordings load the data to the table
-        if( $CFG->recordingsbn_ui_html_default ) {
+        if( $recordingsbn->ui_html ) {
             //Shows HTML version.
             $table = bigbluebuttonbn_get_recording_table($bbbsession, $recordings);
             if( isset($table->data) ) {

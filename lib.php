@@ -69,15 +69,16 @@ function recordingsbn_add_instance($data, $mform) {
  * @param mod_recordingsbn_mod_form $mform
  * @return boolean Success/Fail
  */
-function recordingsbn_update_instance(stdClass $recordingsbn, mod_recordingsbn_mod_form $mform = null) {
-    global $DB;
+function recordingsbn_update_instance($data, $mform) {
+    global $DB, $CFG;
 
-    $recordingsbn->timemodified = time();
-    $recordingsbn->id = $recordingsbn->instance;
+    $data->id = $data->instance;
 
-    # You may have to add extra stuff in here #
+    recordingsbn_process_pre_save($data);
 
-    return $DB->update_record('recordingsbn', $recordingsbn);
+    $DB->update_record('recordingsbn', $data);
+
+    return true;
 }
 
 /**
@@ -320,7 +321,9 @@ function recordingsbn_extend_settings_navigation(settings_navigation $settingsna
  * @return void
  **/
 function recordingsbn_process_pre_save(&$recordingsbn) {
-    global $DB, $CFG;
+
+    if (! isset($recordingsbn->ui_html))
+        $recordingsbn->ui_html = 0;
 
     if ( !isset($recordingsbn->timecreated) || !$recordingsbn->timecreated ) {
         $recordingsbn->timecreated = time();

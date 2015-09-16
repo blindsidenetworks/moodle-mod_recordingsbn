@@ -10,6 +10,8 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+global $RECORDINGSBN_CFG, $CFG;
+
 require_once(dirname(__FILE__).'/lib.php');
 
 function recordingsbn_getRecordedMeetings( $courseID ) {
@@ -37,4 +39,14 @@ function recordingsbn_getRecordedMeetings( $courseID ) {
     }
 
     return $records;
+}
+
+function recordingsbn_get_cfg_ui_html_default() {
+    global $RECORDINGSBN_CFG, $CFG;
+    return (isset($RECORDINGSBN_CFG->recordingsbn_ui_html_default)? $RECORDINGSBN_CFG->recordingsbn_ui_html_default: (isset($CFG->recordingsbn_ui_html_default)? $CFG->recordingsbn_ui_html_default: false));
+}
+
+function recordingsbn_get_cfg_ui_html_editable() {
+    global $RECORDINGSBN_CFG, $CFG;
+    return (isset($RECORDINGSBN_CFG->recordingsbn_ui_html_editable)? $RECORDINGSBN_CFG->recordingsbn_ui_html_editable: (isset($CFG->recordingsbn_ui_html_editable)? $CFG->recordingsbn_ui_html_editable: false));
 }
