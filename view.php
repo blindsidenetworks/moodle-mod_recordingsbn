@@ -67,9 +67,8 @@ if ( $version_major < '2014051200' ) {
     $event->trigger();
 }
 
-//User roles
-$bbbsession['moderator'] = has_capability('mod/bigbluebuttonbn:moderate', $context);
-$bbbsession['administrator'] = has_capability('moodle/category:manage', $context);
+//Validates if user has permissions for managing recordings
+$bbbsession['managerecordings'] = (has_capability('moodle/category:manage', $context) || has_capability('mod/bigbluebuttonbn:managerecordings', $context));
 
 //Additional info related to the course
 $bbbsession['coursename'] = $course->fullname;
@@ -107,7 +106,7 @@ if ($dbman->table_exists('bigbluebuttonbn_log') ) {
     $shared_secret = bigbluebuttonbn_get_cfg_shared_secret();
 
     //Execute actions if there is one and it is allowed
-    if( isset($action) && isset($recordingid) && ($bbbsession['administrator'] || $bbbsession['moderator']) ){
+    if( isset($action) && isset($recordingid) && ($bbbsession['managerecordings']) ){
         if( $action == 'show' ) {
             bigbluebuttonbn_doPublishRecordings($recordingid, 'true', $endpoint, $shared_secret);
             if ( $version_major < '2014051200' ) {
