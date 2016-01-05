@@ -211,7 +211,8 @@ if ($dbman->table_exists('bigbluebuttonbn_log') ) {
 $waitformoderator_ping_interval = bigbluebuttonbn_get_cfg_waitformoderator_ping_interval();
 $jsVars = array(
         'ping_interval' => ($waitformoderator_ping_interval > 0? $waitformoderator_ping_interval * 1000: 15000),
-        'locales' => bigbluebuttonbn_get_locales_for_ui()
+        'locales' => bigbluebuttonbn_get_locales_for_ui(),
+        'locale' => $USER->lang
 );
 
 $PAGE->requires->data_for_js('bigbluebuttonbn', $jsVars);
