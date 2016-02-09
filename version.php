@@ -10,10 +10,10 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version = 2015080607;
+$plugin->version = 2015080608;
 $plugin->requires = 2013111800;
 $plugin->cron = 0;
 $plugin->component = 'mod_recordingsbn';
 $plugin->maturity = MATURITY_STABLE;    // [MATURITY_STABLE | MATURITY_RC | MATURITY_BETA | MATURITY_ALPHA]
-$plugin->release = '1.2.1';
+$plugin->release = '1.2.2';
 $plugin->dependencies = array( 'mod_bigbluebuttonbn' => 2015080600 );
