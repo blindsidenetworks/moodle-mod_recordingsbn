@@ -14,45 +14,6 @@ global $RECORDINGSBN_CFG, $CFG;
 
 require_once(dirname(__FILE__).'/lib.php');
 
-function recordingsbn_getRecordedMeetings( $courseID ) {
-    global $DB;
-
-    $bigbluebuttonbns = $DB->get_records('bigbluebuttonbn', array('course' => $courseID));
-
-    //Prepare select for loading records based on existent bigbluebuttonbns
-    $table = 'bigbluebuttonbn_logs';
-    $select = "";
-    foreach ($bigbluebuttonbns as $key => $bigbluebuttonbn) {
-        $select .= strlen($select) == 0? "": " OR ";
-        $select .= "bigbluebuttonbnid=".$bigbluebuttonbn->id;
-    }
-    $select .= strlen($select) == 0? "log='Create'": " AND log='Create'";
-
-    //Execute select for loading records based on existent bigbluebuttonbns
-    $records = $DB->get_records_select($table,$select);
-
-    //Remove duplicates
-    $unique_records = array();
-    foreach ($records as $key => $record) {
-        $record_key = $record->meetingid.','.$record->bigbluebuttonbnid.','.$record->meta;
-        if( array_search($record_key, $unique_records) === false ) {
-            array_push($unique_records, $record_key);
-        } else {
-            unset($records[$key]);
-        }
-    }
-
-    //Remove the ones with record=false
-    foreach ($records as $key => $record) {
-        $meta = json_decode($record->meta);
-        if ( !$meta || !$meta->record ) {
-            unset($records[$key]);
-        }
-    }
-
-    return $records;
-}
-
 function recordingsbn_get_cfg_ui_html_default() {
     global $RECORDINGSBN_CFG, $CFG;
     return (isset($RECORDINGSBN_CFG->recordingsbn_ui_html_default)? $RECORDINGSBN_CFG->recordingsbn_ui_html_default: (isset($CFG->recordingsbn_ui_html_default)? $CFG->recordingsbn_ui_html_default: false));

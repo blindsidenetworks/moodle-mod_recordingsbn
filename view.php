@@ -144,7 +144,7 @@ if ($dbman->table_exists('bigbluebuttonbn_logs') ) {
     }
 
     $meetingID='';
-    $results = recordingsbn_getRecordedMeetings($course->id);
+    $results = bigbluebuttonbn_getRecordedMeetings($course->id);
     if( $results ){
         //Eliminates duplicates
         $mIDs = array();
