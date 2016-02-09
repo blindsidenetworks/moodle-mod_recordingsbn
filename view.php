@@ -101,7 +101,7 @@ echo $OUTPUT->heading($recordingsbn->name, 2);
 
 // Recordings plugin code
 $dbman = $DB->get_manager(); // loads ddl manager and xmldb classes
-if ($dbman->table_exists('bigbluebuttonbn_log') ) {
+if ($dbman->table_exists('bigbluebuttonbn_logs') ) {
     // BigBlueButton Setup
     $endpoint = bigbluebuttonbn_get_cfg_server_url();
     $shared_secret = bigbluebuttonbn_get_cfg_shared_secret();
