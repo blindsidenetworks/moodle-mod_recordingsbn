@@ -107,7 +107,7 @@ if ($dbman->table_exists('bigbluebuttonbn_logs') ) {
     $shared_secret = bigbluebuttonbn_get_cfg_shared_secret();
 
     //Execute actions if there is one and it is allowed
-    if( isset($action) && isset($recordingid) && ($bbbsession['managerecordings']) ){
+    if( !empty($action) && !empty($recordingid) && $bbbsession['managerecordings'] ){
         if( $action == 'show' ) {
             bigbluebuttonbn_doPublishRecordings($recordingid, 'true', $endpoint, $shared_secret);
             if ( $version_major < '2014051200' ) {
@@ -145,6 +145,8 @@ if ($dbman->table_exists('bigbluebuttonbn_logs') ) {
 
     $meetingID='';
     $results = bigbluebuttonbn_getRecordedMeetings($course->id);
+    $results_deleted = bigbluebuttonbn_getRecordedMeetingsDeleted($course->id);
+    $results = array_merge($results, $results_deleted);
     if( $results ){
         //Eliminates duplicates
         $mIDs = array();
