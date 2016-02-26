@@ -322,8 +322,13 @@ function recordingsbn_extend_settings_navigation(settings_navigation $settingsna
  **/
 function recordingsbn_process_pre_save(&$recordingsbn) {
 
-    if (! isset($recordingsbn->ui_html))
+    if (! isset($recordingsbn->ui_html) ) {
         $recordingsbn->ui_html = 0;
+    }
+
+    if (! isset($recordingsbn->include_deleted_activities) ) {
+        $recordingsbn->include_deleted_activities = 0;
+    }
 
     if ( !isset($recordingsbn->timecreated) || !$recordingsbn->timecreated ) {
         $recordingsbn->timecreated = time();

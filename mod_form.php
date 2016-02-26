@@ -26,6 +26,8 @@ class mod_recordingsbn_mod_form extends moodleform_mod {
         //UI configuration options
         $ui_html_default = recordingsbn_get_cfg_ui_html_default();
         $ui_html_editable = recordingsbn_get_cfg_ui_html_editable();
+        $include_deleted_activities_default = recordingsbn_get_cfg_include_deleted_activities_default();
+        $include_deleted_activities_editable = recordingsbn_get_cfg_include_deleted_activities_editable();
 
         $mform = $this->_form;
 
@@ -52,6 +54,15 @@ class mod_recordingsbn_mod_form extends moodleform_mod {
             $mform->addElement('hidden', 'ui_html', $ui_html_default);
         }
         $mform->setType('ui_html', PARAM_INT);
+
+        if ( $include_deleted_activities_editable ) {
+            $mform->addElement('checkbox', 'include_deleted_activities', get_string('mod_form_field_include_deleted_activities', 'recordingsbn'));
+            $mform->setDefault( 'include_deleted_activities', $ui_html_default );
+            $mform->setAdvanced('include_deleted_activities');
+        } else {
+            $mform->addElement('hidden', 'include_deleted_activities', $include_deleted_activities_default);
+        }
+        $mform->setType('include_deleted_activities', PARAM_INT);
 
         //-------------------------------------------------------------------------------
         // add standard elements, common to all modules

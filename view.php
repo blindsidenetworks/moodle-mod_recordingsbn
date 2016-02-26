@@ -145,8 +145,12 @@ if ($dbman->table_exists('bigbluebuttonbn_logs') ) {
 
     $meetingID='';
     $results = bigbluebuttonbn_getRecordedMeetings($course->id);
-    $results_deleted = bigbluebuttonbn_getRecordedMeetingsDeleted($course->id);
-    $results = array_merge($results, $results_deleted);
+
+    if( $recordingsbn->include_deleted_activities ) {
+        $results_deleted = bigbluebuttonbn_getRecordedMeetingsDeleted($course->id);
+        $results = array_merge($results, $results_deleted);
+    }
+
     if( $results ){
         //Eliminates duplicates
         $mIDs = array();

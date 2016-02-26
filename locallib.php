@@ -23,3 +23,13 @@ function recordingsbn_get_cfg_ui_html_editable() {
     global $RECORDINGSBN_CFG, $CFG;
     return (isset($RECORDINGSBN_CFG->recordingsbn_ui_html_editable)? $RECORDINGSBN_CFG->recordingsbn_ui_html_editable: (isset($CFG->recordingsbn_ui_html_editable)? $CFG->recordingsbn_ui_html_editable: false));
 }
+
+function recordingsbn_get_cfg_include_deleted_activities_default() {
+    global $RECORDINGSBN_CFG, $CFG;
+    return (isset($RECORDINGSBN_CFG->recordingsbn_include_deleted_activities_default)? $RECORDINGSBN_CFG->recordingsbn_include_deleted_activities_default: (isset($CFG->recordingsbn_include_deleted_activities_default)? $CFG->recordingsbn_include_deleted_activities_default: false));
+}
+
+function recordingsbn_get_cfg_include_deleted_activities_editable() {
+    global $RECORDINGSBN_CFG, $CFG;
+    return (isset($RECORDINGSBN_CFG->recordingsbn_include_deleted_activities_editable)? $RECORDINGSBN_CFG->recordingsbn_include_deleted_activities_editable: (isset($CFG->recordingsbn_include_deleted_activities_editable)? $CFG->recordingsbn_include_deleted_activities_editable: false));
+}
