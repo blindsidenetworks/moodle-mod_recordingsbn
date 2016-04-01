@@ -76,6 +76,9 @@ $bbbsession['coursename'] = $course->fullname;
 $bbbsession['courseid'] = $course->id;
 $bbbsession['cm'] = $cm;
 
+// Initialize session variable used across views
+$SESSION->bigbluebuttonbn_bbbsession = $bbbsession;
+
 ///Set strings to show
 $view_no_recordings = get_string('view_no_recordings', 'recordingsbn');
 
