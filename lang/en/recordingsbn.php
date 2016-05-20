@@ -22,6 +22,7 @@ $string['recordingsbn:addinstance'] = 'Add a new resource with playback recordin
 $string['recordingsbn:view'] = 'View recordings';
 
 $string['mod_form_field_ui_html'] = 'Show the table in plain html';
+$string['mod_form_field_include_deleted_activities'] = 'Include recordings from deleted activities';
 
 $string['config_general'] = 'General configuration';
 $string['config_general_description'] = 'These settings are <b>always</b> used';
@@ -29,6 +30,10 @@ $string['config_feature_ui_html_default'] = 'UI as html is enabled by default';
 $string['config_feature_ui_html_default_description'] = 'If enabled the recording table is shown in plain HTML by default.';
 $string['config_feature_ui_html_editable'] = 'UI as html feature can be edited';
 $string['config_feature_ui_html_editable_description'] = 'UI as html value by default can be edited when the recordingbn is added or updated.';
+$string['config_feature_include_deleted_activities_default'] = 'Include recordings from deleted activities enabled by default';
+$string['config_feature_include_deleted_activities_default_description'] = 'If enabled the recording table will include the recordings belonging to deleted activities if there is any.';
+$string['config_feature_include_deleted_activities_editable'] = 'Include recordings from deleted activities feature can be edited';
+$string['config_feature_include_deleted_activities_editable_description'] = 'Include recordings from deleted activities by default can be edited when the recordingbn is added or updated.';
 
 $string['view_noguests'] = 'The RecordingsBN module is not open to guests';
 $string['view_delete_confirmation'] = 'Are you sure to delete this recording?';

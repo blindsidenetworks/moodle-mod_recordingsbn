@@ -111,6 +111,19 @@ function xmldb_recordingsbn_upgrade($oldversion) {
         upgrade_mod_savepoint(true, 2015080603, 'recordingsbn');
     }
 
+    if ($oldversion < 2016011301) {
+        $table = new xmldb_table('recordingsbn');
+
+        $field = new xmldb_field('include_deleted_activities');
+        $field->set_attributes(XMLDB_TYPE_INTEGER, '1', XMLDB_UNSIGNED, XMLDB_NOTNULL, null, 1);
+
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field, $continue=true, $feedback=true);
+        }
+
+        upgrade_mod_savepoint(true, 2016011301, 'recordingsbn');
+    }
+
     // Final return of upgrade result (true, all went good) to Moodle.
     return true;
 }

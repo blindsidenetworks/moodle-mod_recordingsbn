@@ -76,6 +76,9 @@ $bbbsession['coursename'] = $course->fullname;
 $bbbsession['courseid'] = $course->id;
 $bbbsession['cm'] = $cm;
 
+// Initialize session variable used across views
+$SESSION->bigbluebuttonbn_bbbsession = $bbbsession;
+
 ///Set strings to show
 $view_no_recordings = get_string('view_no_recordings', 'recordingsbn');
 
@@ -101,13 +104,13 @@ echo $OUTPUT->heading($recordingsbn->name, 2);
 
 // Recordings plugin code
 $dbman = $DB->get_manager(); // loads ddl manager and xmldb classes
-if ($dbman->table_exists('bigbluebuttonbn_log') ) {
+if ($dbman->table_exists('bigbluebuttonbn_logs') ) {
     // BigBlueButton Setup
     $endpoint = bigbluebuttonbn_get_cfg_server_url();
     $shared_secret = bigbluebuttonbn_get_cfg_shared_secret();
 
     //Execute actions if there is one and it is allowed
-    if( isset($action) && isset($recordingid) && ($bbbsession['managerecordings']) ){
+    if( !empty($action) && !empty($recordingid) && $bbbsession['managerecordings'] ){
         if( $action == 'show' ) {
             bigbluebuttonbn_doPublishRecordings($recordingid, 'true', $endpoint, $shared_secret);
             if ( $version_major < '2014051200' ) {
@@ -144,7 +147,13 @@ if ($dbman->table_exists('bigbluebuttonbn_log') ) {
     }
 
     $meetingID='';
-    $results = recordingsbn_getRecordedMeetings($course->id);
+    $results = bigbluebuttonbn_getRecordedMeetings($course->id);
+
+    if( $recordingsbn->include_deleted_activities ) {
+        $results_deleted = bigbluebuttonbn_getRecordedMeetingsDeleted($course->id);
+        $results = array_merge($results, $results_deleted);
+    }
+
     if( $results ){
         //Eliminates duplicates
         $mIDs = array();

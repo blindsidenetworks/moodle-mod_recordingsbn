@@ -51,3 +51,11 @@ $RECORDINGSBN_CFG = new stdClass();
 // enabled/disabled by the user creating or editing the resource.
 #$RECORDINGSBN_CFG->recordingsbn_ui_html_editable = 0;
 
+// When the value is set to 1 (checked) the recordingsbn resources
+// will show the recodings belonging to deleted activities as part of the list.
+#$RECORDINGSBN_CFG->recordingsbn_include_deleted_activities_default = 1;
+
+// When the value is set to 1 (checked) the 'include recordings from deleted activities' 
+// capability can be enabled/disabled by the user creating or editing the resource.
+#$RECORDINGSBN_CFG->recordingsbn_include_deleted_activities_editable = 0;
+
