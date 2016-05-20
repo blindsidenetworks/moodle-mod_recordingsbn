@@ -72,8 +72,7 @@ $bbbsession['administrator'] = has_capability('moodle/category:manage', $context
 $bbbsession['managerecordings'] = (has_capability('moodle/category:manage', $context) || has_capability('mod/bigbluebuttonbn:managerecordings', $context));
 
 //Additional info related to the course
-$bbbsession['coursename'] = $course->fullname;
-$bbbsession['courseid'] = $course->id;
+$bbbsession['course'] = $course;
 $bbbsession['cm'] = $cm;
 
 // Initialize session variable used across views
