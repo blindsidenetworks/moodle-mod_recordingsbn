@@ -166,9 +166,16 @@ if ($dbman->table_exists('bigbluebuttonbn_logs') ) {
         }
     }
 
+    // Get actual recordings
     if ( $meetingID != '' ) {
         $recordings = bigbluebuttonbn_getRecordingsArray($meetingID, $endpoint, $shared_secret);
+    } else {
+        $recordings = Array();
     }
+    // Get recording links
+    $recordings_imported = bigbluebuttonbn_getRecordingsImportedArray($bbbsession['course']->id);
+    // Merge the recordings
+    $recordings = array_merge( $recordings, $recordings_imported );
 
     echo "\n".'  <div id="bigbluebuttonbn_html_table">'."\n";
     if ( isset($recordings) && !array_key_exists('messageKey', $recordings)) {  // There are recordings for this meeting
