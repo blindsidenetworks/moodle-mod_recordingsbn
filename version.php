@@ -14,6 +14,6 @@ $plugin->version = 2016051902;
 $plugin->requires = 2013111800;
 $plugin->cron = 0;
 $plugin->component = 'mod_recordingsbn';
-$plugin->maturity = MATURITY_BETA;
+$plugin->maturity = MATURITY_RC;
 $plugin->release = '1.3.0';
 $plugin->dependencies = array( 'mod_bigbluebuttonbn' => 2016051900 );
