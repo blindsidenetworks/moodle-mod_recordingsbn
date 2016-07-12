@@ -190,8 +190,8 @@ if ($dbman->table_exists('bigbluebuttonbn_logs') ) {
 
         } else {
             //Shows YUI version.
-            $recordingsbn_data = bigbluebuttonbn_get_recording_data($bbbsession, $recordings);
             $recordingsbn_columns = bigbluebuttonbn_get_recording_columns($bbbsession, $recordings);
+            $recordingsbn_data = bigbluebuttonbn_get_recording_data($bbbsession, $recordings);
 
             echo '    <div id="recordingsbn_yui_table">'."\n";
 
