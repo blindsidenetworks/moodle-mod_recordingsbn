@@ -25,7 +25,7 @@ if ($ADMIN->fulltree) {
         $settings->add(new admin_setting_configcheckbox('recordingsbn_ui_html_default',
                 get_string('config_feature_ui_html_default', 'recordingsbn'),
                 get_string('config_feature_ui_html_default_description', 'recordingsbn'),
-                0));
+                1));
     }
     if( !isset($BIGBLUEBUTTONBN_CFG->recordingsbn_ui_html_editable) ) {
         // UI for 'recording' feature
