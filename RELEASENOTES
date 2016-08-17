@@ -1,1 +1,17 @@
+1.3.1 (2016051905)
+Bug: Fixed bug in YUI datatable showing a blank page. The bug was affecting users who make use of a language package with sub code (e.g. en_CA, es_MX)
 
+1.3.0 (2016051904)
+Tag: Bumped version and release tags and updated maturity to stable
+
+1.3.0-rc2 (2016051903)
+Bug: Fixed bug in format of imported recordings on YUI table
+
+1.3.0-rc1 (2016051902)
+Tag: Bumped version and release tags and updated maturity to release candidate
+
+1.3.0-beta2 (2016051901)
+Bug: Fixed bug in recording list. Imported links were not included in the list
+
+1.3.0-beta1 (2016051900)
+Enhancement: Version compatible with BigBlueButtonBN 2.1
