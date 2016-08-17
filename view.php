@@ -225,10 +225,12 @@ if ($dbman->table_exists('bigbluebuttonbn_logs') ) {
 
 //JavaScript variables
 $waitformoderator_ping_interval = bigbluebuttonbn_get_cfg_waitformoderator_ping_interval();
+list($lang, $locale_encoder) = explode('.', get_string('locale', 'core_langconfig'));
+list($locale_code, $locale_sub_code) = explode('_', $lang);
 $jsVars = array(
         'ping_interval' => ($waitformoderator_ping_interval > 0? $waitformoderator_ping_interval * 1000: 15000),
         'locales' => bigbluebuttonbn_get_locales_for_ui(),
-        'locale' => $USER->lang
+        'locale' => $locale_code
 );
 
 $PAGE->requires->data_for_js('bigbluebuttonbn', $jsVars);
