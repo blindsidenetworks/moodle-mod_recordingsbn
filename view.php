@@ -85,7 +85,6 @@ $view_no_recordings = get_string('view_no_recordings', 'recordingsbn');
 $PAGE->set_url($CFG->wwwroot.'/mod/recordingsbn/view.php', array('id' => $cm->id));
 $PAGE->set_title(format_string($recordingsbn->name));
 $PAGE->set_heading(format_string($course->fullname));
-$PAGE->set_button(update_module_button($cm->id, $course->id, get_string('modulename', 'recordingsbn')));
 $PAGE->set_context($context);
 $PAGE->set_cacheable(false);
 //$PAGE->set_periodic_refresh_delay(60);
@@ -216,7 +215,7 @@ if ($dbman->table_exists('bigbluebuttonbn_logs') ) {
         echo '  '.$view_no_recordings."\n";
     }
     echo '  </div>'."\n";
-    
+
 } else {
     echo $OUTPUT->box_start('generalbox boxaligncenter', 'dates');
     print_error(get_string('view_dependency_error', 'recordingsbn'));
