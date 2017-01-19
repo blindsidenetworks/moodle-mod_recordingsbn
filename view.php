@@ -144,7 +144,9 @@ if ($dbman->table_exists('bigbluebuttonbn_logs') ) {
         }
     }
 
-    $meetingID='';
+    $recordings = array();
+
+    // Get recorded meetings
     $results = bigbluebuttonbn_getRecordedMeetings($course->id);
 
     if( $recordingsbn->include_deleted_activities ) {
@@ -152,28 +154,29 @@ if ($dbman->table_exists('bigbluebuttonbn_logs') ) {
         $results = array_merge($results, $results_deleted);
     }
 
+    // Get actual recordings
     if( $results ){
-        //Eliminates duplicates
         $mIDs = array();
+        //Eliminates duplicates
         foreach ($results as $result) {
             $mIDs[$result->meetingid] = $result->meetingid;
         }
-        //Generates the meetingID string
-        foreach ($mIDs as $mID) {
-            if (strlen($meetingID) > 0) $meetingID .= ',';
-            $meetingID .= $mID;
+
+        // If there are mIDs excecute a paginated getRecordings request
+        if ( !empty($mIDs) ) {
+            $pages = floor(sizeof($mIDs) / 25) + 1;
+            for ( $page = 1; $page <= $pages; $page++ ) {
+                $meetingIDs = array_slice($mIDs, ($page-1)*25, 25);
+                $fetched_recordings = bigbluebuttonbn_getRecordingsArray(implode(',', $meetingIDs), $endpoint, $shared_secret);
+                $recordings = array_merge($recordings, $fetched_recordings);
+            }
         }
     }
 
-    // Get actual recordings
-    if ( $meetingID != '' ) {
-        $recordings = bigbluebuttonbn_getRecordingsArray($meetingID, $endpoint, $shared_secret);
-    } else {
-        $recordings = Array();
-    }
     // Get recording links
     $recordings_imported = bigbluebuttonbn_getRecordingsImportedArray($bbbsession['course']->id);
-    // Merge the recordings
+
+    // Merge the recordings and recording links 
     $recordings = array_merge( $recordings, $recordings_imported );
 
     echo "\n".'  <div id="bigbluebuttonbn_html_table">'."\n";
