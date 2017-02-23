@@ -19,9 +19,9 @@ M.mod_recordingsbn.datatable_init = function(Y) {
         recordingsbn.data[i].date = date.toLocaleDateString(bigbluebuttonbn.locale, options);
     }
 
-    YUI().use('datatable', 'datatable-sort', 'datatable-paginator', 'datatype-number', function (Y) {
+    YUI({lang:bigbluebuttonbn.locale}).use('datatable', 'datatable-sort', 'datatable-paginator', 'datatype-number', function (Y) {
         var table = new Y.DataTable({
-            width:  "900px",
+            width:  "1075px",
             columns: recordingsbn.columns,
             data: recordingsbn.data,
             rowsPerPage: 10,

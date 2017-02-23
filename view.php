@@ -68,6 +68,12 @@ if ( $version_major < '2014051200' ) {
 }
 
 //Validates if user has permissions for managing recordings
+$bbbsession['bigbluebuttonbn'] = (object) array(
+  'type' => BIGBLUEBUTTONBN_TYPE_RECORDING_ONLY,
+  'recordings_deleted_activities' => $recordingsbn->include_deleted_activities,
+  'recordings_html' => $recordingsbn->ui_html
+);
+
 $bbbsession['administrator'] = has_capability('moodle/category:manage', $context);
 $bbbsession['managerecordings'] = (has_capability('moodle/category:manage', $context) || has_capability('mod/bigbluebuttonbn:managerecordings', $context));
 
@@ -144,58 +150,20 @@ if ($dbman->table_exists('bigbluebuttonbn_logs') ) {
         }
     }
 
-    $recordings = array();
+    // Get recordings
+    $recordings = bigbluebuttonbn_get_recordings($course->id, null, FALSE, $recordingsbn->include_deleted_activities);
 
-    // Get recorded meetings
-    $results = bigbluebuttonbn_getRecordedMeetings($course->id);
-
-    if( $recordingsbn->include_deleted_activities ) {
-        $results_deleted = bigbluebuttonbn_getRecordedMeetingsDeleted($course->id);
-        $results = array_merge($results, $results_deleted);
-    }
-
-    // Get actual recordings
-    if( $results ){
-        $mIDs = array();
-        //Eliminates duplicates
-        foreach ($results as $result) {
-            $mIDs[$result->meetingid] = $result->meetingid;
-        }
-
-        // If there are mIDs excecute a paginated getRecordings request
-        if ( !empty($mIDs) ) {
-            $pages = floor(sizeof($mIDs) / 25) + 1;
-            for ( $page = 1; $page <= $pages; $page++ ) {
-                $meetingIDs = array_slice($mIDs, ($page-1)*25, 25);
-                $fetched_recordings = bigbluebuttonbn_getRecordingsArray(implode(',', $meetingIDs), $endpoint, $shared_secret);
-                $recordings = array_merge($recordings, $fetched_recordings);
-            }
-        }
-    }
-
-    // Get recording links
-    $recordings_imported = bigbluebuttonbn_getRecordingsImportedArray($bbbsession['course']->id);
-
-    // Merge the recordings and recording links 
-    $recordings = array_merge( $recordings, $recordings_imported );
-
-    echo "\n".'  <div id="bigbluebuttonbn_html_table">'."\n";
-    if ( isset($recordings) && !array_key_exists('messageKey', $recordings)) {  // There are recordings for this meeting
+    if ( isset($recordings) && !empty($recordings) && !array_key_exists('messageKey', $recordings)) {  // There are recordings for this meeting
         //If there are meetings with recordings load the data to the table
         if( $recordingsbn->ui_html ) {
             //Shows HTML version.
-            $table = bigbluebuttonbn_get_recording_table($bbbsession, $recordings);
-            if( isset($table->data) ) {
-                //Print the table
-                echo html_writer::table($table)."\n";
-            }
-
+            echo bigbluebutton_output_recording_table($bbbsession, $recordings) . "\n";
         } else {
             //Shows YUI version.
             $recordingsbn_columns = bigbluebuttonbn_get_recording_columns($bbbsession, $recordings);
             $recordingsbn_data = bigbluebuttonbn_get_recording_data($bbbsession, $recordings);
 
-            echo '    <div id="recordingsbn_yui_table">'."\n";
+            echo '    <div id="recordingsbn_yui_table"></div>'."\n";
 
             //JavaScript variables
             $jsvars = array(
@@ -210,14 +178,14 @@ if ($dbman->table_exists('bigbluebuttonbn_logs') ) {
                     'requires' => array('datatable', 'datatable-sort', 'datatable-paginator', 'datatype-number'),
             );
             $PAGE->requires->js_init_call('M.mod_recordingsbn.datatable_init', array(), false, $jsmodule);
-            echo '    </div>'."\n";
         }
-
     } else {
         //There are no recordings to be shown.
+        echo "\n";
+        echo '  <div id="bigbluebuttonbn_html_table">'."\n";
         echo '  '.$view_no_recordings."\n";
+        echo '  </div>'."\n";
     }
-    echo '  </div>'."\n";
 
 } else {
     echo $OUTPUT->box_start('generalbox boxaligncenter', 'dates');
@@ -231,7 +199,7 @@ list($lang, $locale_encoder) = explode('.', get_string('locale', 'core_langconfi
 list($locale_code, $locale_sub_code) = explode('_', $lang);
 $jsVars = array(
         'ping_interval' => ($waitformoderator_ping_interval > 0? $waitformoderator_ping_interval * 1000: 15000),
-        'locales' => bigbluebuttonbn_get_locales_for_ui(),
+        'locales' => bigbluebuttonbn_get_locales_for_view(),
         'locale' => $locale_code
 );
 
@@ -242,7 +210,7 @@ $jsmodule = array(
         'fullpath' => '/mod/bigbluebuttonbn/module.js',
         'requires' => array('datasource-get', 'datasource-jsonschema', 'datasource-polling'),
 );
-$PAGE->requires->js_init_call('M.mod_bigbluebuttonbn.recordingsbn_init', array(), false, $jsmodule);
+$PAGE->requires->js_init_call('M.mod_bigbluebuttonbn.datasource_init', array(), false, $jsmodule);
 
 // Finish the page
 echo $OUTPUT->footer();
