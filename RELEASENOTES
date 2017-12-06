@@ -1,3 +1,6 @@
+1.3.2 (2016051906)
+Update: Version deprecated will not work with newer versions of BigBlueButtonBN.
+
 1.3.1 (2016051905)
 Bug: Fixed bug in YUI datatable showing a blank page. The bug was affecting users who make use of a language package with sub code (e.g. en_CA, es_MX)
 Bug: Fixed issue with deprecated function called by the view

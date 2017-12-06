@@ -48,6 +48,8 @@ $string['view_head_duration'] = 'Duration';
 $string['view_head_recording'] = 'Recording';
 $string['view_duration_min'] = 'min';
 $string['view_no_recordings'] = 'There are no recordings to show';
+$string['view_deprecated'] = 'RecordingsBN has been deprecated and can only be used with BigBlueButtonBN 2.1.x.';
+$string['view_deprecated_info'] = 'Since version 2.2 it is possible to add a BigBlueButtonBN instance in Recordings only mode for getting RecordingsBN functionality.';
 
 $string['event_resource_page_viewed'] = 'RecordingsBN page viewed';
 $string['event_recording_published'] = 'Recording published';

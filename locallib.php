@@ -33,3 +33,9 @@ function recordingsbn_get_cfg_include_deleted_activities_editable() {
     global $RECORDINGSBN_CFG, $CFG;
     return (isset($RECORDINGSBN_CFG->recordingsbn_include_deleted_activities_editable)? $RECORDINGSBN_CFG->recordingsbn_include_deleted_activities_editable: (isset($CFG->recordingsbn_include_deleted_activities_editable)? $CFG->recordingsbn_include_deleted_activities_editable: false));
 }
+
+function recordingsbn_get_moodle_version_major() {
+    global $CFG;
+    $versionarray = explode('.', $CFG->version);
+    return $versionarray[0];
+}
