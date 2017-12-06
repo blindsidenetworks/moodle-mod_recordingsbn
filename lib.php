@@ -1,4 +1,19 @@
 <?php
+// This file is part of Moodle - http://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+
 /**
  * View and administrate BigBlueButton playback recordings
  *
@@ -10,31 +25,36 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-////////////////////////////////////////////////////////////////////////////////
-// Moodle core API                                                            //
-////////////////////////////////////////////////////////////////////////////////
-
 /**
  * Returns the information on whether the module supports a feature
  *
- * @see plugin_supports() in lib/moodlelib.php
  * @param string $feature FEATURE_xx constant for requested feature
  * @return mixed true if the feature is supported, null if unknown
  */
 function recordingsbn_supports($feature) {
     switch($feature) {
-        case FEATURE_IDNUMBER:                 return false;
-        case FEATURE_GROUPS:                   return false;
-        case FEATURE_GROUPINGS:                return false;
-        case FEATURE_GROUPMEMBERSONLY:         return false;
-        case FEATURE_MOD_INTRO:                return false;
-        case FEATURE_COMPLETION_TRACKS_VIEWS:  return false;
-        case FEATURE_GRADE_HAS_GRADE:          return false;
-        case FEATURE_GRADE_OUTCOMES:           return false;
-        case FEATURE_MOD_ARCHETYPE:            return MOD_ARCHETYPE_RESOURCE;
-        case FEATURE_BACKUP_MOODLE2:           return true;
-
-        default:                               return null;
+        case FEATURE_IDNUMBER:
+            return false;
+        case FEATURE_GROUPS:
+            return false;
+        case FEATURE_GROUPINGS:
+            return false;
+        case FEATURE_GROUPMEMBERSONLY:
+            return false;
+        case FEATURE_MOD_INTRO:
+            return false;
+        case FEATURE_COMPLETION_TRACKS_VIEWS:
+            return false;
+        case FEATURE_GRADE_HAS_GRADE:
+            return false;
+        case FEATURE_GRADE_OUTCOMES:
+            return false;
+        case FEATURE_MOD_ARCHETYPE:
+            return MOD_ARCHETYPE_RESOURCE;
+        case FEATURE_BACKUP_MOODLE2:
+            return true;
+        default:
+            return null;
     }
 }
 
@@ -93,15 +113,11 @@ function recordingsbn_update_instance($data, $mform) {
  */
 function recordingsbn_delete_instance($id) {
     global $DB;
-
     if (! $recordingsbn = $DB->get_record('recordingsbn', array('id' => $id))) {
         return false;
     }
-
-    # Delete any dependent records here #
-
+    // Delete any dependent records here.
     $DB->delete_records('recordingsbn', array('id' => $recordingsbn->id));
-
     return true;
 }
 
@@ -115,7 +131,6 @@ function recordingsbn_delete_instance($id) {
  * @return stdClass|null
  */
 function recordingsbn_user_outline($course, $user, $mod, $recordingsbn) {
-
     $return = new stdClass();
     $return->time = 0;
     $return->info = '';
@@ -140,7 +155,7 @@ function recordingsbn_user_complete($course, $user, $mod, $recordingsbn) {
  * @return boolean
  */
 function recordingsbn_print_recent_activity($course, $viewfullnames, $timestart) {
-    return false;  //  True if anything was printed, otherwise false
+    return false;  // True if anything was printed, otherwise false.
 }
 
 /**
@@ -159,7 +174,7 @@ function recordingsbn_get_recent_mod_activity(&$activities, &$index, $timestart,
 }
 
 /**
- * Prints single activity item prepared by {@see recordingsbn_get_recent_mod_activity()}
+ * Prints single activity item prepared by {see recordingsbn_get_recent_mod_activity()}
 
  * @return void
  */
@@ -197,16 +212,11 @@ function recordingsbn_get_participants($recordingsbnid) {
 /**
  * Returns all other caps used in the module
  *
- * @example return array('moodle/site:accessallgroups');
  * @return array
  */
 function recordingsbn_get_extra_capabilities() {
     return array('moodle/site:accessallgroups');
 }
-
-////////////////////////////////////////////////////////////////////////////////
-// Gradebook API                                                              //
-////////////////////////////////////////////////////////////////////////////////
 
 /**
  * Is a given scale used by the instance of recordingsbn?
@@ -220,11 +230,8 @@ function recordingsbn_get_extra_capabilities() {
  * @return bool true if the scale is used by the given recordingsbn instance
  */
 function recordingsbn_scale_used($recordingsbnid, $scaleid) {
-
     $return = false;
-
     return $return;
-
 }
 
 /**
@@ -237,13 +244,8 @@ function recordingsbn_scale_used($recordingsbnid, $scaleid) {
  */
 function recordingsbn_scale_used_anywhere($scaleid) {
     $return = false;
-
     return $return;
 }
-
-////////////////////////////////////////////////////////////////////////////////
-// File API                                                                   //
-////////////////////////////////////////////////////////////////////////////////
 
 /**
  * Returns the lists of all browsable file areas within the given module context
@@ -283,10 +285,6 @@ function recordingsbn_pluginfile($course, $cm, $context, $filearea, array $args,
     send_file_not_found();
 }
 
-////////////////////////////////////////////////////////////////////////////////
-// Navigation API                                                             //
-////////////////////////////////////////////////////////////////////////////////
-
 /**
  * Extends the global navigation tree by adding recordingsbn nodes if there is a relevant content
  *
@@ -316,7 +314,6 @@ function recordingsbn_extend_settings_navigation(settings_navigation $settingsna
  * Runs any processes that must run before
  * a recordingsbn insert/update
  *
- * @global object
  * @param object $recordingsbn RecordingsBN form data
  * @return void
  **/

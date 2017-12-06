@@ -1,4 +1,19 @@
 <?php
+// This file is part of Moodle - http://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+
 /**
  * View and administrate BigBlueButton playback recordings
  *
@@ -22,7 +37,7 @@ if ($id) {
     $cm = get_coursemodule_from_id('recordingsbn', $id, 0, false, MUST_EXIST);
     $course = $DB->get_record('course', array('id' => $cm->course), '*', MUST_EXIST);
     $recordingsbn = $DB->get_record('recordingsbn', array('id' => $cm->instance), '*', MUST_EXIST);
-} elseif ($r) {
+} else if ($r) {
     $recordingsbn = $DB->get_record('recordingsbn', array('id' => $r), '*', MUST_EXIST);
     $course = $DB->get_record('course', array('id' => $recordingsbn->course), '*', MUST_EXIST);
     $cm = get_coursemodule_from_instance('recordingsbn', $recordingsbn->id, $course->id, false, MUST_EXIST);
@@ -55,7 +70,8 @@ if ( $versionmajor < '2014051200' ) {
     add_to_log($course->id, 'recordingsbn', 'resource viewed', "view.php?id={$cm->id}", $recordingsbn->name, $cm->id);
 } else {
     // This is valid after v2.7.
-    $event = \mod_recordingsbn\event\recordingsbn_resource_page_viewed::create(array('context' => $context, 'objectid' => $recordingsbn->id));
+    $event = \mod_recordingsbn\event\recordingsbn_resource_page_viewed::create(
+        array('context' => $context, 'objectid' => $recordingsbn->id));
     $event->trigger();
 }
 
@@ -121,37 +137,40 @@ $endpoint = bigbluebuttonbn_get_cfg_server_url();
 $sharedsecret = bigbluebuttonbn_get_cfg_shared_secret();
 
 // Execute actions if there is one and it is allowed.
-if( !empty($action) && !empty($recordingid) && $bbbsession['managerecordings'] ){
-    if( $action == 'show' ) {
+if (!empty($action) && !empty($recordingid) && $bbbsession['managerecordings']) {
+    if ($action == 'show') {
         bigbluebuttonbn_doPublishRecordings($recordingid, 'true', $endpoint, $sharedsecret);
-        if ( $versionmajor < '2014051200' ) {
+        if ($versionmajor < '2014051200') {
             // This is valid before v2.7.
             add_to_log($course->id, 'recordingsbn', 'recording published', "", $recordingsbn->name, $cm->id);
         } else {
             // This is valid after v2.7.
-            $event = \mod_recordingsbn\event\recordingsbn_recording_published::create(array('context' => $context, 'objectid' => $recordingsbn->id, 'other' => array('rid' => $recordingid)));
+            $event = \mod_recordingsbn\event\recordingsbn_recording_published::create(
+                array('context' => $context, 'objectid' => $recordingsbn->id, 'other' => array('rid' => $recordingid)));
             $event->trigger();
         }
 
-    } else if( $action == 'hide') {
+    } else if ($action == 'hide') {
         bigbluebuttonbn_doPublishRecordings($recordingid, 'false', $endpoint, $sharedsecret);
         if ( $versionmajor < '2014051200' ) {
             // This is valid before v2.7.
             add_to_log($course->id, 'recordingsbn', 'recording unpublished', "", $recordingsbn->name, $cm->id);
         } else {
             // This is valid after v2.7.
-            $event = \mod_recordingsbn\event\recordingsbn_recording_unpublished::create(array('context' => $context, 'objectid' => $recordingsbn->id, 'other' => array('rid' => $recordingid)));
+            $event = \mod_recordingsbn\event\recordingsbn_recording_unpublished::create(
+                array('context' => $context, 'objectid' => $recordingsbn->id, 'other' => array('rid' => $recordingid)));
             $event->trigger();
         }
 
-    } else if( $action == 'delete') {
+    } else if ($action == 'delete') {
         bigbluebuttonbn_doDeleteRecordings($recordingid, $endpoint, $sharedsecret);
-        if ( $versionmajor < '2014051200' ) {
+        if ($versionmajor < '2014051200' ) {
             // This is valid before v2.7.
             add_to_log($course->id, 'recordingsbn', 'recording deleted', '', $recordingsbn->name, $cm->id);
         } else {
             // This is valid after v2.7.
-            $event = \mod_recordingsbn\event\recordingsbn_recording_deleted::create(array('context' => $context,'objectid' => $recordingsbn->id,'other' => array('rid' => $recordingid)));
+            $event = \mod_recordingsbn\event\recordingsbn_recording_deleted::create(
+                array('context' => $context, 'objectid' => $recordingsbn->id, 'other' => array('rid' => $recordingid)));
             $event->trigger();
         }
     }
@@ -162,25 +181,25 @@ $recordings = array();
 // Get recorded meetings.
 $results = bigbluebuttonbn_getRecordedMeetings($course->id);
 
-if( $recordingsbn->include_deleted_activities ) {
-    $results_deleted = bigbluebuttonbn_getRecordedMeetingsDeleted($course->id);
-    $results = array_merge($results, $results_deleted);
+if ($recordingsbn->include_deleted_activities) {
+    $resultsdeleted = bigbluebuttonbn_getRecordedMeetingsDeleted($course->id);
+    $results = array_merge($results, $resultsdeleted);
 }
 
 // Get actual recordings.
-if( $results ){
-    $mIDs = array();
+if ($results) {
+    $mids = array();
     // Eliminates duplicates.
     foreach ($results as $result) {
-        $mIDs[$result->meetingid] = $result->meetingid;
+        $mids[$result->meetingid] = $result->meetingid;
     }
 
     // If there are mIDs excecute a paginated getRecordings request.
-    if ( !empty($mIDs) ) {
-        $pages = floor(sizeof($mIDs) / 25) + 1;
-        for ( $page = 1; $page <= $pages; $page++ ) {
-            $meetingIDs = array_slice($mIDs, ($page-1)*25, 25);
-            $fetchedrecordings = bigbluebuttonbn_getRecordingsArray(implode(',', $meetingIDs), $endpoint, $sharedsecret);
+    if (!empty($mids)) {
+        $pages = floor(count($mids) / 25) + 1;
+        for ($page = 1; $page <= $pages; $page++) {
+            $meetingids = array_slice($mids, ($page - 1) * 25, 25);
+            $fetchedrecordings = bigbluebuttonbn_getRecordingsArray(implode(',', $meetingids), $endpoint, $sharedsecret);
             $recordings = array_merge($recordings, $fetchedrecordings);
         }
     }
@@ -193,12 +212,12 @@ $recordingsimported = bigbluebuttonbn_getRecordingsImportedArray($bbbsession['co
 $recordings = array_merge($recordings, $recordingsimported);
 
 echo "\n".'  <div id="bigbluebuttonbn_html_table">'."\n";
-if ( isset($recordings) && !array_key_exists('messageKey', $recordings)) {  // There are recordings for this meeting
+if (isset($recordings) && !array_key_exists('messageKey', $recordings)) {  // There are recordings for this meeting
     // If there are meetings with recordings load the data to the table.
-    if( $recordingsbn->ui_html ) {
+    if ($recordingsbn->ui_html) {
         // Shows HTML version.
         $table = bigbluebuttonbn_get_recording_table($bbbsession, $recordings);
-        if( isset($table->data) ) {
+        if (isset($table->data)) {
             // Print the table.
             echo html_writer::table($table)."\n";
         }
@@ -237,20 +256,19 @@ echo '  </div>'."\n";
 $pinginterval = bigbluebuttonbn_get_cfg_waitformoderator_ping_interval();
 list($lang, $localeencoder) = explode('.', get_string('locale', 'core_langconfig'));
 list($localecode, $localesubcode) = explode('_', $lang);
-$jsVars = array(
-        'ping_interval' => ($pinginterval > 0? $pinginterval * 1000: 15000),
+$jsvars = array(
+        'ping_interval' => ($pinginterval > 0 ? $pinginterval * 1000 : 15000),
         'locales' => bigbluebuttonbn_get_locales_for_ui(),
         'locale' => $localecode
 );
 
-$PAGE->requires->data_for_js('bigbluebuttonbn', $jsVars);
+$PAGE->requires->data_for_js('bigbluebuttonbn', $jsvars);
 
 $jsmodule = array(
-        'name'     => 'mod_bigbluebuttonbn',
-        'fullpath' => '/mod/bigbluebuttonbn/module.js',
-        'requires' => array('datasource-get', 'datasource-jsonschema', 'datasource-polling'),
-);
+    'name'     => 'mod_bigbluebuttonbn',
+    'fullpath' => '/mod/bigbluebuttonbn/module.js',
+    'requires' => array('datasource-get', 'datasource-jsonschema', 'datasource-polling'));
 $PAGE->requires->js_init_call('M.mod_bigbluebuttonbn.recordingsbn_init', array(), false, $jsmodule);
 
-// Finish the page
+// Finish the page.
 echo $OUTPUT->footer();

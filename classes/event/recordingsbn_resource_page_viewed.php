@@ -1,4 +1,19 @@
 <?php
+// This file is part of Moodle - http://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+
 /**
  * The mod_recordingsbn viewed event.
  *
@@ -11,6 +26,12 @@
 namespace mod_recordingsbn\event;
 defined('MOODLE_INTERNAL') || die();
 
+/**
+ * Moodle class for event page_viewed.
+ *
+ * @copyright 2010-2017 Blindside Networks Inc
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v2 or later
+ */
 class recordingsbn_resource_page_viewed extends \core\event\base {
     /**
      * Init method.
@@ -48,8 +69,8 @@ class recordingsbn_resource_page_viewed extends \core\event\base {
      * @return array
      */
     protected function get_legacy_logdata() {
-        return(array($this->courseid, 'recordingsbn', 'resource page viewed',
-                'view.php?pageid=' . $this->objectid, get_string('event_resource_page_viewed', 'recordingsbn'), $this->contextinstanceid));
+        return(array($this->courseid, 'recordingsbn', 'resource page viewed', 'view.php?pageid=' . $this->objectid,
+        get_string('event_resource_page_viewed', 'recordingsbn'), $this->contextinstanceid));
     }
 
     /**

@@ -1,4 +1,19 @@
 <?php
+// This file is part of Moodle - http://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+
 /**
  * View and administrate BigBlueButton playback recordings
  *
@@ -11,7 +26,7 @@
 require_once(dirname(dirname(dirname(__FILE__))).'/config.php');
 require_once(dirname(__FILE__).'/lib.php');
 
-$id = required_param('id', PARAM_INT);   // course
+$id = required_param('id', PARAM_INT);
 
 if (! $course = $DB->get_record('course', array('id' => $id))) {
     print_error('Course ID is incorrect');
@@ -20,25 +35,24 @@ if (! $course = $DB->get_record('course', array('id' => $id))) {
 require_course_login($course);
 
 if ( $CFG->version < '2013111800' ) {
-    //This is valid before v2.6
+    // This is valid before v2.6.
     $context = get_context_instance(CONTEXT_MODULE, $cm->id);
 } else {
-    //This is valid after v2.6
+    // This is valid after v2.6.
     $context = context_module::instance($cm->id);
 }
 
-
-/// Print the header
+// Print the header.
 
 $PAGE->set_url('/mod/recordingsbn/index.php', array('id' => $id));
 $PAGE->set_title(format_string($course->fullname));
 $PAGE->set_heading(format_string($course->fullname));
 $PAGE->set_context($context);
 
-// Output starts here
+// Output starts here.
 echo $OUTPUT->header();
 
-/// Get all the appropriate data
+// Get all the appropriate data.
 
 if (! $recordingsbns = get_all_instances_in_course('recordingsbn', $course)) {
     echo $OUTPUT->heading(get_string('norecordingsbns', 'recordingsbn'), 2);
@@ -47,8 +61,7 @@ if (! $recordingsbns = get_all_instances_in_course('recordingsbn', $course)) {
     die();
 }
 
-/// Print the list of instances (your module will probably extend this)
-
+// Print the list of instances (your module will probably extend this).
 $timenow  = time();
 $strname  = get_string('name');
 $strweek  = get_string('week');
@@ -68,10 +81,10 @@ if ($course->format == 'weeks') {
 
 foreach ($recordingsbns as $recordingsbn) {
     if (!$recordingsbn->visible) {
-        //Show dimmed if the mod is hidden
+        // Show dimmed if the mod is hidden.
         $link = '<a class="dimmed" href="view.php?id='.$recordingsbn->coursemodule.'">'.format_string($recordingsbn->name).'</a>';
     } else {
-        //Show normal if the mod is visible
+        // Show normal if the mod is visible.
         $link = '<a href="view.php?id='.$recordingsbn->coursemodule.'">'.format_string($recordingsbn->name).'</a>';
     }
 
@@ -85,6 +98,6 @@ foreach ($recordingsbns as $recordingsbn) {
 echo $OUTPUT->heading(get_string('modulenameplural', 'recordingsbn'), 2);
 print_table($table);
 
-/// Finish the page
+// Finish the page.
 
 echo $OUTPUT->footer();
