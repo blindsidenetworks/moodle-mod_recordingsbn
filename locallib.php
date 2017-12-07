@@ -29,26 +29,75 @@ global $RECORDINGSBN_CFG, $CFG;
 
 require_once(dirname(__FILE__).'/lib.php');
 
+/**
+ * Returns default value for ui_html.
+ *
+ * @return boolean
+ */
 function recordingsbn_get_cfg_ui_html_default() {
     global $RECORDINGSBN_CFG, $CFG;
-    return (isset($RECORDINGSBN_CFG->recordingsbn_ui_html_default) ? $RECORDINGSBN_CFG->recordingsbn_ui_html_default : (isset($CFG->recordingsbn_ui_html_default) ? $CFG->recordingsbn_ui_html_default : false));
+    if (isset($RECORDINGSBN_CFG->recordingsbn_ui_html_default)) {
+        return $RECORDINGSBN_CFG->recordingsbn_ui_html_default;
+    }
+    if (isset($CFG->recordingsbn_ui_html_default)) {
+        return $CFG->recordingsbn_ui_html_default;
+    }
+    return false;
 }
 
+/**
+ * Returns value for ui_html_editable.
+ *
+ * @return boolean
+ */
 function recordingsbn_get_cfg_ui_html_editable() {
     global $RECORDINGSBN_CFG, $CFG;
-    return (isset($RECORDINGSBN_CFG->recordingsbn_ui_html_editable) ? $RECORDINGSBN_CFG->recordingsbn_ui_html_editable: (isset($CFG->recordingsbn_ui_html_editable) ? $CFG->recordingsbn_ui_html_editable : false));
+    if (isset($RECORDINGSBN_CFG->recordingsbn_ui_html_editable)) {
+        return $RECORDINGSBN_CFG->recordingsbn_ui_html_editable;
+    }
+    if (isset($CFG->recordingsbn_ui_html_editable)) {
+        return $CFG->recordingsbn_ui_html_editable;
+    }
+    return false;
 }
 
+/**
+ * Returns default value for include_deleted_activities.
+ *
+ * @return boolean
+ */
 function recordingsbn_get_cfg_include_deleted_activities_default() {
     global $RECORDINGSBN_CFG, $CFG;
-    return (isset($RECORDINGSBN_CFG->recordingsbn_include_deleted_activities_default) ? $RECORDINGSBN_CFG->recordingsbn_include_deleted_activities_default : (isset($CFG->recordingsbn_include_deleted_activities_default) ? $CFG->recordingsbn_include_deleted_activities_default : false));
+    if (isset($RECORDINGSBN_CFG->recordingsbn_include_deleted_activities_default)) {
+        return $RECORDINGSBN_CFG->recordingsbn_include_deleted_activities_default;
+    }
+    if (isset($CFG->recordingsbn_include_deleted_activities_default)) {
+        return $CFG->recordingsbn_include_deleted_activities_default;
+    }
+    return false;
 }
 
+/**
+ * Returns value for include_deleted_activities_editable.
+ *
+ * @return boolean
+ */
 function recordingsbn_get_cfg_include_deleted_activities_editable() {
     global $RECORDINGSBN_CFG, $CFG;
-    return (isset($RECORDINGSBN_CFG->recordingsbn_include_deleted_activities_editable) ? $RECORDINGSBN_CFG->recordingsbn_include_deleted_activities_editable : (isset($CFG->recordingsbn_include_deleted_activities_editable) ? $CFG->recordingsbn_include_deleted_activities_editable : false));
+    if (isset($RECORDINGSBN_CFG->recordingsbn_include_deleted_activities_editable)) {
+        return $RECORDINGSBN_CFG->recordingsbn_include_deleted_activities_editable;
+    }
+    if (isset($CFG->recordingsbn_include_deleted_activities_editable)) {
+        return $CFG->recordingsbn_include_deleted_activities_editable;
+    }
+    return false;
 }
 
+/**
+ * Returns moodle version.
+ *
+ * @return string
+ */
 function recordingsbn_get_moodle_version_major() {
     global $CFG;
     $versionarray = explode('.', $CFG->version);

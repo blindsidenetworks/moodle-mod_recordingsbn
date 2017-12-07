@@ -66,7 +66,7 @@ function recordingsbn_supports($feature) {
  * will create a new instance and return the id number
  * of the new instance.
  *
- * @param object $recordingsbn An object from the form in mod_form.php
+ * @param object $data An object from the form in mod_form.php
  * @param mod_recordingsbn_mod_form $mform
  * @return int The id of the newly inserted recordingsbn record
  */
@@ -85,7 +85,7 @@ function recordingsbn_add_instance($data, $mform) {
  * (defined by the form in mod_form.php) this function
  * will update an existing instance with new data.
  *
- * @param object $recordingsbn An object from the form in mod_form.php
+ * @param object $data An object from the form in mod_form.php
  * @param mod_recordingsbn_mod_form $mform
  * @return boolean Success/Fail
  */
@@ -128,6 +128,10 @@ function recordingsbn_delete_instance($id) {
  * $return->time = the time they did it
  * $return->info = a short text description
  *
+ * @param object $course
+ * @param object $user
+ * @param object $mod
+ * @param object $recordingsbn An object from the form in mod_form.php
  * @return stdClass|null
  */
 function recordingsbn_user_outline($course, $user, $mod, $recordingsbn) {
@@ -141,6 +145,10 @@ function recordingsbn_user_outline($course, $user, $mod, $recordingsbn) {
  * Prints a detailed representation of what a user has done with
  * a given particular instance of this module, for user activity reports.
  *
+ * @param object $course
+ * @param object $user
+ * @param object $mod
+ * @param object $recordingsbn An object from the form in mod_form.php
  * @return string HTML
  */
 function recordingsbn_user_complete($course, $user, $mod, $recordingsbn) {
@@ -152,6 +160,9 @@ function recordingsbn_user_complete($course, $user, $mod, $recordingsbn) {
  * that has occurred in recordingsbn activities and print it out.
  * Return true if there was output, or false is there was none.
  *
+ * @param object $course
+ * @param array $viewfullnames
+ * @param integer $timestart
  * @return boolean
  */
 function recordingsbn_print_recent_activity($course, $viewfullnames, $timestart) {
@@ -175,7 +186,12 @@ function recordingsbn_get_recent_mod_activity(&$activities, &$index, $timestart,
 
 /**
  * Prints single activity item prepared by {see recordingsbn_get_recent_mod_activity()}
-
+ *
+ * @param object $activity
+ * @param integer $courseid
+ * @param string $detail
+ * @param array $modnames
+ * @param array $viewfullnames
  * @return void
  */
 function recordingsbn_print_recent_mod_activity($activity, $courseid, $detail, $modnames, $viewfullnames) {
@@ -227,6 +243,7 @@ function recordingsbn_get_extra_capabilities() {
  * as reference.
  *
  * @param int $recordingsbnid ID of an instance of this module
+ * @param int $scaleid
  * @return bool true if the scale is used by the given recordingsbn instance
  */
 function recordingsbn_scale_used($recordingsbnid, $scaleid) {
@@ -236,10 +253,9 @@ function recordingsbn_scale_used($recordingsbnid, $scaleid) {
 
 /**
  * Checks if scale is being used by any instance of recordingsbn.
- *
  * This is used to find out if scale used anywhere.
  *
- * @param $scaleid int
+ * @param int $scaleid
  * @return boolean true if the scale is used by any recordingsbn instance
  */
 function recordingsbn_scale_used_anywhere($scaleid) {
@@ -287,13 +303,13 @@ function recordingsbn_pluginfile($course, $cm, $context, $filearea, array $args,
 
 /**
  * Extends the global navigation tree by adding recordingsbn nodes if there is a relevant content
- *
  * This can be called by an AJAX request so do not rely on $PAGE as it might not be set up properly.
  *
  * @param navigation_node $navref An object representing the navigation tree node of the recordingsbn module instance
  * @param stdClass $course
  * @param stdClass $module
  * @param cm_info $cm
+ * @return void this should never return to the caller
  */
 function recordingsbn_extend_navigation(navigation_node $navref, stdclass $course, stdclass $module, cm_info $cm) {
 }
@@ -306,6 +322,7 @@ function recordingsbn_extend_navigation(navigation_node $navref, stdclass $cours
  *
  * @param settings_navigation $settingsnav {@link settings_navigation}
  * @param navigation_node $recordingsbnnode {@link navigation_node}
+ * @return void this should never return to the caller
  */
 function recordingsbn_extend_settings_navigation(settings_navigation $settingsnav, navigation_node $recordingsbnnode=null) {
 }

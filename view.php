@@ -77,7 +77,8 @@ if ( $versionmajor < '2014051200' ) {
 
 // Validates if user has permissions for managing recordings.
 $bbbsession['administrator'] = has_capability('moodle/category:manage', $context);
-$bbbsession['managerecordings'] = (has_capability('moodle/category:manage', $context) || has_capability('mod/bigbluebuttonbn:managerecordings', $context));
+$bbbsession['managerecordings'] = (has_capability('moodle/category:manage', $context) ||
+    has_capability('mod/bigbluebuttonbn:managerecordings', $context));
 
 // Additional info related to the course.
 $bbbsession['course'] = $course;
