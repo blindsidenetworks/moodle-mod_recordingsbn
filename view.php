@@ -242,7 +242,7 @@ if (isset($recordings) && !array_key_exists('messageKey', $recordings)) {  // Th
                 'fullpath' => '/mod/recordingsbn/module.js',
                 'requires' => array('datatable', 'datatable-sort', 'datatable-paginator', 'datatype-number'),
         );
-        $PAGE->requires->js_init_call('M.mod_recordingsbn.datatable_init', array(), false, $jsmodule);
+        $PAGE->requires->js_init_call('M.mod_recordingsbn.datatableInit', array(), false, $jsmodule);
         echo '    </div>'."\n";
     }
 
