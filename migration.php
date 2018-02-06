@@ -25,7 +25,6 @@
 
 require_once(dirname(dirname(dirname(__FILE__))).'/config.php');
 require_once(dirname(__FILE__).'/locallib.php');
-require_once($CFG->dirroot.'/mod/bigbluebuttonbn/locallib.php');
 
 $id = optional_param('id', 0, PARAM_INT);
 
@@ -74,6 +73,101 @@ if (!$dbman->table_exists('bigbluebuttonbn_logs')) {
 }
 
 // Proceed with the migration
+$courses = get_courses('all', 'c.fullname ASC', 'c.id,c.shortname,c.fullname');
+//error_log(json_encode($courses));
+$bns = get_all_instances_in_course('bigbluebuttonbn', $course);
+//error_log(json_encode($bns));
+
+if (! $recordingsbns = get_all_instances_in_courses('recordingsbn', $courses)) {
+    echo $OUTPUT->heading(get_string('norecordingsbns', 'recordingsbn'), 2);
+    echo $OUTPUT->continue_button("view.php?id=$course->id");
+    echo $OUTPUT->footer();
+    die();
+}
+
+//error_log(json_encode($recordingsbns));
+foreach ($recordingsbns as $bn) {
+    error_log(json_encode($bn));
+    // Module test values.
+    $moduleinfo = new stdClass();
+
+    // Always mandatory generic values to any module.
+    $moduleinfo->modulename = 'bigbluebuttonbn';
+    $moduleinfo->section = $bn->section; // This is the section number in the course. Not the section id in the database.
+    $moduleinfo->course = $bn->course;
+    $moduleinfo->groupmode = $bn->groupmode;
+    $moduleinfo->groupingid = $bn->groupingid;
+    $moduleinfo->visible = $bn->visible;
+    $moduleinfo->visibleoncoursepage = 1;
+
+    // Reguired values by BigBlueButtonBN.
+    $moduleinfo->type = "2";
+    $moduleinfo->name = $bn->name;
+    $moduleinfo->recordings_html = $bn->ui_html;
+    $moduleinfo->recordings_deleted = $bn->include_deleted_activities;
+    $moduleinfo->participants = "[{&quot;selectiontype&quot;:&quot;all&quot;,&quot;selectionid&quot;:&quot;all&quot;,&quot;role&quot;:&quot;viewer&quot;}]";
+
+    // Optional intro editor (depends of module).
+    $draftid_editor = 0;
+    file_prepare_draft_area($draftid_editor, null, null, null, null);
+    $moduleinfo->introeditor = array('text' => '', 'format' => FORMAT_HTML, 'itemid' => $draftid_editor);
+
+    $modluleinfo = create_module($moduleinfo);
+    error_log(json_encode($modluleinfo));
+}
+
+
 
 // Finish the page.
 echo $OUTPUT->footer();
+
+function bigbluebuttonbn_new($bn) {
+    global $CFG;
+/*
+    $data = array(
+        "type" => "2",
+        "name" => $bn->name,
+        "showdescription" => "0",
+        "welcome" => "",
+        "voicebridge" => "0",
+        "userlimit" => $CFG->bigbluebuttonbn['userlimit_default'],
+        "record" => $CFG->bigbluebuttonbn['recording_default'] == 'true' ? 1 : 0,
+        "recordings_html" => (int)$bn->ui_html,
+        "recordings_deleted" => (int)$bn->include_deleted_activities,
+        "recordings_preview" => $CFG->bigbluebuttonbn['recordings_preview'] == 'true' ? 1 : 0,
+        "mform_isexpanded_id_preuploadpresentation" => 1,
+        "presentation" => null,
+        "mform_isexpanded_id_permissions" => 1,
+        "participants" => "[{&quot;selectiontype&quot;:&quot;all&quot;,&quot;selectionid&quot;:&quot;all&quot;,&quot;role&quot;:&quot;viewer&quot;}]",
+        "openingtime" => 0,
+        "closingtime" => 0,
+        "visible" => (int)$bn->visible,
+        "visibleoncoursepage" => 1,
+        "cmidnumber" => "",
+        "groupmode" => $bn->groupmode,
+        "groupingid" => $bn->groupingid,
+        "availabilityconditionsjson" => "{\\"op\\":\\"&\\",\\"c\\":[],\\"showc\\":[]}",
+        "tags" => [],
+        "course" => $bn->course,
+        ////"coursemodule" => 40, // This is an assigned consecutive
+        "section" => (int)$bn->section,
+        ////"module" => 23,  // This is constant
+        "modulename" => "bigbluebuttonbn",
+        "instance" => "",
+        "add" => "bigbluebuttonbn",
+        "update" => 0,
+        "return" => 0,
+        "sr" => 0,
+        "competency_rule" => "0",
+        "submitbutton" => "Save and display",
+        "completion" => 0,
+        "completionview" => 0,
+        "completionexpected" => 0,
+        "completiongradeitemnumber" => null,
+        "conditiongradegroup" => [],
+        "conditionfieldgroup" => [],
+        "intro" => "",
+        "introformat" => "1"
+    );
+*/
+}

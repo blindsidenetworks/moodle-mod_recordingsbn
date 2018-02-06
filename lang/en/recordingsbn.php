@@ -35,6 +35,7 @@ $string['pluginadministration'] = 'recordingsbn administration';
 $string['pluginname'] = 'RecordingsBN';
 $string['recordingsbn:addinstance'] = 'Add a new resource with playback recordings';
 $string['recordingsbn:view'] = 'View recordings';
+$string['norecordingsbns'] = 'There are no instances of RecordingsBN';
 
 $string['mod_form_field_ui_html'] = 'Show the table in plain html';
 $string['mod_form_field_include_deleted_activities'] = 'Include recordings from deleted activities';
