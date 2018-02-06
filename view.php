@@ -95,11 +95,11 @@ $PAGE->set_context($context);
 $PAGE->set_cacheable(false);
 
 // This module was deprecated when BigBlueButtonBN 2.2 was released (2017101000).
-if ($dependencyversion > '2016051919') {
+if ($dependencyversion >= '2017101000') {
     $PAGE->set_title(format_string($recordingsbn->name));
     echo $OUTPUT->header();
     echo $OUTPUT->box_start('generalbox boxaligncenter');
-    recordingsbn_deprecation_messages($bbbsession);
+    recordingsbn_deprecation_messages($bbbsession, $dependencyversion);
     echo $OUTPUT->box_end();
     echo $OUTPUT->footer();
     exit;
@@ -274,67 +274,33 @@ $PAGE->requires->js_init_call('M.mod_bigbluebuttonbn.recordingsbn_init', array()
 echo $OUTPUT->footer();
 
 
-function recordingsbn_deprecation_messages($bbbsession) {
+/**
+ * Renders deprecation message.
+ *
+ * @param array $bbbsession
+ * @param string $dependencyversion
+ *
+ * @return string
+ */
+function recordingsbn_deprecation_messages($bbbsession, $dependencyversion) {
+    global $CFG;
+    if ($dependencyversion < '2017101009') {
+        echo '<br><div class="alert alert-danger">' . get_string('view_deprecated_msg_admin', 'recordingsbn') . '</div>';
+        echo '<br><div class="alert alert-info">' . get_string('view_deprecated_info_admin', 'recordingsbn') . '</div>';
+        return;
+    }
+    // Implements the use of new functions and option for migration
     if ($bbbsession['administrator']) {
-        echo recordingsbn_view_render_warning(get_string('view_deprecated_msg_admin', 'recordingsbn'), 'danger', 'http://google.ca', 'Migrate', 'btn btn-primary');
+        echo bigbluebuttonbn_render_warning(get_string('view_deprecated_msg_admin', 'recordingsbn'), 'danger');
+        echo bigbluebuttonbn_render_warning(get_string('view_deprecated_info_admin', 'recordingsbn'), 'info',
+          $CFG->wwwroot . '/mod/recordingsbn/migration.php?id=' . $bbbsession['cm']->id, get_string('view_deprecated_call_to_action', 'recordingsbn'), 'btn btn-primary');
         return;
     }
     if ($bbbsession['managerecordings']) {
-        echo recordingsbn_view_render_warning(get_string('view_deprecated_msg_admin', 'recordingsbn'), 'danger');
+        echo bigbluebuttonbn_render_warning(get_string('view_deprecated_msg_admin', 'recordingsbn'), 'danger');
+        echo bigbluebuttonbn_render_warning(get_string('view_deprecated_info_admin', 'recordingsbn'), 'info');
         return;
     }
-    echo recordingsbn_view_render_warning(get_string('view_deprecated_msg_user', 'recordingsbn'), 'warning');
-}
-
-/**
- * Renders the general warning message.
- *
- * @param string $message
- * @param string $type
- * @param string $href
- * @param string $text
- * @param string $class
- *
- * @return string
- */
-function recordingsbn_view_render_warning($message, $type='info', $href='', $text='', $class='') {
-    global $OUTPUT;
-    $output = "\n";
-    // Evaluates if config_warning is enabled.
-    if (empty($message)) {
-        return $output;
-    }
-    $output .= $OUTPUT->box_start('box boxalignleft adminerror alert alert-' . $type . ' alert-block fade in') . "\n";
-    $output .= '    ' . $message . "\n";
-    $output .= '  <div class="singlebutton pull-right">' . "\n";
-    if (!empty($href)) {
-        $output .= bigbluebuttonbn_view_render_warning_button($href, $text, $class);
-    }
-    $output .= '  </div>' . "\n";
-    $output .= $OUTPUT->box_end() . "\n";
-    return $output;
-}
-
-/**
- * Renders the general warning button.
- *
- * @param string $href
- * @param string $text
- * @param string $class
- *
- * @return string
- */
-function bigbluebuttonbn_view_render_warning_button($href, $text = '', $class = '') {
-    if ($text == '') {
-        $text = get_string('ok', 'moodle');
-    }
-    if ($class == '') {
-        $class = 'btn btn-secondary';
-    }
-    $output  = '    <form method="post" action="' . $href . '" class="form-inline">'."\n";
-    $output .= '      <button type="submit" class="' . $class . '"'."\n";
-    $output .= '        title="' . $text . '"'."\n";
-    $output .= '        >' . $text . '</button>'."\n";
-    $output .= '    </form>'."\n";
-    return $output;
+    echo bigbluebuttonbn_render_warning(get_string('view_deprecated_msg_user', 'recordingsbn'), 'danger');
+    echo bigbluebuttonbn_render_warning(get_string('view_deprecated_info_user', 'recordingsbn'), 'info');
 }
