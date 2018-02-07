@@ -34,7 +34,7 @@ require_once($CFG->libdir.'/adminlib.php');
 /**
  * Helper class for rendering HTML for settings.php.
  *
- * @copyright 2010-2017 Blindside Networks Inc
+ * @copyright 2018 Blindside Networks Inc
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v2 or later
  */
 class renderer {
@@ -145,33 +145,6 @@ class renderer {
         return $item;
     }
 
-     /**
-     * Render a multiselect element in a group.
-     *
-     * @param string    $name
-     * @param string    $url
-     * @param string    $caption
-     * @param string    $class
-     * @param string    $action
-     *
-     * @return Object
-     */
-    public function render_group_element_button($name, $url = '', $caption = '', $title = '', $class = 'btn btn-primary', $action = '') {
-        global $OUTPUT;
-        if ($caption == '') {
-            $caption = get_string('ok', 'moodle');
-        }
-        if ($title == '') {
-            $title = $caption;
-        }
-        $output  = $OUTPUT->box_start('box boxalignleft fade in', $this->module . '_' . $name) . "\n";
-        $output .= '  <button type="button" class="' . $class . '" title="' . $title . '">' . $caption . '</button>' . "\n";
-        $output .= $OUTPUT->box_end() . "\n";
-        $item = new \admin_setting_heading($this->module . '_' . $name, '', $output, 'center-block');
-        $this->settings->add($item);
-        return $item;
-    }
- 
     /**
      * Render a general warning message.
      *
@@ -194,4 +167,33 @@ class renderer {
         $this->settings->add($item);
         return $item;
     }
+
+    /**
+    * Render a multiselect element in a group.
+    *
+    * @param string    $name
+    * @param string    $url
+    * @param string    $caption
+    * @param string    $class
+    * @param string    $action
+    *
+    * @return Object
+    */
+    public function render_group_element_button($name, $url, $caption = '', $title = '', $class = 'btn btn-secondary', $action = '') {
+        global $OUTPUT;
+        if ($caption == '') {
+            $caption = get_string('ok', 'moodle');
+        }
+        if ($title == '') {
+            $title = $caption;
+        }
+        $output  = $OUTPUT->box_start('box boxalignleft fade in', $this->module . '_' . $name) . "\n";
+        //$output .= $OUTPUT->single_button($url, $caption, 'get');
+        $output .= '  <a href="' . $url . '" class="' . $class . '" title="' . $title . '">' . $caption . '</a>' . "\n";
+        $output .= $OUTPUT->box_end() . "\n";
+        $item = new \admin_setting_heading($this->module . '_' . $name, '', $output, 'center-block');
+        $this->settings->add($item);
+        return $item;
+    }
+
 }

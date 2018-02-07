@@ -40,7 +40,7 @@ if ($ADMIN->fulltree) {
             get_string('view_deprecated_info_admin', 'recordingsbn'), 'info', false);
         // Renders call to action button.
         $renderer->render_group_element_button('deprecated_action',
-            $CFG->wwwroot . '/mod/recordingsbn/migrate.php',
+            $CFG->wwwroot . '/mod/recordingsbn/migration.php',
             get_string('view_deprecated_call_to_action', 'recordingsbn'));
         return;
     }

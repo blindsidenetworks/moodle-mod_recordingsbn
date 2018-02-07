@@ -290,13 +290,7 @@ function recordingsbn_view_deprecation_messages($bbbsession, $dependencyversion)
         return;
     }
     // Implements the use of new functions and option for migration
-    if ($bbbsession['administrator']) {
-        echo bigbluebuttonbn_render_warning(get_string('view_deprecated_msg_admin', 'recordingsbn'), 'danger');
-        echo bigbluebuttonbn_render_warning(get_string('view_deprecated_info_admin', 'recordingsbn'), 'info',
-          $CFG->wwwroot . '/mod/recordingsbn/migration.php?id=' . $bbbsession['cm']->id, get_string('view_deprecated_call_to_action', 'recordingsbn'), 'btn btn-primary');
-        return;
-    }
-    if ($bbbsession['managerecordings']) {
+    if ($bbbsession['administrator'] || $bbbsession['managerecordings']) {
         echo bigbluebuttonbn_render_warning(get_string('view_deprecated_msg_admin', 'recordingsbn'), 'danger');
         echo bigbluebuttonbn_render_warning(get_string('view_deprecated_info_admin', 'recordingsbn'), 'info');
         return;
