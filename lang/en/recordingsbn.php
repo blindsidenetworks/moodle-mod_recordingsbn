@@ -42,14 +42,14 @@ $string['mod_form_field_include_deleted_activities'] = 'Include recordings from 
 
 $string['config_general'] = 'General configuration';
 $string['config_general_description'] = 'These settings are <b>always</b> used';
-$string['config_feature_ui_html_default'] = 'UI as html is enabled by default';
-$string['config_feature_ui_html_default_description'] = 'If enabled the recording table is shown in plain HTML by default.';
-$string['config_feature_ui_html_editable'] = 'UI as html feature can be edited';
-$string['config_feature_ui_html_editable_description'] = 'UI as html value by default can be edited when the recordingbn is added or updated.';
-$string['config_feature_include_deleted_activities_default'] = 'Include recordings from deleted activities enabled by default';
-$string['config_feature_include_deleted_activities_default_description'] = 'If enabled the recording table will include the recordings belonging to deleted activities if there is any.';
-$string['config_feature_include_deleted_activities_editable'] = 'Include recordings from deleted activities feature can be edited';
-$string['config_feature_include_deleted_activities_editable_description'] = 'Include recordings from deleted activities by default can be edited when the recordingbn is added or updated.';
+$string['config_ui_html_default'] = 'UI as html is enabled by default';
+$string['config_ui_html_default_description'] = 'If enabled the recording table is shown in plain HTML by default.';
+$string['config_ui_html_editable'] = 'UI as html feature can be edited';
+$string['config_ui_html_editable_description'] = 'UI as html value by default can be edited when the instance is added or updated.';
+$string['config_include_deleted_activities_default'] = 'Include recordings from deleted activities enabled by default';
+$string['config_include_deleted_activities_default_description'] = 'If enabled the recording table will include the recordings belonging to deleted activities if there is any.';
+$string['config_include_deleted_activities_editable'] = 'Include recordings from deleted activities feature can be edited';
+$string['config_include_deleted_activities_editable_description'] = 'Include recordings from deleted activities by default can be edited when the recordingbn is added or updated.';
 
 $string['view_noguests'] = 'The RecordingsBN module is not open to guests';
 $string['view_delete_confirmation'] = 'Are you sure to delete this recording?';

@@ -29,59 +29,42 @@ global $BIGBLUEBUTTONBN_CFG;
 
 require_once(dirname(__FILE__).'/locallib.php');
 
-$versionmajor = recordingsbn_get_moodle_version_major();
-if ( $versionmajor < '2013111800' ) {
-    // This is valid before v2.6.
-    $dependency = $DB->get_record('modules', array('name' => 'bigbluebuttonbn'));
-    $dependencyversion = $dependency->version;
-} else {
-    // This is valid after v2.6.
-    $dependencyversion = get_config('mod_bigbluebuttonbn', 'version');
-}
-
 if ($ADMIN->fulltree) {
+    $dependencyversion = recordingsbn_get_dependency_version();
     if ($dependencyversion >= '2017101009') {
-        // Configuration for BigBlueButtonBN.
-        $renderer = new \mod_bigbluebuttonbn\settings\renderer($settings);
-        // Renders general warning message for settings.
-        $renderer->render_warning_message(
-            get_string('view_deprecated_msg_admin', 'recordingsbn'),
-            'danger', false, 'recordingsbn_deprecated_warning');
-        $renderer->render_warning_message(
-            get_string('view_deprecated_info_admin', 'recordingsbn'),
-            'info', false, 'recordingsbn_deprecated_info');
+        $renderer = new \mod_recordingsbn\settings\renderer('recordingsbn', $settings);
+        // Renders deprecation messages.
+        $renderer->render_warning_message('deprecated_warning',
+            get_string('view_deprecated_msg_admin', 'recordingsbn'), 'danger', false);
+        $renderer->render_warning_message('deprecated_info',
+            get_string('view_deprecated_info_admin', 'recordingsbn'), 'info', false);
+        // Renders call to action button.
+        $renderer->render_group_element_button('deprecated_action',
+            $CFG->wwwroot . '/mod/recordingsbn/migrate.php',
+            get_string('view_deprecated_call_to_action', 'recordingsbn'));
         return;
     }
+    // Render this when dependency is older than v2.2.1.
     if (!isset($BIGBLUEBUTTONBN_CFG->recordingsbn_ui_html_default) ||
-        !isset($BIGBLUEBUTTONBN_CFG->recordingsbn_ui_html_editable)) {
-            $settings->add( new admin_setting_heading('recordingsbn_config_general',
-                    get_string('config_general', 'recordingsbn'),
-                    get_string('config_general_description', 'recordingsbn')));
+        !isset($BIGBLUEBUTTONBN_CFG->recordingsbn_ui_html_editable) ||
+        !isset($BIGBLUEBUTTONBN_CFG->recordingsbn_include_deleted_activities_default) ||
+        !isset($BIGBLUEBUTTONBN_CFG->recordingsbn_include_deleted_activities_editable)) {
+        $renderer->render_group_header('general');
     }
     if (!isset($BIGBLUEBUTTONBN_CFG->recordingsbn_ui_html_default) ) {
-        $settings->add(new admin_setting_configcheckbox('recordingsbn_ui_html_default',
-                get_string('config_feature_ui_html_default', 'recordingsbn'),
-                get_string('config_feature_ui_html_default_description', 'recordingsbn'),
-                1));
+        $renderer->render_group_element('ui_html_default',
+            $renderer->render_group_element_checkbox('ui_html_default', 1));
     }
     if (!isset($BIGBLUEBUTTONBN_CFG->recordingsbn_ui_html_editable)) {
-        // UI for 'recording' feature.
-        $settings->add(new admin_setting_configcheckbox('recordingsbn_ui_html_editable',
-                get_string('config_feature_ui_html_editable', 'recordingsbn'),
-                get_string('config_feature_ui_html_editable_description', 'recordingsbn'),
-                0));
+        $renderer->render_group_element('ui_html_editable',
+            $renderer->render_group_element_checkbox('ui_html_editable', 0));
     }
     if (!isset($BIGBLUEBUTTONBN_CFG->recordingsbn_include_deleted_activities_default)) {
-        $settings->add(new admin_setting_configcheckbox('recordingsbn_include_deleted_activities_default',
-                get_string('config_feature_include_deleted_activities_default', 'recordingsbn'),
-                get_string('config_feature_include_deleted_activities_default_description', 'recordingsbn'),
-                1));
+        $renderer->render_group_element('include_deleted_activities_default',
+            $renderer->render_group_element_checkbox('include_deleted_activities_default', 1));
     }
     if (!isset($BIGBLUEBUTTONBN_CFG->recordingsbn_include_deleted_activities_editable)) {
-        // UI for 'recording' feature.
-        $settings->add(new admin_setting_configcheckbox('recordingsbn_include_deleted_activities_editable',
-                get_string('config_feature_include_deleted_activities_editable', 'recordingsbn'),
-                get_string('config_feature_include_deleted_activities_editable_description', 'recordingsbn'),
-                0));
+        $renderer->render_group_element('include_deleted_activities_editable',
+            $renderer->render_group_element_checkbox('include_deleted_activities_editable', 0));
     }
 }

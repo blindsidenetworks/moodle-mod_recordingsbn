@@ -103,3 +103,19 @@ function recordingsbn_get_moodle_version_major() {
     $versionarray = explode('.', $CFG->version);
     return $versionarray[0];
 }
+
+/**
+ * Returns dependency version.
+ *
+ * @return string
+ */
+function recordingsbn_get_dependency_version() {
+    $versionmajor = recordingsbn_get_moodle_version_major();
+    if ( $versionmajor < '2013111800' ) {
+        // This is valid before v2.6.
+        $dependency = $DB->get_record('modules', array('name' => 'bigbluebuttonbn'));
+        return $dependency->version;
+    }
+    // This is valid after v2.6.
+    return get_config('mod_bigbluebuttonbn', 'version');
+}
