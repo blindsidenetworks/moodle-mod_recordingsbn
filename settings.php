@@ -29,7 +29,29 @@ global $BIGBLUEBUTTONBN_CFG;
 
 require_once(dirname(__FILE__).'/locallib.php');
 
+$versionmajor = recordingsbn_get_moodle_version_major();
+if ( $versionmajor < '2013111800' ) {
+    // This is valid before v2.6.
+    $dependency = $DB->get_record('modules', array('name' => 'bigbluebuttonbn'));
+    $dependencyversion = $dependency->version;
+} else {
+    // This is valid after v2.6.
+    $dependencyversion = get_config('mod_bigbluebuttonbn', 'version');
+}
+
 if ($ADMIN->fulltree) {
+    if ($dependencyversion >= '2017101009') {
+        // Configuration for BigBlueButtonBN.
+        $renderer = new \mod_bigbluebuttonbn\settings\renderer($settings);
+        // Renders general warning message for settings.
+        $renderer->render_warning_message(
+            get_string('view_deprecated_msg_admin', 'recordingsbn'),
+            'danger', false, 'recordingsbn_deprecated_warning');
+        $renderer->render_warning_message(
+            get_string('view_deprecated_info_admin', 'recordingsbn'),
+            'info', false, 'recordingsbn_deprecated_info');
+        return;
+    }
     if (!isset($BIGBLUEBUTTONBN_CFG->recordingsbn_ui_html_default) ||
         !isset($BIGBLUEBUTTONBN_CFG->recordingsbn_ui_html_editable)) {
             $settings->add( new admin_setting_heading('recordingsbn_config_general',

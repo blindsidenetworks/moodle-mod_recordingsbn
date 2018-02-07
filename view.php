@@ -99,7 +99,7 @@ if ($dependencyversion >= '2017101000') {
     $PAGE->set_title(format_string($recordingsbn->name));
     echo $OUTPUT->header();
     echo $OUTPUT->box_start('generalbox boxaligncenter');
-    recordingsbn_deprecation_messages($bbbsession, $dependencyversion);
+    recordingsbn_view_deprecation_messages($bbbsession, $dependencyversion);
     echo $OUTPUT->box_end();
     echo $OUTPUT->footer();
     exit;
@@ -282,7 +282,7 @@ echo $OUTPUT->footer();
  *
  * @return string
  */
-function recordingsbn_deprecation_messages($bbbsession, $dependencyversion) {
+function recordingsbn_view_deprecation_messages($bbbsession, $dependencyversion) {
     global $CFG;
     if ($dependencyversion < '2017101009') {
         echo '<br><div class="alert alert-danger">' . get_string('view_deprecated_msg_admin', 'recordingsbn') . '</div>';
