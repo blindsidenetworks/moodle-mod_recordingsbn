@@ -188,12 +188,10 @@ class renderer {
             $title = $caption;
         }
         $output  = $OUTPUT->box_start('box boxalignleft fade in', $this->module . '_' . $name) . "\n";
-        //$output .= $OUTPUT->single_button($url, $caption, 'get');
         $output .= '  <a href="' . $url . '" class="' . $class . '" title="' . $title . '">' . $caption . '</a>' . "\n";
         $output .= $OUTPUT->box_end() . "\n";
         $item = new \admin_setting_heading($this->module . '_' . $name, '', $output, 'center-block');
         $this->settings->add($item);
         return $item;
     }
-
 }

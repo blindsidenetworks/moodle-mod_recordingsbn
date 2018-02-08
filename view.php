@@ -221,7 +221,6 @@ if (isset($recordings) && !array_key_exists('messageKey', $recordings)) {  // Th
             // Print the table.
             echo html_writer::table($table)."\n";
         }
-
     } else {
         // Shows YUI version.
         $columns = bigbluebuttonbn_get_recording_columns($bbbsession, $recordings);
