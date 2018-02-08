@@ -31,7 +31,7 @@ require_once(dirname(__FILE__).'/locallib.php');
 
 if ($ADMIN->fulltree) {
     $dependencyversion = recordingsbn_get_dependency_version();
-    if ($dependencyversion >= '2017101009') {
+    if ($dependencyversion >= '2017101000') {
         $renderer = new \mod_recordingsbn\settings\renderer('recordingsbn', $settings);
         // Renders deprecation messages.
         $renderer->render_warning_message('deprecated_warning',

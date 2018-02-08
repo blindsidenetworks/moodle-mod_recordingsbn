@@ -19,7 +19,7 @@
  *
  * @package   mod_recordingsbn
  * @author    Jesus Federico  (jesus [at] blindsidenetworks [dt] com)
- * @copyright 2011-2014 Blindside Networks Inc.
+ * @copyright 2011-2018 Blindside Networks Inc.
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v2 or later
  */
 
@@ -283,17 +283,18 @@ echo $OUTPUT->footer();
  */
 function recordingsbn_view_deprecation_messages($bbbsession, $dependencyversion) {
     global $CFG;
+    $message = get_string('view_deprecated_msg_user', 'recordingsbn');
+    $info = get_string('view_deprecated_info_user', 'recordingsbn');
+    if ($bbbsession['administrator'] || $bbbsession['managerecordings']) {
+        $message = get_string('view_deprecated_msg_admin', 'recordingsbn');
+        $info = get_string('view_deprecated_info_admin', 'recordingsbn');
+    }
     if ($dependencyversion < '2017101009') {
-        echo '<br><div class="alert alert-danger">' . get_string('view_deprecated_msg_admin', 'recordingsbn') . '</div>';
-        echo '<br><div class="alert alert-info">' . get_string('view_deprecated_info_admin', 'recordingsbn') . '</div>';
+        echo '<br><div class="alert alert-danger">' . $message . '</div>';
+        echo '<br><div class="alert alert-info">' . $info . '</div>';
         return;
     }
     // Implements the use of new functions and option for migration
-    if ($bbbsession['administrator'] || $bbbsession['managerecordings']) {
-        echo bigbluebuttonbn_render_warning(get_string('view_deprecated_msg_admin', 'recordingsbn'), 'danger');
-        echo bigbluebuttonbn_render_warning(get_string('view_deprecated_info_admin', 'recordingsbn'), 'info');
-        return;
-    }
-    echo bigbluebuttonbn_render_warning(get_string('view_deprecated_msg_user', 'recordingsbn'), 'danger');
-    echo bigbluebuttonbn_render_warning(get_string('view_deprecated_info_user', 'recordingsbn'), 'info');
+    echo bigbluebuttonbn_render_warning($message, 'danger');
+    echo bigbluebuttonbn_render_warning($info, 'info');
 }
