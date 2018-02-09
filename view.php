@@ -294,7 +294,7 @@ function recordingsbn_view_deprecation_messages($bbbsession, $dependencyversion)
         echo '<br><div class="alert alert-info">' . $info . '</div>';
         return;
     }
-    // Implements the use of new functions and option for migration
+    // Implements the use of new functions and option for migration.
     echo bigbluebuttonbn_render_warning($message, 'danger');
     echo bigbluebuttonbn_render_warning($info, 'info');
 }

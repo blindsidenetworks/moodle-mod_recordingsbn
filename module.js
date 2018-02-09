@@ -1,3 +1,9 @@
+
+/** global: M */
+/** global: Y */
+/** global: bigbluebuttonbn */
+/** global: recordingsbn */
+
 /**
  * @namespace
  */

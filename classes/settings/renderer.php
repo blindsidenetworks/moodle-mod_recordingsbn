@@ -44,7 +44,7 @@ class renderer {
      */
     private $settings;
 
-     /**
+    /**
      * @var $module stores the plugin name where the renderer is going to be used
      */
     private $module;
@@ -169,17 +169,17 @@ class renderer {
     }
 
     /**
-    * Render a multiselect element in a group.
-    *
-    * @param string    $name
-    * @param string    $url
-    * @param string    $caption
-    * @param string    $class
-    * @param string    $action
-    *
-    * @return Object
-    */
-    public function render_group_element_button($name, $url, $caption = '', $title = '', $class = 'btn btn-secondary', $action = '') {
+     * Render a multiselect element in a group.
+     *
+     * @param string    $name
+     * @param string    $url
+     * @param string    $caption
+     * @param string    $title
+     * @param string    $class
+     *
+     * @return Object
+     */
+    public function render_group_element_button($name, $url, $caption = '', $title = '', $class = 'btn btn-secondary') {
         global $OUTPUT;
         if ($caption == '') {
             $caption = get_string('ok', 'moodle');
