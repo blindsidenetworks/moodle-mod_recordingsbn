@@ -1,1 +1,1 @@
-Feature: Includes an option for migrating RecordingsBN instances to BigBlueButtonBN.
+Feature: Added support for privacy API in compliance with GDPR (CONTRIB-7304).

@@ -1,3 +1,6 @@
+1.3.4 (2016051908)
+Feature: Added support for privacy API in compliance with GDPR (CONTRIB-7304).
+
 1.3.3 (2016051907)
 Feature: Includes an option for migrating RecordingsBN instances to BigBlueButtonBN.
 
