@@ -145,7 +145,7 @@ echo $OUTPUT->single_button(new moodle_url('/index.php'), get_string('ok', 'mood
 echo $OUTPUT->footer();
 
 /**
- * Returns moodle version.
+ * Index the bigbluebutton instances based on a key.
  *
  * @param array $bigbluebuttonbns
  * @param string $key

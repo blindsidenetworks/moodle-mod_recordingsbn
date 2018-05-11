@@ -315,7 +315,7 @@ function recordingsbn_pluginfile($course, $cm, $context, $filearea, array $args,
  * @param cm_info $cm
  * @return void this should never return to the caller
  */
-function recordingsbn_extend_navigation(navigation_node $navref, stdclass $course, stdclass $module, cm_info $cm) {
+function recordingsbn_extend_navigation(navigation_node $navref, stdClass $course, stdClass $module, cm_info $cm) {
 }
 
 /**
