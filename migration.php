@@ -53,7 +53,7 @@ if (!$dbman->table_exists('bigbluebuttonbn_logs')) {
     print_error(get_string('view_dependency_error', 'recordingsbn'));
 }
 
-// Proceed with the migration
+// Proceed with the migration.
 $courses = get_courses('all', 'c.fullname ASC', 'c.id,c.shortname,c.fullname');
 if (!$recordingsbns = get_all_instances_in_courses('recordingsbn', $courses)) {
     echo bigbluebuttonbn_render_warning(get_string('norecordingsbns', 'recordingsbn'), 'warning');
@@ -98,9 +98,9 @@ foreach ($courses as $course) {
         $moduleinfo->recordings_deleted = $source->include_deleted_activities;
         $moduleinfo->participants = "[{&quot;selectiontype&quot;:&quot;all&quot;,&quot;selectionid&quot;:&quot;all&quot;,&quot;role&quot;:&quot;viewer&quot;}]";
         // Optional intro editor (depends of module).
-        $draftid_editor = 0;
-        file_prepare_draft_area($draftid_editor, null, null, null, null);
-        $moduleinfo->introeditor = array('text' => '', 'format' => FORMAT_HTML, 'itemid' => $draftid_editor);
+        $draftideditor = 0;
+        file_prepare_draft_area($draftideditor, null, null, null, null);
+        $moduleinfo->introeditor = array('text' => '', 'format' => FORMAT_HTML, 'itemid' => $draftideditor);
         echo html_writer::start_tag('tr') . "\n";
         echo html_writer::tag('td', $course->fullname, array('class' => 'cell')) . "\n";
         echo html_writer::tag('td', $source->name, array('class' => 'cell')) . "\n";
@@ -144,6 +144,14 @@ echo $OUTPUT->single_button(new moodle_url('/index.php'), get_string('ok', 'mood
 // Finish the page.
 echo $OUTPUT->footer();
 
+/**
+ * Index the bigbluebutton instances based on a key.
+ *
+ * @param array $bigbluebuttonbns
+ * @param string $key
+ *
+ * @return array
+ */
 function recordingsbn_index_bigbluebuttonbn_instances($bigbluebuttonbns, $key) {
     $indexedbns = array();
     foreach ($bigbluebuttonbns as $bn) {
