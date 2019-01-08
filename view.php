@@ -55,11 +55,13 @@ if ( $versionmajor < '2013111800' ) {
     $dependency = $DB->get_record('modules', array('name' => 'bigbluebuttonbn'));
     $dependencyversion = $dependency->version;
     $context = get_context_instance(CONTEXT_MODULE, $cm->id);
+    //$contextcourse = get_context_instance(CONTEXT_COURSE, $course->id);
 } else {
     // This is valid after v2.6.
     $moduleversion = get_config('mod_recordingsbn', 'version');
     $dependencyversion = get_config('mod_bigbluebuttonbn', 'version');
     $context = context_module::instance($cm->id);
+    //$contextcourse = context_course::instance($course->id);
 }
 
 $PAGE->set_context($context);
@@ -81,6 +83,7 @@ $bbbsession['managerecordings'] = (has_capability('moodle/category:manage', $con
     has_capability('mod/bigbluebuttonbn:managerecordings', $context));
 
 // Additional info related to the course.
+$bbbsession['context'] = $context;
 $bbbsession['course'] = $course;
 $bbbsession['cm'] = $cm;
 
@@ -283,11 +286,15 @@ echo $OUTPUT->footer();
  */
 function recordingsbn_view_deprecation_messages($bbbsession, $dependencyversion) {
     global $CFG;
-    $message = get_string('view_deprecated_msg_user', 'recordingsbn');
-    $info = get_string('view_deprecated_info_user', 'recordingsbn');
-    if ($bbbsession['administrator'] || $bbbsession['managerecordings']) {
-        $message = get_string('view_deprecated_msg_admin', 'recordingsbn');
-        $info = get_string('view_deprecated_info_admin', 'recordingsbn');
+    $message = get_string('view_deprecated_msg', 'recordingsbn');
+    $info = get_string('view_deprecated_info', 'recordingsbn');
+    if ($bbbsession['managerecordings']) {
+        $info .= '<br><br>' . get_string('view_deprecated_migrate_teacher', 'recordingsbn');
+    } else {
+        $info .= '<br><br>' . get_string('view_deprecated_migrate_user', 'recordingsbn');
+    }
+    if ($bbbsession['administrator']) {
+        $info .= '<br><br>' . get_string('view_deprecated_migrate_admin', 'recordingsbn');
     }
     if ($dependencyversion < '2017101009') {
         echo '<br><div class="alert alert-danger">' . $message . '</div>';

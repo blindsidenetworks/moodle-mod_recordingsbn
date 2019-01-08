@@ -35,10 +35,12 @@ if ($ADMIN->fulltree) {
         $renderer = new \mod_recordingsbn\settings\renderer('recordingsbn', $settings);
         // Renders deprecation messages.
         $renderer->render_warning_message('deprecated_warning',
-            get_string('view_deprecated_msg_admin', 'recordingsbn'), 'danger', false);
+            get_string('view_deprecated_msg', 'recordingsbn'), 'danger', false);
         $renderer->render_warning_message('deprecated_info',
-            get_string('view_deprecated_info_admin', 'recordingsbn') . '<br><br>' .
-            get_string('view_deprecated_migrate', 'recordingsbn'), 'info', false);
+            get_string('view_deprecated_info', 'recordingsbn') . '<br><br>' .
+            get_string('view_deprecated_migrate_teacher', 'recordingsbn') . '<br><br>' .
+            get_string('view_deprecated_migrate_admin', 'recordingsbn') . ' ' .
+            get_string('view_deprecated_migrate_admin_warning', 'recordingsbn'), 'info', false);
         // Renders call to action button.
         $renderer->render_group_element_button('deprecated_action',
             $CFG->wwwroot . '/mod/recordingsbn/migration.php',
